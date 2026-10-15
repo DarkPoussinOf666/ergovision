@@ -129,8 +129,8 @@
     - [x] 10.3.2 Rédiger le `README.fr.md` miroir en Français intégral.
   - [x] 10.4 Initialisation Git & Premier Commit Propre
     - [x] 10.4.1 Initialiser le dépôt git (`git init -b main`).
-    - [ ] 10.4.2 Commit initial standardisé selon Conventional Commits.
-  - [ ] 10.5 Validation globale, tests et compte-rendu didactique.
+    - [x] 10.4.2 Commit initial standardisé selon Conventional Commits (`feat: initial open-source release with modular architecture and international docs`).
+  - [x] 10.5 Validation globale, tests et compte-rendu didactique.
 
 ---
 
