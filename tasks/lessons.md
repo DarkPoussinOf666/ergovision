@@ -32,6 +32,8 @@
 ## 7. Structuration Hybride Open-Source & Standardisation Internationale
 - **Architecture Duale (Standalone vs Modulaire)** : Conserver à la fois une distribution `index.html` racine 100% autonome (zéro installation, déploiement immédiat en 1 clic sur GitHub Pages) et une architecture ES6 modulaire découplée dans `90_Code_Source/` (`audio`, `biomechanics`, `pacing`, `storage`, `ui`, `vision`). Cela supprime toute friction à l'adoption tout en permettant aux contributeurs internationaux de faire des PRs atomiques et testées.
 - **Documentation Bilingue Miroir & Standard GitHub** : Pour maximiser l'impact mondial d'un projet de santé open source, placer le `README.md` principal en anglais (standard de facto des développeurs internationaux) avec un lien proéminent vers `README.fr.md` en français complet.
-- **Avertissement Ergonomique / Médical Clair** : Sur GitHub, tout outil d'ergonomie ou de vision corporelle doit intégrer un disclaimer explicite rappelant qu'il s'agit d'un copilote d'hygiène posturale et non d'un dispositif médical de diagnostic.
+## 8. Coaching Kinésithérapique du Dos & Pacing de Pause Active
+- **Guidage Bienveillant vs Surveillance Algorithmique Inquisitrice** : Lors d'une pause active, l'utilisateur a besoin de relâcher sa tension musculaire et mentale. Remplacer un chrono vide par des fiches d'exercices animées (McKenzie, Brügger, Extension thoracique, Bascule pelvienne) avec tempo respiratoire guidé et carillon zen bol tibétain (~432Hz) apporte une immense valeur réparatrice sans générer le stress d'une évaluation par caméra.
+- **Micro-Étirements Découplés du FOV de la Webcam** : Les mouvements du dos (bascule du bassin sur chaise, décompression lombaire) se déroulent souvent hors du champ restreint d'une webcam de PC portable. Privilégier un guidage visuel/sonore autonome plutôt qu'une validation IA contraignante garantit un fonctionnement 100% robuste quel que soit l'angle ou la distance du poste de travail.
 
 

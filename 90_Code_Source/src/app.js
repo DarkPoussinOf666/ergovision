@@ -15,6 +15,8 @@ import { getTodayKey, loadDailyLogs, saveDailyLogs, clearDailyLogs, createCSVCon
 import { 
   getIsCameraActive, setIsCameraActive, enumerateVideoDevices, startCameraStream, stopCameraStream, togglePictureInPicture 
 } from './vision/camera-stream.js';
+import { KineRoutineManager } from './kine/routine-timer.js';
+import { KineStudioView } from './ui/kine-studio-view.js';
 
 // DOM References
 const videoElement = document.getElementById('input_video');
@@ -54,6 +56,18 @@ let elapsedStanding = 0;
 
 let pacingConfig = loadPacingConfig();
 let audioSettings = loadAudioSettings();
+
+// Kiné Studio Instance
+const kineRoutineManager = new KineRoutineManager();
+let kineStudioView = null;
+if (document.getElementById('kineStudioContainer')) {
+  kineStudioView = new KineStudioView('kineStudioContainer', kineRoutineManager);
+  kineRoutineManager.setCallbacks({
+    onRoutineComplete: () => {
+      addDailyLog('summary', t('kine_phase_done'), 'pause');
+    }
+  });
+}
 
 // Init Theme
 applyTheme(getSavedTheme(), btnTheme);
@@ -311,6 +325,16 @@ function setMode(mode) {
 
   stopContinuousPostureAlert();
   resetCurrentModeTimer();
+
+  if (kineStudioView) {
+    if (mode === 'pause') {
+      kineStudioView.show();
+      kineRoutineManager.start();
+    } else {
+      kineStudioView.hide();
+      kineRoutineManager.stop();
+    }
+  }
 }
 
 // ----------------------------------------------------
@@ -562,6 +586,11 @@ function setLanguage(lang) {
   if (btnPiP) {
     const span = btnPiP.querySelector('span');
     if (span) span.innerText = t('btn_pip');
+  }
+
+  if (kineStudioView && currentMode === 'pause') {
+    kineStudioView.renderInitialStructure();
+    kineStudioView.updateExercise(kineRoutineManager.getCurrentExercise(), kineRoutineManager.currentIndex, kineRoutineManager.exercises.length);
   }
 
   updateTimerDisplayTitles();

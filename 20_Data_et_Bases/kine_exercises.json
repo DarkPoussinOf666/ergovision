@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ErgoVisionKineExercisesCatalogue",
+  "description": "Catalogue clinique des exercices de mobilisation et de décompression du dos validés en kinésithérapie pour le travail sur écran",
+  "version": "2.0.0",
+  "exercises": [
+    {
+      "id": "mckenzie_chin_tuck",
+      "target_area": "cervical",
+      "clinical_protocol": "Protocole McKenzie (Rétraction Cervicale)",
+      "type": "repetition",
+      "reps": 5,
+      "hold_sec": 3,
+      "rest_sec": 2,
+      "total_duration_sec": 45,
+      "posture_position": "sitting_or_standing",
+      "muscles_targeted": ["Sous-occipitaux", "Fléchisseurs profonds du cou", "Trapèzes supérieurs"],
+      "biomechanical_rationale": "Corrige la projection antérieure de la tête ('Text-Neck') et décharge la compression des disques cervicaux C5-C6-C7 en rétablissant l'axe neutre.",
+      "contraindications": "Cessez immédiatement en cas d'engourdissement irradiant dans le bras ou de vertige aigu."
+    },
+    {
+      "id": "brugger_relief",
+      "target_area": "thoracic",
+      "clinical_protocol": "Posture de Décharge de Brügger",
+      "type": "hold",
+      "reps": 2,
+      "hold_sec": 20,
+      "rest_sec": 5,
+      "total_duration_sec": 50,
+      "posture_position": "sitting_edge",
+      "muscles_targeted": ["Rhomboïdes", "Trapèzes inférieurs", "Pectoraux (étirement)"],
+      "biomechanical_rationale": "Inverse le schéma moteur d'enroulement des épaules vers l'avant (cyphose posturale), active la fixation scapulaire et libère l'amplitude costale.",
+      "contraindications": "Ne pas forcer si conflit sous-acromial de l'épaule douloureux."
+    },
+    {
+      "id": "thoracic_extension",
+      "target_area": "thoracic",
+      "clinical_protocol": "Extension Thoracique sur Dossier",
+      "type": "repetition",
+      "reps": 5,
+      "hold_sec": 4,
+      "rest_sec": 3,
+      "total_duration_sec": 45,
+      "posture_position": "sitting",
+      "muscles_targeted": ["Érecteurs du rachis dorsal", "Intercostaux", "Cage thoracique"],
+      "biomechanical_rationale": "Mobilise le rachis thoracique en extension pour contrer l'affaissement vertébral prolongé et améliorer la mécanique respiratoire.",
+      "contraindications": "Garder impérativement les mains derrière la nuque pour soutenir le rachis cervical et ne pas cambrer exagérément les lombaires."
+    },
+    {
+      "id": "pelvic_tilt",
+      "target_area": "lumbar",
+      "clinical_protocol": "Bascules Pelviennes Lombo-Sacrées",
+      "type": "repetition",
+      "reps": 6,
+      "hold_sec": 3,
+      "rest_sec": 2,
+      "total_duration_sec": 45,
+      "posture_position": "sitting",
+      "muscles_targeted": ["Transverse de l'abdomen", "Carré des lombes", "Psoas-iliaque"],
+      "biomechanical_rationale": "Favorise l'imbibition et la réhydratation des disques intervertébraux lombaires L4-L5-S1 par mouvement alternatif de nutation et contre-nutation du bassin.",
+      "contraindications": "Amplitude douce sans douleur vive dans le sacrum."
+    }
+  ]
+}

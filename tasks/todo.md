@@ -141,33 +141,33 @@
   - [x] 11.0.2 Créer une branche Git `release/v1-stable`.
   - [x] 11.0.3 Créer un dossier miroir autonome `v1/` contenant la distribution autonome complète V1 (`v1/index.html`, README V1) pour exécution directe sans checkout.
 
-- [ ] **Phase 11.1 : Référentiel Clinique Kiné & Modèle de Données (Dos & Rachis)**
-  - [ ] 11.1.1 Définir le schéma et le catalogue d'exercices dans `20_Data_et_Bases/kine_exercises.json`.
-  - [ ] 11.1.2 Rédiger les 4 protocoles cliniques clés (Rétraction McKenzie, Posture Brügger, Extension thoracique active, Bascule pelvienne lombo-sacrée).
-  - [ ] 11.1.3 Enrichir les dictionnaires i18n (`src/i18n/translations.js`) avec toutes les consignes, bénéfices, respirations et durées en FR et EN.
-  - [ ] 11.1.4 Créer le module clinique modulaire `src/kine/exercises.js`.
+- [x] **Phase 11.1 : Référentiel Clinique Kiné & Modèle de Données (Dos & Rachis)**
+  - [x] 11.1.1 Définir le schéma et le catalogue d'exercices dans `20_Data_et_Bases/kine_exercises.json`.
+  - [x] 11.1.2 Rédiger les 4 protocoles cliniques clés (Rétraction McKenzie, Posture Brügger, Extension thoracique active, Bascule pelvienne lombo-sacrée).
+  - [x] 11.1.3 Enrichir les dictionnaires i18n (`src/i18n/translations.js`) avec toutes les consignes, bénéfices, respirations et durées en FR et EN.
+  - [x] 11.1.4 Créer le module clinique modulaire `src/kine/exercises.js`.
 
-- [ ] **Phase 11.2 : Moteur de Routine & Pacing Kiné (`src/kine/routine-timer.js`)**
-  - [ ] 11.2.1 Concevoir le gestionnaire de cycle d'exercice (phases : Préparation 5s, Maintien actif 20-30s ou Répétitions x5, Relâchement, Transition).
-  - [ ] 11.2.2 Intégrer les signaux Web Audio doux dédiés au coaching (gong tibétain / cloche douce de début/fin d'étirement, respiration guidée).
-  - [ ] 11.2.3 Permettre la navigation manuelle (Suivant, Précédent, Pause/Reprise, Passer l'exercice).
+- [x] **Phase 11.2 : Moteur de Routine & Pacing Kiné (`src/kine/routine-timer.js`)**
+  - [x] 11.2.1 Concevoir le gestionnaire de cycle d'exercice (phases : Préparation 5s, Maintien actif 20-30s ou Répétitions x5, Relâchement, Transition).
+  - [x] 11.2.2 Intégrer les signaux Web Audio doux dédiés au coaching (gong tibétain / cloche douce de début/fin d'étirement, respiration guidée).
+  - [x] 11.2.3 Permettre la navigation manuelle (Suivant, Précédent, Pause/Reprise, Passer l'exercice).
 
-- [ ] **Phase 11.3 : Composant UI Fluent UI 2 — Studio Kiné de Pause**
-  - [ ] 11.3.1 Concevoir le conteneur immersif "Pause & Mobilisation Kiné" (surface Mica, bento card dédiée s'ouvrant en mode Pause).
-  - [ ] 11.3.2 Illustrer chaque mouvement avec des pictogrammes/schémas SVG vectoriels haute clarté anatomique.
-  - [ ] 11.3.3 Intégrer la jauge circulaire de maintien temporel / compteur de répétitions avec typographie tabulaire sans tremblement.
-  - [ ] 11.3.4 Afficher les conseils de respiration guidée (Inspirer / Expirer) et la zone anatomique ciblée en temps réel.
+- [x] **Phase 11.3 : Composant UI Fluent UI 2 — Studio Kiné de Pause**
+  - [x] 11.3.1 Concevoir le conteneur immersif "Pause & Mobilisation Kiné" (surface Mica, bento card dédiée s'ouvrant en mode Pause).
+  - [x] 11.3.2 Illustrer chaque mouvement avec des pictogrammes/schémas SVG vectoriels haute clarté anatomique.
+  - [x] 11.3.3 Intégrer la jauge circulaire de maintien temporel / compteur de répétitions avec typographie tabulaire sans tremblement.
+  - [x] 11.3.4 Afficher les conseils de respiration guidée (Inspirer / Expirer) et la zone anatomique ciblée en temps réel.
 
-- [ ] **Phase 11.4 : Intégration Système & Pacing Automatique**
-  - [ ] 11.4.1 Déclenchement automatique de la routine kiné lors de la sélection du Mode Pause ou à l'expiration du temps assis/debout.
-  - [ ] 11.4.2 Maintien strict de la suspension des alertes biomécaniques intrusives pendant la pause.
-  - [ ] 11.4.3 Enregistrement dans le journal quotidien (`activity-logger.js`) des exercices complétés et du temps d'étirement actif.
+- [x] **Phase 11.4 : Intégration Système & Pacing Automatique**
+  - [x] 11.4.1 Déclenchement automatique de la routine kiné lors de la sélection du Mode Pause ou à l'expiration du temps assis/debout.
+  - [x] 11.4.2 Maintien strict de la suspension des alertes biomécaniques intrusives pendant la pause.
+  - [x] 11.4.3 Enregistrement dans le journal quotidien (`activity-logger.js`) des exercices complétés et du temps d'étirement actif.
 
-- [ ] **Phase 11.5 : Rétro-portage Standalone, Validation WCAG & Documentation**
-  - [ ] 11.5.1 Valider le bon fonctionnement dans `90_Code_Source/` (modules ES6).
-  - [ ] 11.5.2 Rétro-porter les modules et styles dans la version autonome `index.html` (V2).
-  - [ ] 11.5.3 Valider l'accessibilité WCAG 2.1 AA (contraste, focus clavier, ARIA live regions pour les malvoyants).
-  - [ ] 11.5.4 Mettre à jour `01_PRD.md`, `README.md`, `README.fr.md` et `tasks/lessons.md`.
+- [x] **Phase 11.5 : Rétro-portage Standalone, Validation WCAG & Documentation**
+  - [x] 11.5.1 Valider le bon fonctionnement dans `90_Code_Source/` (modules ES6).
+  - [x] 11.5.2 Rétro-porter les modules et styles dans la version autonome `index.html` (V2).
+  - [x] 11.5.3 Valider l'accessibilité WCAG 2.1 AA (contraste, focus clavier, ARIA live regions pour les malvoyants).
+  - [x] 11.5.4 Mettre à jour `01_PRD.md`, `README.md`, `README.fr.md` et `tasks/lessons.md`.
 
 ---
 

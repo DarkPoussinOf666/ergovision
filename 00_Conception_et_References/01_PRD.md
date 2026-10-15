@@ -31,19 +31,20 @@
 
 ---
 
-## 3. Scope & Fonctionnalités (v3.3)
+## 3. Scope & Fonctionnalités (v2.0)
 - **Fonctionnalités Clés (In-Scope)** :
   - [x] Détection temps réel MediaPipe Pose via Canvas WebGL/Wasm avec filtrage de visibilité (`visibility > 0.45`).
   - [x] Calibration guidée interactive (3-2-1 sonore) mémorisant le point zéro physiologique.
-  - [x] Moteur audio Web Audio API polyphonique : alertes continues/pulsées dynamiques et carillon de cycle.
+  - [x] Moteur audio Web Audio API polyphonique : alertes continues/pulsées dynamiques, carillon de cycle et bols zen kiné (432Hz).
   - [x] Pacing postural multi-modes : Bureau Assis, Station Debout, Pause & Étirement active avec gestion du dépassement (overtime).
+  - [x] **Atelier Kiné du Dos & Pause Active Intelligente (v2.0)** : Catalogue clinique d'exercices de décharge du rachis (McKenzie, Brügger, Extension thoracique, Bascule pelvienne) avec guidage visuel SVG, timing de maintien, répétitions et respiration guidée.
   - [x] Modal Centre de Contrôle Fluent UI 2 : presets 1-clic, réglage volume, test son, latence et sensibilité.
   - [x] Switch de langue instantané Français / Anglais.
   - [x] Mode Picture-in-Picture (PiP) avec incrustation du HUD de feedback.
-  - [x] Journal chronologique persistant des alertes, transitions et scores de cycles avec export CSV.
+  - [x] Journal chronologique persistant des alertes, transitions, séances kiné et scores de cycles avec export CSV.
 - **Hors Périmètre (Out-of-Scope)** :
   - Pas de backend cloud, pas de base de données distante, pas de compte utilisateur obligatoire.
-  - Pas de modèle lourd de détection 3D nécessitant un GPU dédié haut de gamme.
+  - Pas d'évaluation invasive ou punitive des exercices (guidage bienveillant non bloquant).
 
 ---
 

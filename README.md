@@ -35,13 +35,22 @@ Prolonged screen work leads to repetitive musculoskeletal strain (RSI), upper tr
 - **Lateral Head Tilt Monitoring**: Prevents prolonged lateral neck leaning that strains cervical foramina.
 - **Interactive 3-Second Zero-Point Calibration**: Adapts instantly to individual morphology, camera angle, and seating height.
 
-### 2. ⏱️ Adaptive Workstation Pacing
+### 2. 🧘 Back Physiotherapy Studio & Active Break (v2.0 New Feature)
+- **Clinically Validated Desk Micro-Exercises**:
+  - **McKenzie Cervical Retraction**: Decompresses C5-C6-C7 discs and corrects forward "Text-Neck" slump.
+  - **Brügger Postural Relief**: Scapular retraction and reversal of rounded shoulder posture.
+  - **Active Thoracic Extension**: Mobilizes stiff upper back and reverses work-induced kyphosis.
+  - **Lumbosacral Pelvic Tilts**: Gently rehydrates L4-L5-S1 lumbar discs through controlled pelvic rolling.
+- **Visual Guidance & Guided Breathing**: Crisp SVG vector anatomical illustrations, circular hold timer, repetition counter, and rhythmic breath prompts (inhale/exhale).
+- **Zen Soundscape**: Gentle resonant Tibetan singing bowl chimes (~432Hz) marking movement transitions without audio fatigue.
+
+### 3. ⏱️ Adaptive Workstation Pacing
 - **💻 Sitting Desk Mode**: Customizable session duration (default: 45 min).
 - **🧍 Standing Desk Mode**: Dynamic count-up with posture change advisory (default: 15 min).
 - **🧘 Active Break & Stretch Mode**: 5-minute dedicated timer with **automatic alert suspension** so you can stretch and move freely without false alarms.
 - **⏳ Overtime Negative Counting**: When time expires, the timer counts into the negative (`-01:23`) with a visual warning without abruptly halting your focus, rewarding your neutral posture ratio upon completion.
 
-### 3. 🔊 Gentle, Non-Intrusive Audio Ergonomics
+### 4. 🔊 Gentle, Non-Intrusive Audio Ergonomics
 - **Dynamic Continuous/Pulsed Feedback**: Emits a subtle recurring pulse or gentle sine drone during sustained poor posture, and **silences instantly** the millisecond you return to your calibrated neutral posture.
 - **Harmonious Cycle End Chime**: A friendly three-tone chime (C-E-G) celebrating completed cycles without cognitive shock.
 - **Smart Debouncing (Latch)**: One continuous drift equals exactly one alert log and notification, eliminating duplicate alarms.

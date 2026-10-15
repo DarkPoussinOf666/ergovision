@@ -35,13 +35,22 @@ Le travail prolongé devant écran engendre des contraintes mécaniques chroniqu
 - **Surveillance de l'Inclinaison Latérale** : Prévient les torsions unilatérales prolongées de la nuque.
 - **Calibration Interactive 3 Secondes (« Point Zéro »)** : S'adapte instantanément à la morphologie, à la taille du bureau et à la position de votre écran.
 
-### 2. ⏱️ Pacing Postural Adaptatif
+### 2. 🧘 Atelier Kiné du Dos & Pause Active Intelligente (Nouveauté v2.0)
+- **Catalogue Clinique Validé pour le Travail sur Écran** :
+  - **Rétraction Cervicale de McKenzie** : Décompression des disques C5-C6-C7 et correction du « Text-Neck ».
+  - **Posture de Décharge de Brügger** : Resserrement scapulaire et inversion de l'enroulement d'épaules.
+  - **Extension Thoracique Active** : Mobilisation de la charnière dorsale et redressement de la cyphose.
+  - **Bascules Pelviennes Lombo-Sacrées** : Imbibition et réhydratation des disques L4-L5-S1 par roulement sur ischions.
+- **Guidage Visuel & Respiration Rythmée** : Pictogrammes anatomiques vectoriels SVG, jauge de maintien circulaire, décompte de répétitions et tempo respiratoire (inspire/expire).
+- **Accompagnement Sonore Zen** : Sons doux de bol tibétain (~432Hz) marquant le début, la transition et la complétion des exercices sans surstimulation.
+
+### 3. ⏱️ Pacing Postural Adaptatif
 - **💻 Mode Bureau Assis** : Durée de session personnalisable (45 min par défaut).
 - **🧍 Mode Bureau Debout** : Compteur croissant avec seuil d'alternance conseillé (15 min par défaut).
 - **🧘 Mode Pause & Étirement Actif** : Compte à rebours dédié de 5 minutes avec **suspension automatique des alertes** pour bouger et vous étirer en toute liberté.
 - **⏳ Dépassement de Session (Overtime)** : Lorsque le temps est écoulé, le chronomètre bascule en défilement négatif (`-01:23`) avec style d'avertissement sans interrompre brutalement votre concentration, et enregistre le score de maintien neutre atteint.
 
-### 3. 🔊 Ergonomie Sonore Non Intrusive
+### 4. 🔊 Ergonomie Sonore Non Intrusive
 - **Alerte Continue / Pulsée Dynamique** : Émet un bip cadencé discret ou une onde sinusoïdale douce en cas de mauvaise posture prolongée, et **s'éteint instantanément** dès que vous reprenez une posture conforme.
 - **Carillon Harmonieux de Fin de Cycle** : Un carillon à trois tons (Do-Mi-Sol) marquant la fin du temps sans agressivité cognitive.
 - **Anti-Rebond Intelligent (Debouncing / Latch)** : Une compensation continue génère exactement 1 log et 1 notification, éliminant les alertes répétitives en boucle.

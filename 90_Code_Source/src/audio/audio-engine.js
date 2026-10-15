@@ -176,3 +176,50 @@ export function testAudioAlert() {
     soundEnabled = prevSound;
   }, 2400);
 }
+
+/**
+ * Zen resonant chime for physiotherapy stretches (bowl tone ~432Hz)
+ */
+export function playZenBell(freq = 432) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const effectiveVol = Math.max(0.02, audioSettings.volume * 0.9);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(effectiveVol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 1.8);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 1.8);
+  } catch (err) {
+    console.warn("Erreur playZenBell :", err);
+  }
+}
+
+/**
+ * Soft subtle tick for countdown pacing
+ */
+export function playSoftTick() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const effectiveVol = Math.max(0.01, audioSettings.volume * 0.25);
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    gain.gain.setValueAtTime(effectiveVol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.04);
+  } catch (err) {
+    // Silently ignore tick failures
+  }
+}
+
