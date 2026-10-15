@@ -29,13 +29,19 @@ Le travail prolongé devant écran engendre des contraintes mécaniques chroniqu
 
 ## 🌟 Fonctionnalités Clés
 
-### 1. 🔬 Analyse Biomécanique Ciblée
+### 1. 🔬 Analyse Biomécanique Ciblée (4 Jauges Temps Réel)
 - **Rachis Cervical & Détection du « Text-Neck »** : Mesure le ratio normalisé entre le nez et la ligne bi-acromiale pour détecter l'affaissement de la tête vers l'avant.
 - **Symétrie Scapulaire & Protection des Trapèzes** : Surveille l'élévation réflexe d'une épaule causée par la fatigue ou un accoudoir asymétrique.
 - **Surveillance de l'Inclinaison Latérale** : Prévient les torsions unilatérales prolongées de la nuque.
+- **Distance Écran-Yeux & Profondeur Z (Nouveauté v2.1)** : 4ème jauge biomécanique mesurant le rapprochement excessif de l'écran (<50cm, seuil INRS) pour prévenir la cyphose de compensation et la fatigue visuelle.
 - **Calibration Interactive 3 Secondes (« Point Zéro »)** : S'adapte instantanément à la morphologie, à la taille du bureau et à la position de votre écran.
 
-### 2. 🧘 Atelier Kiné du Dos & Pause Active Intelligente (Nouveauté v2.0)
+### 2. 👁️ Gardien Visuel & Règle Oculaire 20-20-20 (Nouveauté v2.1)
+- **Hygiène Visuelle Clinique** : Toutes les 20 minutes, un bandeau discret et un carillon doux (528 Hz) vous invitent à relâcher l'accommodation cilaire en regardant au loin (6 mètres) pendant 20 secondes.
+- **Suspension Croisée Bienveillante** : Les alertes de posture sont automatiquement suspendues pendant la pause oculaire pour vous laisser contempler l'horizon sans fausse alerte.
+- **Bouton Rapide « Passer »** : Reprise immédiate en cas de visioconférence ou de tâche urgente.
+
+### 3. 🧘 Atelier Kiné du Dos & Pause Active Intelligente (v2.0)
 - **Catalogue Clinique Validé pour le Travail sur Écran** :
   - **Rétraction Cervicale de McKenzie** : Décompression des disques C5-C6-C7 et correction du « Text-Neck ».
   - **Posture de Décharge de Brügger** : Resserrement scapulaire et inversion de l'enroulement d'épaules.
@@ -44,7 +50,7 @@ Le travail prolongé devant écran engendre des contraintes mécaniques chroniqu
 - **Guidage Visuel & Respiration Rythmée** : Pictogrammes anatomiques vectoriels SVG, jauge de maintien circulaire, décompte de répétitions et tempo respiratoire (inspire/expire).
 - **Accompagnement Sonore Zen** : Sons doux de bol tibétain (~432Hz) marquant le début, la transition et la complétion des exercices sans surstimulation.
 
-### 3. ⏱️ Pacing Postural Adaptatif
+### 4. ⏱️ Pacing Postural Adaptatif
 - **💻 Mode Bureau Assis** : Durée de session personnalisable (45 min par défaut).
 - **🧍 Mode Bureau Debout** : Compteur croissant avec seuil d'alternance conseillé (15 min par défaut).
 - **🧘 Mode Pause & Étirement Actif** : Compte à rebours dédié de 5 minutes avec **suspension automatique des alertes** pour bouger et vous étirer en toute liberté.

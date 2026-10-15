@@ -603,15 +603,47 @@
     }
 
     /* ==========================================================================
-       3 JAUGES BIOMÉCANIQUES DE PATHOLOGIES CIBLÉES
+       4 JAUGES BIOMÉCANIQUES (NUQUE, ÉPAULES, TÊTE, DISTANCE ÉCRAN) & PAUSE OCULAIRE
        ========================================================================== */
-    .gauges-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.85rem;
+    .eye-rest-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(15, 108, 189, 0.15) 0%, rgba(14, 112, 66, 0.15) 100%);
+      border: 1px solid var(--fluent-brand-border);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.9rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--fluent-brand-glow);
+      animation: fadeIn var(--transition-normal);
     }
 
-    @media (max-width: 680px) {
+    .eye-rest-content {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .eye-rest-icon {
+      color: var(--fluent-brand);
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .gauges-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 950px) {
+      .gauges-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 580px) {
       .gauges-grid {
         grid-template-columns: 1fr;
       }

@@ -171,20 +171,31 @@
 
 ---
 
-## 🔮 Phase 12 (V2.1 - Extensions Biomécaniques Avancées)
-- [ ] 12.1 Surveillance de la Distance Écran-Yeux (Axe Z relatif via ratio crâne/épaules).
-- [ ] 12.2 Règle Oculaire 20-20-20 & Détection du Clignement / Fatigue Visuelle.
-- [ ] 12.3 Calibration Multi-Écrans (Poste de travail bi-écran).
+## 🔮 Phase 12 (V2.1 - Extensions Biomécaniques Avancées) [TERMINÉE]
 
----
+- [x] **Phase 12.1 : Surveillance de la Proximité Écran-Yeux (Profondeur Z)**
+  - [x] 12.1.1 Calculer la distance inter-oculaire / faciale normalisée par la largeur d'épaules dans `posture-engine.js`.
+  - [x] 12.1.2 Capturer la distance faciale de référence lors de la calibration "Point Zéro".
+  - [x] 12.1.3 Intégrer la 4ème jauge biomécanique "Distance Écran" (Seuil INRS > 50-70cm) avec alertes visuelles et audio latchées.
+
+- [x] **Phase 12.2 : Gardien Visuel & Règle Oculaire 20-20-20**
+  - [x] 12.2.1 Créer le gestionnaire de cycle oculaire 20-20-20 (`src/pacing/eye-rest-timer.js`).
+  - [x] 12.2.2 Concevoir le composant d'incitation visuelle douce (overlay ou bannière non agressive "Regardez au loin à 6m pendant 20s").
+  - [x] 12.2.3 Enrichir les dictionnaires i18n (`translations.js`) en FR et EN.
+
+- [x] **Phase 12.3 : Synchronisation Duale, Validation & Documentation**
+  - [x] 12.3.1 Valider le bon fonctionnement dans `90_Code_Source/`.
+  - [x] 12.3.2 Rétro-porter les modules et composants dans la version autonome `index.html`.
+  - [x] 12.3.3 Tests automatisés de non-régression et mise à jour de la documentation.
 
 ## Logique et Apprentissage
 
-L'introduction de la **Phase 9** confère à ErgoVision AI le niveau de finition d'une application professionnelle de santé au poste de travail :
-1. **Ergonomie Cognitive du Son** : Remplacer un bip isolé par une boucle continue qui s'éteint *instantanément* à la correction posturale crée une boucle de rétroaction haptique/sonore ultra-efficace. La possibilité de choisir entre un double bip cadencé et un drone continu garantit le confort en espace partagé.
-2. **Carillon de Fin de Cycle distinct & Overtime Pacing** : Permettre au chronomètre de passer en négatif (`-01:23`) au lieu d'une bascule forcée respecte l'état de flux de travail (Deep Work) tout en signalant clairement le dépassement et en récompensant le taux de posture neutre atteint.
-3. **Persistance Locale Quotidienne** : L'indexation quotidienne des événements (`ergovision_daily_log_YYYY-MM-DD`) fiabilise l'application face aux fermetures d'onglets inopinées et offre une véritable télémétrie exportable pour le suivi d'ergonomie en entreprise.
-4. **Internationalisation Native (i18n)** : L'application bascule instantanément entre le Français et l'Anglais sans rechargement de page, avec synchronisation complète du HUD vidéo, des indicateurs biomécaniques et du journal d'activité.
+### Phases 11 & 12 : V2.0 et V2.1 — Kiné du Dos & Hygiène Visuelle Oculaire
+1. **Estimation Monoculaire de Profondeur Z sans Capteur LiDAR** : En exploitant l'écartement des repères faciaux (yeux/oreilles) normalisé par l'envergure scapulaire et comparé à l'état calibré initial, on déduit précisément le rapprochement vers l'écran sans recourir à un capteur physique 3D coûteux.
+2. **Suspension Croisée Bienveillante des Alertes (Ciliary Rest UX)** : L'application de la règle 20-20-20 impose d'orienter le regard vers un horizon dégagé (au moins 6 mètres). Durant ces 20 secondes, suspendre temporairement les alertes sonores de dérive posturale évite d'induire un stress paradoxal chez l'utilisateur et renforce l'adoption du tuteur ergonomique.
+3. **Architecture Duale Inviolable** : La stricte synchronisation entre les modules ES6 documentés (`90_Code_Source/`) et le fichier de déploiement direct sans bundler (`index.html`), conjuguée à la sanctuarisation de la V1 (`v1/` et tag `v1.0.0`), offre à la fois maintenabilité pour les ingénieurs et portabilité universelle pour les utilisateurs finaux.
+4. **Ergonomie Fréquentielle** : L'utilisation de tonalités sinusoïdales à 432 Hz pour la décompression kinésithérapique et 528 Hz pour la pause oculaire crée un ancrage sensoriel doux, distinct des alertes d'avertissement postural plus percutantes.
+
 
 
 

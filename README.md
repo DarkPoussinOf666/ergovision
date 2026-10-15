@@ -29,13 +29,19 @@ Prolonged screen work leads to repetitive musculoskeletal strain (RSI), upper tr
 
 ## 🌟 Key Features
 
-### 1. 🔬 Targeted Biomechanical Analysis
+### 1. 🔬 Targeted Biomechanical Analysis (4 Live Gauges)
 - **Cervical Spine & "Text-Neck" Detection**: Calculates the normalized distance ratio between nose and acromioclavicular line to detect forward head slump.
 - **Scapular Symmetry & Trapezius Protection**: Detects asymmetric shoulder shrugging and reflex compensations caused by fatigue or uneven arm rests.
 - **Lateral Head Tilt Monitoring**: Prevents prolonged lateral neck leaning that strains cervical foramina.
+- **Screen-to-Eye Distance & Z-Depth (v2.1 New Feature)**: 4th biomechanical gauge tracking forward hunching towards the monitor (<50cm / 20 in, OSHA/INRS threshold) to curb visual fatigue and spinal compression.
 - **Interactive 3-Second Zero-Point Calibration**: Adapts instantly to individual morphology, camera angle, and seating height.
 
-### 2. 🧘 Back Physiotherapy Studio & Active Break (v2.0 New Feature)
+### 2. 👁️ 20-20-20 Eye Rest & Visual Hygiene Guardian (v2.1 New Feature)
+- **Clinical Eye Rest Protocol**: Every 20 minutes, a discreet floating banner and a restorative 528 Hz bell remind you to soften ocular ciliary focus by gazing at 20 feet (6 meters) for 20 seconds.
+- **Thoughtful Alert Suspension**: Postural drift alerts are muted during the 20-second eye rest to let you freely gaze out the window or across the room without false alarms.
+- **Quick "Skip" Control**: Instant one-click dismiss for meetings or urgent workflow moments.
+
+### 3. 🧘 Back Physiotherapy Studio & Active Break (v2.0)
 - **Clinically Validated Desk Micro-Exercises**:
   - **McKenzie Cervical Retraction**: Decompresses C5-C6-C7 discs and corrects forward "Text-Neck" slump.
   - **Brügger Postural Relief**: Scapular retraction and reversal of rounded shoulder posture.
@@ -44,7 +50,7 @@ Prolonged screen work leads to repetitive musculoskeletal strain (RSI), upper tr
 - **Visual Guidance & Guided Breathing**: Crisp SVG vector anatomical illustrations, circular hold timer, repetition counter, and rhythmic breath prompts (inhale/exhale).
 - **Zen Soundscape**: Gentle resonant Tibetan singing bowl chimes (~432Hz) marking movement transitions without audio fatigue.
 
-### 3. ⏱️ Adaptive Workstation Pacing
+### 4. ⏱️ Adaptive Workstation Pacing
 - **💻 Sitting Desk Mode**: Customizable session duration (default: 45 min).
 - **🧍 Standing Desk Mode**: Dynamic count-up with posture change advisory (default: 15 min).
 - **🧘 Active Break & Stretch Mode**: 5-minute dedicated timer with **automatic alert suspension** so you can stretch and move freely without false alarms.

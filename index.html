@@ -616,15 +616,47 @@
     }
 
     /* ==========================================================================
-       3 JAUGES BIOMÉCANIQUES DE PATHOLOGIES CIBLÉES
+       4 JAUGES BIOMÉCANIQUES (NUQUE, ÉPAULES, TÊTE, DISTANCE ÉCRAN) & PAUSE OCULAIRE
        ========================================================================== */
-    .gauges-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.85rem;
+    .eye-rest-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(15, 108, 189, 0.15) 0%, rgba(14, 112, 66, 0.15) 100%);
+      border: 1px solid var(--fluent-brand-border);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.9rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--fluent-brand-glow);
+      animation: fadeIn var(--transition-normal);
     }
 
-    @media (max-width: 680px) {
+    .eye-rest-content {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .eye-rest-icon {
+      color: var(--fluent-brand);
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .gauges-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 950px) {
+      .gauges-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 580px) {
       .gauges-grid {
         grid-template-columns: 1fr;
       }
@@ -1359,6 +1391,23 @@
 
     <!-- COLONNE GAUCHE : FLUX VIDEO, POSE ESTIMATION & JAUGES EN TEMPS REEL -->
     <section class="panel" aria-label="Flux vidéo et analyse biomécanique">
+      <!-- BANDEAU PAUSE OCULAIRE 20-20-20 -->
+      <div id="eyeRestBanner" class="eye-rest-banner" style="display:none;" role="alert" aria-live="polite">
+        <div class="eye-rest-content">
+          <svg class="icon eye-rest-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          <div>
+            <div style="font-weight:700; font-size:0.85rem;" id="eyeRestTitle">Pause Oculaire 20-20-20</div>
+            <div style="font-size:0.74rem; color:var(--fluent-fg-secondary);" id="eyeRestDesc">Fixez un point à 6m pour détendre vos yeux</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span id="eyeRestDigits" class="mono-big" style="font-size:1.3rem; color:var(--status-success);">20s</span>
+          <button type="button" class="btn-action" id="btnSkipEyeRest" style="font-size:0.72rem; padding:0.25rem 0.5rem;" onclick="skipEyeRest()">
+            <span>Passer</span>
+          </button>
+        </div>
+      </div>
+
       <div class="viewport" aria-label="Moniteur vidéo de posture">
         <!-- Écran d'accueil de la caméra -->
         <div id="cameraPlaceholder" class="camera-placeholder">
@@ -1441,12 +1490,24 @@
           <div class="gauge-header">
             <div class="gauge-title-box">
               <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 12a4 4 0 0 1-8 0"/></svg>
-              <span>3. Inclinaison Tête</span>
+              <span id="titleGaugeTilt">3. Inclinaison Tête</span>
             </div>
             <span id="badgeTilt" class="gauge-badge">0%</span>
           </div>
           <div class="gauge-track"><div id="fillTilt" class="gauge-fill"></div></div>
-          <div class="gauge-caption">Détecte l'inclinaison latérale prolongée et les tensions asymétriques.</div>
+          <div class="gauge-caption" id="descGaugeTilt">Détecte l'inclinaison latérale prolongée et les tensions asymétriques.</div>
+        </div>
+
+        <div id="cardDistance" class="gauge-card">
+          <div class="gauge-header">
+            <div class="gauge-title-box">
+              <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span id="titleGaugeDistance">4. Distance Écran</span>
+            </div>
+            <span id="badgeDistance" class="gauge-badge">0%</span>
+          </div>
+          <div class="gauge-track"><div id="fillDistance" class="gauge-fill"></div></div>
+          <div class="gauge-caption" id="descGaugeDistance">Prévient le rapprochement excessif (&lt;50cm) et la fatigue oculaire.</div>
         </div>
       </div>
     </section>
@@ -1786,6 +1847,8 @@
         gauge_shoulder_desc: "Surveille l'élévation anormale des épaules et les asymétries posturales.",
         gauge_tilt_title: "3. Inclinaison Tête",
         gauge_tilt_desc: "Détecte l'inclinaison latérale prolongée et les tensions asymétriques.",
+        gauge_distance_title: "4. Distance Écran",
+        gauge_distance_desc: "Prévient le rapprochement excessif (<50cm) et la fatigue oculaire.",
         title_sit: "Bureau Assis",
         title_stand: "Bureau Debout",
         title_pause: "Pause & Étirement",
@@ -1840,11 +1903,18 @@
         reason_neck: "Projection cervicale",
         reason_shoulder: "Élévation épaule",
         reason_tilt: "Inclinaison latérale",
+        reason_distance: "Proximité écran (<50cm)",
         status_optimal: "Posture optimale",
         status_alert_prefix: "Alerte : Redressez-vous (",
         badge_alert: "ALERTE",
         badge_transition: "PASSAGE",
         badge_summary: "CYCLE",
+        badge_eye_rest: "YEUX",
+        eye_rest_title: "Pause Oculaire 20-20-20",
+        eye_rest_desc: "Détendez vos yeux : fixez un point à au moins 6 mètres pendant 20 secondes.",
+        eye_rest_sub: "Relâchement du muscle ciliaire en cours...",
+        eye_rest_complete: "Pause oculaire accomplie ! Vos yeux sont reposés.",
+        btn_skip_eye_rest: "Passer",
         transition_to: "Bascule vers",
         cycle_summary_title: "Fin de cycle",
         standing_warning_sub: "min debout : pensez à changer d'appui",
@@ -1905,6 +1975,8 @@
         gauge_shoulder_desc: "Monitors shoulder shrug, scapular tension and asymmetric tilt.",
         gauge_tilt_title: "3. Head Lateral Tilt",
         gauge_tilt_desc: "Detects sustained lateral tilt and uneven cervical strain.",
+        gauge_distance_title: "4. Screen Distance",
+        gauge_distance_desc: "Prevents screen hunching (<50cm) and computer vision syndrome.",
         title_sit: "Sitting Desk",
         title_stand: "Standing Desk",
         title_pause: "Active Break & Stretch",
@@ -1959,11 +2031,18 @@
         reason_neck: "Forward neck",
         reason_shoulder: "Shoulder shrug",
         reason_tilt: "Head tilt",
+        reason_distance: "Screen proximity (<50cm)",
         status_optimal: "Optimal posture",
         status_alert_prefix: "Alert: Please straighten up (",
         badge_alert: "ALERT",
         badge_transition: "SWITCH",
         badge_summary: "CYCLE",
+        badge_eye_rest: "EYES",
+        eye_rest_title: "20-20-20 Eye Rest",
+        eye_rest_desc: "Relax your eyes: look at an object at least 20 feet away for 20 seconds.",
+        eye_rest_sub: "Ciliary muscle relaxation in progress...",
+        eye_rest_complete: "Eye rest complete! Your eyes are refreshed.",
+        btn_skip_eye_rest: "Skip",
         transition_to: "Switched to",
         cycle_summary_title: "Cycle completed",
         standing_warning_sub: "min standing: consider shifting support",
@@ -2073,6 +2152,18 @@
       document.querySelector('#cardShoulder .gauge-caption').innerText = t('gauge_shoulder_desc');
       document.querySelector('#cardTilt .gauge-title-box span').innerText = t('gauge_tilt_title');
       document.querySelector('#cardTilt .gauge-caption').innerText = t('gauge_tilt_desc');
+      const cardDistTitle = document.querySelector('#cardDistance .gauge-title-box span');
+      if (cardDistTitle) cardDistTitle.innerText = t('gauge_distance_title');
+      const cardDistDesc = document.querySelector('#cardDistance .gauge-caption');
+      if (cardDistDesc) cardDistDesc.innerText = t('gauge_distance_desc');
+
+      // Eye Rest Banner
+      const eyeTitle = document.getElementById('eyeRestTitle');
+      if (eyeTitle) eyeTitle.innerText = t('eye_rest_title');
+      const eyeDesc = document.getElementById('eyeRestDesc');
+      if (eyeDesc) eyeDesc.innerText = t('eye_rest_desc');
+      const eyeBtn = document.getElementById('btnSkipEyeRest');
+      if (eyeBtn) eyeBtn.innerText = t('btn_skip_eye_rest');
 
       // Footer
       const footer = document.querySelector('footer');
@@ -2737,12 +2828,15 @@
       }
 
       const shoulderWidth = Math.hypot(leftShoulder.x - rightShoulder.x, leftShoulder.y - rightShoulder.y) || 0.001;
+      const faceWidth = Math.hypot(leftEar.x - rightEar.x, leftEar.y - rightEar.y) || 0.001;
       const midShoulderY = (leftShoulder.y + rightShoulder.y) / 2;
 
       return {
         neckHeightRatio: (midShoulderY - nose.y) / shoulderWidth,
         shoulderDiffRatio: (rightShoulder.y - leftShoulder.y) / shoulderWidth,
-        headTiltRatio: Math.abs(leftEar.y - rightEar.y) / shoulderWidth
+        headTiltRatio: Math.abs(leftEar.y - rightEar.y) / shoulderWidth,
+        faceWidth,
+        shoulderWidth
       };
     }
 
@@ -2808,25 +2902,31 @@
           updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
           updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
           updateGauge('cardTilt', 'badgeTilt', 'fillTilt', 0);
+          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', 0);
         } else if (baseline) {
           const sens = parseFloat(document.getElementById('sensitivitySelect').value);
 
           const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
           const shoulderDelta = (current.shoulderDiffRatio - baseline.shoulderDiffRatio);
           const tiltDelta = (current.headTiltRatio - baseline.headTiltRatio);
+          const distanceIncrease = baseline.faceWidth > 0 ? (current.faceWidth - baseline.faceWidth) / baseline.faceWidth : 0;
 
           const neckThreshold = 0.13 * sens;
           const shoulderThreshold = 0.08 * sens;
           const tiltThreshold = 0.11 * sens;
+          const distanceThreshold = 0.22 * sens;
 
           updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
           updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
           updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
+          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
 
           const isNeckBad = neckDelta > neckThreshold;
           const isShoulderBad = shoulderDelta > shoulderThreshold;
           const isTiltBad = tiltDelta > tiltThreshold;
-          const anyBad = isNeckBad || isShoulderBad || isTiltBad;
+          const isDistanceBad = distanceIncrease > distanceThreshold;
+          const isEyeRestOn = typeof eyeRestManager !== 'undefined' && eyeRestManager && eyeRestManager.isEyeRestActive;
+          const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !isEyeRestOn;
 
           totalFrames++;
           sessionTotalFrames++;
@@ -2843,7 +2943,7 @@
           }
 
           if (anyBad) {
-            let reasonKey = isNeckBad ? "reason_neck" : (isShoulderBad ? "reason_shoulder" : "reason_tilt");
+            let reasonKey = isNeckBad ? "reason_neck" : (isShoulderBad ? "reason_shoulder" : (isTiltBad ? "reason_tilt" : "reason_distance"));
             let reason = t(reasonKey);
             hudStatus = t('hud_deviation') + " " + reason.toUpperCase();
             hudColor = "rgba(245, 158, 11, 0.92)";
@@ -3687,6 +3787,145 @@
         }
       });
     }
+
+    // ----------------------------------------------------
+    // EYE REST 20-20-20 MANAGER
+    // ----------------------------------------------------
+    class EyeRestManager {
+      constructor(config = { workMinutes: 20, restSeconds: 20 }) {
+        this.config = { ...config };
+        this.workSeconds = this.config.workMinutes * 60;
+        this.restSeconds = this.config.restSeconds;
+        this.remainingWorkSeconds = this.workSeconds;
+        this.remainingRestSeconds = this.restSeconds;
+        this.isEyeRestActive = false;
+        this.isPaused = false;
+        this.timerId = null;
+        this.callbacks = {
+          onTick: null,
+          onRestStart: null,
+          onRestEnd: null
+        };
+      }
+
+      setCallbacks({ onTick, onRestStart, onRestEnd }) {
+        if (onTick) this.callbacks.onTick = onTick;
+        if (onRestStart) this.callbacks.onRestStart = onRestStart;
+        if (onRestEnd) this.callbacks.onRestEnd = onRestEnd;
+      }
+
+      start() {
+        this.stop();
+        this.isPaused = false;
+        this.isEyeRestActive = false;
+        this.remainingWorkSeconds = this.workSeconds;
+        this.remainingRestSeconds = this.restSeconds;
+        this._runTimer();
+      }
+
+      _runTimer() {
+        this.timerId = setInterval(() => {
+          if (this.isPaused) return;
+
+          if (!this.isEyeRestActive) {
+            this.remainingWorkSeconds--;
+            if (this.callbacks.onTick) {
+              this.callbacks.onTick({
+                workSecondsRemaining: this.remainingWorkSeconds,
+                restSecondsRemaining: this.remainingRestSeconds,
+                isEyeRestActive: false
+              });
+            }
+
+            if (this.remainingWorkSeconds <= 0) {
+              this.startRest();
+            }
+          } else {
+            this.remainingRestSeconds--;
+            playSoftTick();
+
+            if (this.callbacks.onTick) {
+              this.callbacks.onTick({
+                workSecondsRemaining: 0,
+                restSecondsRemaining: this.remainingRestSeconds,
+                isEyeRestActive: true
+              });
+            }
+
+            if (this.remainingRestSeconds <= 0) {
+              this.endRest();
+            }
+          }
+        }, 1000);
+      }
+
+      startRest() {
+        this.isEyeRestActive = true;
+        this.remainingRestSeconds = this.restSeconds;
+        playZenBell(528);
+        if (this.callbacks.onRestStart) {
+          this.callbacks.onRestStart();
+        }
+      }
+
+      endRest() {
+        this.isEyeRestActive = false;
+        this.remainingWorkSeconds = this.workSeconds;
+        this.remainingRestSeconds = this.restSeconds;
+        playZenBell(660);
+        if (this.callbacks.onRestEnd) {
+          this.callbacks.onRestEnd();
+        }
+      }
+
+      skipRest() {
+        if (this.isEyeRestActive) {
+          this.endRest();
+        }
+      }
+
+      pause() {
+        this.isPaused = true;
+      }
+
+      resume() {
+        this.isPaused = false;
+      }
+
+      stop() {
+        if (this.timerId) {
+          clearInterval(this.timerId);
+          this.timerId = null;
+        }
+      }
+    }
+
+    const eyeRestManager = new EyeRestManager();
+    const eyeRestBanner = document.getElementById('eyeRestBanner');
+    const eyeRestDigits = document.getElementById('eyeRestDigits');
+    const btnSkipEyeRest = document.getElementById('btnSkipEyeRest');
+
+    if (btnSkipEyeRest) {
+      btnSkipEyeRest.addEventListener('click', () => eyeRestManager.skipRest());
+    }
+
+    eyeRestManager.setCallbacks({
+      onTick: ({ restSecondsRemaining, isEyeRestActive }) => {
+        if (isEyeRestActive && eyeRestDigits) {
+          eyeRestDigits.innerText = `${restSecondsRemaining}s`;
+        }
+      },
+      onRestStart: () => {
+        if (eyeRestBanner) eyeRestBanner.style.display = 'flex';
+        stopContinuousPostureAlert();
+        triggerAlertNotification(t('eye_rest_title'));
+      },
+      onRestEnd: () => {
+        if (eyeRestBanner) eyeRestBanner.style.display = 'none';
+        addDailyLog('summary', t('eye_rest_complete'), currentMode);
+      }
+    });
+    eyeRestManager.start();
 
     // ----------------------------------------------------
     // INITIALISATION APPLICATIVE

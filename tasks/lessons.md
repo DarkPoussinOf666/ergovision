@@ -36,4 +36,9 @@
 - **Guidage Bienveillant vs Surveillance Algorithmique Inquisitrice** : Lors d'une pause active, l'utilisateur a besoin de relâcher sa tension musculaire et mentale. Remplacer un chrono vide par des fiches d'exercices animées (McKenzie, Brügger, Extension thoracique, Bascule pelvienne) avec tempo respiratoire guidé et carillon zen bol tibétain (~432Hz) apporte une immense valeur réparatrice sans générer le stress d'une évaluation par caméra.
 - **Micro-Étirements Découplés du FOV de la Webcam** : Les mouvements du dos (bascule du bassin sur chaise, décompression lombaire) se déroulent souvent hors du champ restreint d'une webcam de PC portable. Privilégier un guidage visuel/sonore autonome plutôt qu'une validation IA contraignante garantit un fonctionnement 100% robuste quel que soit l'angle ou la distance du poste de travail.
 
+## 9. Surveillance Monoculaire de la Distance Écran & Règle Oculaire 20-20-20
+- **Détection de Profondeur Z sans Capteur LiDAR** : En normalisant la largeur faciale inter-oculaire et bi-auriculaire par la largeur d'épaules et en comparant cette valeur relative à celle mesurée lors de la calibration, on détecte avec fiabilité l'avancement du buste vers l'écran (<50cm, seuil de risque visuel et cervical).
+- **Suspension Croisée d'Alertes en Phase Oculaire** : Durant la pause 20-20-20, l'utilisateur tourne le regard vers l'horizon (au moins 6 mètres). Couper les alertes de posture durant ces 20 secondes évite les faux positifs et garantit une expérience utilisateur fluide et apaisante.
+
+
 

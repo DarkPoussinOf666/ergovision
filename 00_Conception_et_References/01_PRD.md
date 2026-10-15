@@ -17,6 +17,7 @@
 - **Critères d'acceptation (KPIs)** :
   - [x] **Surveillance Cervicale & Text-Neck** : Précision du ratio distance nez-épaules et détection d'inclinaison latérale sans faux positif lors des mouvements naturels de tête.
   - [x] **Surveillance Scapulaire & Épaules** : Calibration sur-mesure d'un « Point Zéro » tenant compte de l'anatomie de l'utilisateur et détection des hausses réflexes d'épaules.
+  - [x] **Surveillance de la Distance Écran-Yeux (Profondeur Z - v2.1)** : 4ème jauge biomécanique mesurant l'avancée de la tête par rapport au plan neutre (seuil INRS 50-70cm), détectant le rapprochement visuel excessif.
   - [x] **Anti-rebond (Debouncing / Latch)** : Zéro duplication des alertes et des logs lors d'une mauvaise posture continue (1 alerte par dérive).
   - [x] Pacing dynamique & personnalisable : Respect des plages de travail (Assis, Debout, Pause active) avec durées configurables dans l'interface et persistées en `localStorage`.
   - [x] **Timer à défilement négatif (Overtime Pacing)** : Défilement sous zéro (`-01:23`) en fin de cycle sans interruption brutale, avec style d'avertissement et consigne automatique du score de posture neutre du cycle.
@@ -26,22 +27,25 @@
   - [x] **Journal Quotidien Enrichi & Persistant** : Sauvegarde locale journalière (`localStorage`) des alertes, passages de modes et bilans de maintien neutre.
   - [x] **Centre de Contrôle Fluent UI 2** : Modal à onglets avec presets ergonomiques (Pomodoro 25/5, 45/15, 50/10), curseurs synchronisés et tests audio intégrés.
   - [x] Pause active intelligente : Suspension automatique des alertes en mode Pause & Étirement pour libre mouvement.
+  - [x] **Gardien Visuel & Règle Oculaire 20-20-20 (v2.1)** : Micro-pauses automatiques toutes les 20 minutes avec compte à rebours de 20 secondes, carillon 528Hz réparateur et suspension croisée bienveillante des alertes posturales.
   - [x] Picture-in-Picture (PiP) : Rendu miroir naturel avec HUD lisible et non inversé.
   - [x] Confidentialité absolue : 0 trame vidéo sortante du navigateur (traitement local client-side).
 
 ---
 
-## 3. Scope & Fonctionnalités (v2.0)
+## 3. Scope & Fonctionnalités (v2.1)
 - **Fonctionnalités Clés (In-Scope)** :
   - [x] Détection temps réel MediaPipe Pose via Canvas WebGL/Wasm avec filtrage de visibilité (`visibility > 0.45`).
   - [x] Calibration guidée interactive (3-2-1 sonore) mémorisant le point zéro physiologique.
-  - [x] Moteur audio Web Audio API polyphonique : alertes continues/pulsées dynamiques, carillon de cycle et bols zen kiné (432Hz).
+  - [x] Moteur audio Web Audio API polyphonique : alertes continues/pulsées dynamiques, carillon de cycle, bols zen kiné (432Hz) et carillon oculaire (528Hz).
   - [x] Pacing postural multi-modes : Bureau Assis, Station Debout, Pause & Étirement active avec gestion du dépassement (overtime).
   - [x] **Atelier Kiné du Dos & Pause Active Intelligente (v2.0)** : Catalogue clinique d'exercices de décharge du rachis (McKenzie, Brügger, Extension thoracique, Bascule pelvienne) avec guidage visuel SVG, timing de maintien, répétitions et respiration guidée.
+  - [x] **Surveillance de la Proximité Écran (v2.1)** : 4ème jauge biomécanique en temps réel basée sur la variation d'échelle faciale relative au point zéro.
+  - [x] **Gardien Visuel 20-20-20 (v2.1)** : Gestionnaire de santé oculaire rappelant toutes les 20 minutes de fixer l'horizon pendant 20 secondes avec bannière discrète et bouton « Passer ».
   - [x] Modal Centre de Contrôle Fluent UI 2 : presets 1-clic, réglage volume, test son, latence et sensibilité.
   - [x] Switch de langue instantané Français / Anglais.
   - [x] Mode Picture-in-Picture (PiP) avec incrustation du HUD de feedback.
-  - [x] Journal chronologique persistant des alertes, transitions, séances kiné et scores de cycles avec export CSV.
+  - [x] Journal chronologique persistant des alertes, transitions, séances kiné, pauses oculaires et scores de cycles avec export CSV.
 - **Hors Périmètre (Out-of-Scope)** :
   - Pas de backend cloud, pas de base de données distante, pas de compte utilisateur obligatoire.
   - Pas d'évaluation invasive ou punitive des exercices (guidage bienveillant non bloquant).

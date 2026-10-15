@@ -17,6 +17,7 @@ import {
 } from './vision/camera-stream.js';
 import { KineRoutineManager } from './kine/routine-timer.js';
 import { KineStudioView } from './ui/kine-studio-view.js';
+import { EyeRestManager } from './pacing/eye-rest-timer.js';
 
 // DOM References
 const videoElement = document.getElementById('input_video');
@@ -68,6 +69,34 @@ if (document.getElementById('kineStudioContainer')) {
     }
   });
 }
+
+// Eye Rest 20-20-20 Instance
+const eyeRestManager = new EyeRestManager();
+const eyeRestBanner = document.getElementById('eyeRestBanner');
+const eyeRestDigits = document.getElementById('eyeRestDigits');
+const btnSkipEyeRest = document.getElementById('btnSkipEyeRest');
+
+if (btnSkipEyeRest) {
+  btnSkipEyeRest.addEventListener('click', () => eyeRestManager.skipRest());
+}
+
+eyeRestManager.setCallbacks({
+  onTick: ({ restSecondsRemaining, isEyeRestActive }) => {
+    if (isEyeRestActive && eyeRestDigits) {
+      eyeRestDigits.innerText = `${restSecondsRemaining}s`;
+    }
+  },
+  onRestStart: () => {
+    if (eyeRestBanner) eyeRestBanner.style.display = 'flex';
+    stopContinuousPostureAlert();
+    triggerAlertNotification(t('eye_rest_title'));
+  },
+  onRestEnd: () => {
+    if (eyeRestBanner) eyeRestBanner.style.display = 'none';
+    addDailyLog('summary', t('eye_rest_complete'), currentMode);
+  }
+});
+eyeRestManager.start();
 
 // Init Theme
 applyTheme(getSavedTheme(), btnTheme);
@@ -431,25 +460,30 @@ function onResults(results) {
       updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
       updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
       updateGauge('cardTilt', 'badgeTilt', 'fillTilt', 0);
+      updateGauge('cardDistance', 'badgeDistance', 'fillDistance', 0);
     } else if (baseline) {
       const sens = parseFloat(sensitivitySelect.value);
 
       const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
       const shoulderDelta = (current.shoulderDiffRatio - baseline.shoulderDiffRatio);
       const tiltDelta = (current.headTiltRatio - baseline.headTiltRatio);
+      const distanceIncrease = baseline.faceWidth > 0 ? (current.faceWidth - baseline.faceWidth) / baseline.faceWidth : 0;
 
       const neckThreshold = 0.13 * sens;
       const shoulderThreshold = 0.08 * sens;
       const tiltThreshold = 0.11 * sens;
+      const distanceThreshold = 0.22 * sens;
 
       updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
       updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
       updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
+      updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
 
       const isNeckBad = neckDelta > neckThreshold;
       const isShoulderBad = shoulderDelta > shoulderThreshold;
       const isTiltBad = tiltDelta > tiltThreshold;
-      const anyBad = isNeckBad || isShoulderBad || isTiltBad;
+      const isDistanceBad = distanceIncrease > distanceThreshold;
+      const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !eyeRestManager.isEyeRestActive;
 
       totalFrames++;
       sessionTotalFrames++;
@@ -466,7 +500,7 @@ function onResults(results) {
       }
 
       if (anyBad) {
-        let reasonKey = isNeckBad ? "reason_neck" : (isShoulderBad ? "reason_shoulder" : "reason_tilt");
+        let reasonKey = isNeckBad ? "reason_neck" : (isShoulderBad ? "reason_shoulder" : (isTiltBad ? "reason_tilt" : "reason_distance"));
         let reason = t(reasonKey);
         hudStatus = t('hud_deviation') + " " + reason.toUpperCase();
         hudColor = "rgba(245, 158, 11, 0.92)";
@@ -592,6 +626,18 @@ function setLanguage(lang) {
     kineStudioView.renderInitialStructure();
     kineStudioView.updateExercise(kineRoutineManager.getCurrentExercise(), kineRoutineManager.currentIndex, kineRoutineManager.exercises.length);
   }
+
+  const titleDist = document.getElementById('titleGaugeDistance');
+  const descDist = document.getElementById('descGaugeDistance');
+  if (titleDist) titleDist.innerText = t('gauge_distance_title');
+  if (descDist) descDist.innerText = t('gauge_distance_desc');
+
+  const eyeTitle = document.getElementById('eyeRestTitle');
+  const eyeDesc = document.getElementById('eyeRestDesc');
+  const btnSkipEye = document.querySelector('#btnSkipEyeRest span');
+  if (eyeTitle) eyeTitle.innerText = t('eye_rest_title');
+  if (eyeDesc) eyeDesc.innerText = t('eye_rest_desc');
+  if (btnSkipEye) btnSkipEye.innerText = t('btn_skip_eye_rest');
 
   updateTimerDisplayTitles();
   renderAllLogs();
