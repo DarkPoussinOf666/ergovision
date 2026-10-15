@@ -1,0 +1,36 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+
+# Node & Package Managers
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE & Editor Settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment & Secrets (Zero-Trust Guardrail)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+
+# Temporary Scratch Files
+tasks/*.tmp
+tasks/extract_modules.js
+tasks/build_modular_src.js
+tasks/build_vision_and_app.js

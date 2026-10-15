@@ -1,0 +1,221 @@
+/**
+ * ErgoVision AI — Fluent UI 2 Design Tokens (CSS Custom Properties)
+ * Standard: Fluent UI 2 Web Specification / DTCG Aligned
+ * Accessibility: WCAG 2.1 Level AA Verified (Contrast >= 4.5:1 text, >= 3.0:1 UI)
+ */
+
+:root, [data-theme="light"] {
+  /* ==========================================================================
+     1. COLOR SYSTEM (LIGHT THEME)
+     ========================================================================== */
+
+  /* Neutral Surfaces (Canvas & Layering) */
+  --fluent-color-neutral-background-1: #ffffff; /* Primary page canvas */
+  --fluent-color-neutral-background-2: #fafafa; /* Side panels / Secondary */
+  --fluent-color-neutral-background-3: #f5f5f5; /* Cards / Nested containers */
+  --fluent-color-neutral-background-4: #f0f0f0; /* Deepest nested layer */
+  --fluent-color-neutral-background-inverted: #242424; /* Tooltips / Dark overlays */
+  
+  --fluent-color-subtle-background: transparent;
+  --fluent-color-subtle-background-hover: #f5f5f5;
+  --fluent-color-subtle-background-pressed: #e0e0e0;
+  --fluent-color-subtle-background-selected: #ebebeb;
+
+  /* Neutral Foreground (Typography & Icons) */
+  --fluent-color-neutral-foreground-1: #242424; /* Primary body text (Ratio > 14:1 on white) */
+  --fluent-color-neutral-foreground-2: #424242; /* Secondary body text (Ratio > 9:1) */
+  --fluent-color-neutral-foreground-3: #616161; /* Tertiary text / metadata (Ratio > 5.5:1) */
+  --fluent-color-neutral-foreground-4: #707070; /* Subdued placeholders (Ratio > 4.5:1) */
+  --fluent-color-neutral-foreground-disabled: #bdbdbd;
+  --fluent-color-neutral-foreground-inverted: #ffffff;
+  --fluent-color-neutral-foreground-on-brand: #ffffff;
+
+  /* Neutral Strokes / Borders */
+  --fluent-color-neutral-stroke-1: #d1d1d1; /* Standard input/card borders */
+  --fluent-color-neutral-stroke-2: #e0e0e0; /* Dividers and separators */
+  --fluent-color-neutral-stroke-3: #f0f0f0; /* Subtle grouped lines */
+  --fluent-color-neutral-stroke-subtle: #e0e0e0;
+  --fluent-color-neutral-stroke-accessible: #616161; /* Guaranteed 3:1 boundary */
+  --fluent-color-neutral-stroke-disabled: #e0e0e0;
+
+  /* Brand Colors (Ergonomic Medical Cyan/Blue) */
+  --fluent-color-brand-background: #0f6cbd; /* Stop 80 */
+  --fluent-color-brand-background-hover: #0f70bf; /* Stop 70 */
+  --fluent-color-brand-background-pressed: #115ea3; /* Stop 60 */
+  --fluent-color-brand-background-selected: #0f70bf;
+  --fluent-color-brand-foreground-1: #0f6cbd;
+  --fluent-color-brand-foreground-link: #115ea3;
+  --fluent-color-brand-foreground-link-hover: #0e2a44;
+  --fluent-color-brand-stroke-1: #0f6cbd;
+
+  /* Biomechanical Status Indicators */
+  /* Success: Aligned Posture (Émeraude) */
+  --fluent-color-status-success-background-1: #e6f7ef;
+  --fluent-color-status-success-foreground-1: #0e7042;
+  --fluent-color-status-success-border-1: #92d8b3;
+  
+  /* Warning: Pre-Alert & Pacing (Ambre) */
+  --fluent-color-status-warning-background-1: #fff8e5;
+  --fluent-color-status-warning-foreground-1: #8f6200;
+  --fluent-color-status-warning-border-1: #fce18d;
+
+  /* Danger: Postural Deflection Alert (Rose / Rouge Clinique) */
+  --fluent-color-status-danger-background-1: #fdf3f4;
+  --fluent-color-status-danger-foreground-1: #b71c1c;
+  --fluent-color-status-danger-border-1: #f4a8a8;
+
+  /* Focus Outlines (Double-Ring A11y Pattern) */
+  --fluent-color-stroke-focus-1: #ffffff; /* Inner ring */
+  --fluent-color-stroke-focus-2: #000000; /* Outer ring */
+
+  /* Glassmorphism / Acrylic Workstation */
+  --fluent-surface-acrylic: rgba(255, 255, 255, 0.85);
+  --fluent-surface-blur: 16px;
+
+  /* Shadows (Dual-Layer: Key + Ambient) */
+  --fluent-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-4: 0 2px 4px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-8: 0 4px 8px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-28: 0 14px 28px rgba(0, 0, 0, 0.24), 0 0 8px rgba(0, 0, 0, 0.20);
+}
+
+/* ==========================================================================
+   DARK THEME (STUDIO WORKSTATION)
+   ========================================================================== */
+[data-theme="dark"] {
+  /* Neutral Surfaces (OLED / Deep Slate hierarchy) */
+  --fluent-color-neutral-background-1: #1f1f1f; /* Primary page canvas */
+  --fluent-color-neutral-background-2: #141414; /* Side panels / Shelves */
+  --fluent-color-neutral-background-3: #292929; /* Cards / Bento tiles */
+  --fluent-color-neutral-background-4: #333333; /* Layered container */
+  --fluent-color-neutral-background-inverted: #ffffff;
+
+  --fluent-color-subtle-background: transparent;
+  --fluent-color-subtle-background-hover: #383838;
+  --fluent-color-subtle-background-pressed: #2e2e2e;
+  --fluent-color-subtle-background-selected: #333333;
+
+  /* Neutral Foreground (Typography & Icons) */
+  --fluent-color-neutral-foreground-1: #ffffff; /* Primary text (16:1 ratio) */
+  --fluent-color-neutral-foreground-2: #d6d6d6; /* Secondary body (11:1 ratio) */
+  --fluent-color-neutral-foreground-3: #adadad; /* Tertiary / Captions (7:1 ratio) */
+  --fluent-color-neutral-foreground-4: #999999; /* Subdued placeholders (5:1 ratio) */
+  --fluent-color-neutral-foreground-disabled: #5c5c5c;
+  --fluent-color-neutral-foreground-inverted: #242424;
+  --fluent-color-neutral-foreground-on-brand: #000000;
+
+  /* Neutral Strokes / Borders */
+  --fluent-color-neutral-stroke-1: #525252;
+  --fluent-color-neutral-stroke-2: #424242;
+  --fluent-color-neutral-stroke-3: #333333;
+  --fluent-color-neutral-stroke-subtle: #383838;
+  --fluent-color-neutral-stroke-accessible: #adadad;
+  --fluent-color-neutral-stroke-disabled: #424242;
+
+  /* Brand Colors */
+  --fluent-color-brand-background: #479ef5; /* Stop 100 */
+  --fluent-color-brand-background-hover: #62abf5; /* Stop 110 */
+  --fluent-color-brand-background-pressed: #2886de; /* Stop 90 */
+  --fluent-color-brand-background-selected: #479ef5;
+  --fluent-color-brand-foreground-1: #479ef5;
+  --fluent-color-brand-foreground-link: #62abf5;
+  --fluent-color-brand-foreground-link-hover: #96c6fa;
+  --fluent-color-brand-stroke-1: #479ef5;
+
+  /* Biomechanical Status Indicators */
+  --fluent-color-status-success-background-1: #0a2e1d;
+  --fluent-color-status-success-foreground-1: #54b080;
+  --fluent-color-status-success-border-1: #1d5738;
+
+  --fluent-color-status-warning-background-1: #382800;
+  --fluent-color-status-warning-foreground-1: #e8b339;
+  --fluent-color-status-warning-border-1: #6b4d00;
+
+  --fluent-color-status-danger-background-1: #3b080c;
+  --fluent-color-status-danger-foreground-1: #f1707b;
+  --fluent-color-status-danger-border-1: #751c24;
+
+  /* Focus Outlines */
+  --fluent-color-stroke-focus-1: #000000; /* Inner ring */
+  --fluent-color-stroke-focus-2: #ffffff; /* Outer ring */
+
+  /* Glassmorphism / Acrylic Workstation */
+  --fluent-surface-acrylic: rgba(31, 31, 31, 0.82);
+  --fluent-surface-blur: 16px;
+
+  /* Shadows (Dark Theme High Depth) */
+  --fluent-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 2px rgba(0, 0, 0, 0.25);
+  --fluent-shadow-4: 0 2px 4px rgba(0, 0, 0, 0.40), 0 0 2px rgba(0, 0, 0, 0.30);
+  --fluent-shadow-8: 0 4px 8px rgba(0, 0, 0, 0.45), 0 0 2px rgba(0, 0, 0, 0.35);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.50), 0 0 2px rgba(0, 0, 0, 0.40);
+  --fluent-shadow-28: 0 14px 28px rgba(0, 0, 0, 0.60), 0 0 8px rgba(0, 0, 0, 0.50);
+}
+
+/* ==========================================================================
+   2. TYPOGRAPHY, SPACING, RADIUS & MOTION (THEME-INDEPENDENT)
+   ========================================================================== */
+:root {
+  /* Typography Scale */
+  --fluent-font-family-base: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  --fluent-font-family-monospace: Consolas, 'Courier New', Courier, monospace;
+  --fluent-font-family-numeric: Bahnschrift, 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+
+  --fluent-font-size-100: 10px;
+  --fluent-line-height-100: 14px;
+  --fluent-font-size-200: 12px;
+  --fluent-line-height-200: 16px;
+  --fluent-font-size-300: 14px;
+  --fluent-line-height-300: 20px;
+  --fluent-font-size-400: 16px;
+  --fluent-line-height-400: 22px;
+  --fluent-font-size-500: 20px;
+  --fluent-line-height-500: 28px;
+  --fluent-font-size-600: 24px;
+  --fluent-line-height-600: 32px;
+  --fluent-font-size-700: 28px;
+  --fluent-line-height-700: 36px;
+  --fluent-font-size-800: 32px;
+  --fluent-line-height-800: 40px;
+
+  --fluent-font-weight-regular: 400;
+  --fluent-font-weight-medium: 500;
+  --fluent-font-weight-semibold: 600;
+  --fluent-font-weight-bold: 700;
+
+  /* Spacing Scale (4px base) */
+  --fluent-spacing-none: 0px;
+  --fluent-spacing-xxs: 2px;
+  --fluent-spacing-xs: 4px;
+  --fluent-spacing-s-nudge: 6px;
+  --fluent-spacing-s: 8px;
+  --fluent-spacing-m-nudge: 10px;
+  --fluent-spacing-m: 12px;
+  --fluent-spacing-l: 16px;
+  --fluent-spacing-xl: 20px;
+  --fluent-spacing-xxl: 24px;
+  --fluent-spacing-xxxl: 32px;
+
+  /* Border Radii */
+  --fluent-border-radius-none: 0px;
+  --fluent-border-radius-small: 2px;
+  --fluent-border-radius-medium: 4px;
+  --fluent-border-radius-large: 6px;
+  --fluent-border-radius-x-large: 8px;
+  --fluent-border-radius-circular: 10000px;
+
+  /* Platform Touch Targets */
+  --fluent-touch-target-desktop: 32px;
+  --fluent-touch-target-touch: 48px;
+
+  /* Motion & Transitions */
+  --fluent-duration-ultra-fast: 50ms;
+  --fluent-duration-faster: 100ms;
+  --fluent-duration-fast: 150ms;
+  --fluent-duration-normal: 200ms;
+  --fluent-duration-gentle: 250ms;
+  --fluent-duration-slow: 300ms;
+  --fluent-curve-decelerate: cubic-bezier(0.1, 0.9, 0.2, 1);
+  --fluent-curve-accelerate: cubic-bezier(0.9, 0.1, 1, 0.2);
+  --fluent-curve-easy-ease: cubic-bezier(0.33, 0, 0.67, 1);
+}

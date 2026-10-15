@@ -1,0 +1,2883 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErgoVision AI — Studio Biomécanique & Gardien Postural</title>
+  
+  <!-- MediaPipe Pose & Camera Utilities -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+
+  <style>
+    /* ==========================================================================
+       FLUENT UI 2 TOKENS & ADVANCED MICA / ACRYLIC MATERIALS
+       WCAG 2.1 Level AA Compliant
+       ========================================================================== */
+    :root, [data-theme="light"] {
+      /* Mica Base & Canvas */
+      --fluent-bg-canvas: #f3f5f9;
+      --fluent-bg-subtle: #eaeff5;
+      --fluent-bg-card: rgba(255, 255, 255, 0.88);
+      --fluent-bg-card-inner: #ffffff;
+      --fluent-bg-card-gradient-end: #f8fafc;
+      --fluent-bg-elevated: #ffffff;
+      --fluent-bg-backdrop: rgba(243, 245, 249, 0.85);
+
+      /* Glass highlights & specular edge bevels */
+      --fluent-glass-highlight: rgba(255, 255, 255, 0.95);
+      --fluent-glass-shine: rgba(255, 255, 255, 0.4);
+
+      /* Typography */
+      --fluent-fg-primary: #0f172a;
+      --fluent-fg-secondary: #334155;
+      --fluent-fg-muted: #64748b;
+      --fluent-fg-on-brand: #ffffff;
+
+      /* Strokes & Separators */
+      --fluent-stroke-subtle: rgba(15, 23, 42, 0.08);
+      --fluent-stroke-default: rgba(15, 23, 42, 0.14);
+      --fluent-stroke-strong: rgba(15, 23, 42, 0.28);
+
+      /* Brand Workstation Blue (Fluent Stop 80) */
+      --fluent-brand: #0f6cbd;
+      --fluent-brand-hover: #115ea3;
+      --fluent-brand-pressed: #0c4a7f;
+      --fluent-brand-tint: rgba(15, 108, 189, 0.08);
+      --fluent-brand-border: rgba(15, 108, 189, 0.25);
+      --fluent-brand-glow: 0 0 16px rgba(15, 108, 189, 0.25);
+
+      /* Biomechanical Status Indicators (AA Compliant) */
+      --status-success: #0e7042;
+      --status-success-bg: rgba(14, 112, 66, 0.08);
+      --status-success-border: rgba(14, 112, 66, 0.25);
+      --status-success-glow: 0 0 14px rgba(14, 112, 66, 0.2);
+
+      --status-warning: #8f6200;
+      --status-warning-bg: rgba(143, 98, 0, 0.08);
+      --status-warning-border: rgba(143, 98, 0, 0.25);
+      --status-warning-glow: 0 0 14px rgba(143, 98, 0, 0.2);
+
+      --status-danger: #b71c1c;
+      --status-danger-bg: rgba(183, 28, 28, 0.08);
+      --status-danger-border: rgba(183, 28, 28, 0.25);
+      --status-danger-glow: 0 0 16px rgba(183, 28, 28, 0.3);
+
+      /* A11y Focus Rings */
+      --focus-ring-inner: #ffffff;
+      --focus-ring-outer: #0f172a;
+
+      /* Fluent Dual-Layer Elevation */
+      --shadow-rest: 0 2px 4px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.03);
+      --shadow-hover: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
+      --shadow-modal: 0 20px 40px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.06);
+
+      --halo-alert: inset 0 0 80px rgba(183, 28, 28, 0.4);
+    }
+
+    [data-theme="dark"] {
+      /* Mica Alt & Deep OLED Workstation */
+      --fluent-bg-canvas: #090c14;
+      --fluent-bg-subtle: #0f1523;
+      --fluent-bg-card: rgba(18, 25, 40, 0.78);
+      --fluent-bg-card-inner: rgba(14, 19, 32, 0.85);
+      --fluent-bg-card-gradient-end: rgba(9, 13, 22, 0.9);
+      --fluent-bg-elevated: #1e283d;
+      --fluent-bg-backdrop: rgba(9, 12, 20, 0.82);
+
+      /* Glass highlights & specular edge bevels */
+      --fluent-glass-highlight: rgba(255, 255, 255, 0.12);
+      --fluent-glass-shine: rgba(255, 255, 255, 0.05);
+
+      /* Typography */
+      --fluent-fg-primary: #f8fafc;
+      --fluent-fg-secondary: #cbd5e1;
+      --fluent-fg-muted: #94a3b8;
+      --fluent-fg-on-brand: #ffffff;
+
+      /* Strokes & Separators */
+      --fluent-stroke-subtle: rgba(255, 255, 255, 0.07);
+      --fluent-stroke-default: rgba(255, 255, 255, 0.12);
+      --fluent-stroke-strong: rgba(255, 255, 255, 0.22);
+
+      /* Brand Workstation Blue (Fluent Stop 100) */
+      --fluent-brand: #2886de;
+      --fluent-brand-hover: #479ef5;
+      --fluent-brand-pressed: #1a65ab;
+      --fluent-brand-tint: rgba(40, 134, 222, 0.14);
+      --fluent-brand-border: rgba(40, 134, 222, 0.38);
+      --fluent-brand-glow: 0 0 20px rgba(40, 134, 222, 0.3);
+
+      /* Biomechanical Status Indicators */
+      --status-success: #34d399;
+      --status-success-bg: rgba(16, 185, 129, 0.12);
+      --status-success-border: rgba(16, 185, 129, 0.35);
+      --status-success-glow: 0 0 16px rgba(16, 185, 129, 0.25);
+
+      --status-warning: #fbbf24;
+      --status-warning-bg: rgba(245, 158, 11, 0.12);
+      --status-warning-border: rgba(245, 158, 11, 0.35);
+      --status-warning-glow: 0 0 16px rgba(245, 158, 11, 0.25);
+
+      --status-danger: #f87171;
+      --status-danger-bg: rgba(239, 68, 68, 0.16);
+      --status-danger-border: rgba(239, 68, 68, 0.42);
+      --status-danger-glow: 0 0 20px rgba(239, 68, 68, 0.35);
+
+      /* A11y Focus Rings */
+      --focus-ring-inner: #090c14;
+      --focus-ring-outer: #38bdf8;
+
+      /* Fluent Dual-Layer Elevation */
+      --shadow-rest: 0 3px 8px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
+      --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.65), 0 3px 8px rgba(0, 0, 0, 0.4);
+      --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.8), 0 6px 16px rgba(0, 0, 0, 0.5);
+
+      --halo-alert: inset 0 0 90px rgba(239, 68, 68, 0.7);
+    }
+
+    :root {
+      --font-family-base: 'Segoe UI Variable Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      --font-family-numeric: 'Bahnschrift', 'Segoe UI Variable Display', 'Segoe UI', -apple-system, sans-serif;
+      --font-family-mono: 'Cascadia Code', Consolas, 'SF Mono', monospace;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      --touch-desktop: 34px;
+      --touch-finger: 48px;
+
+      --transition-fast: 140ms cubic-bezier(0.1, 0.9, 0.2, 1);
+      --transition-smooth: 220ms cubic-bezier(0.33, 0, 0.67, 1);
+    }
+
+    /* ==========================================================================
+       GLOBAL BASE RESETS & MICA CANVAS TEXTURE
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background-color: var(--fluent-bg-canvas);
+      background-image: 
+        radial-gradient(1200px 700px at 15% -10%, rgba(40, 134, 222, 0.08), transparent 60%),
+        radial-gradient(1000px 600px at 85% 105%, rgba(16, 185, 129, 0.06), transparent 50%);
+      background-attachment: fixed;
+      color: var(--fluent-fg-primary);
+      font-family: var(--font-family-base);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      transition: background-color var(--transition-smooth), color var(--transition-smooth), box-shadow 0.3s ease;
+    }
+
+    body.alert-active {
+      box-shadow: var(--halo-alert);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus-ring-outer) !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Icones SVG Inline Spécifiques */
+    .icon {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .icon-lg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ==========================================================================
+       TOPBAR & WORKSTATION HEADER
+       ========================================================================== */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.75rem;
+      background: var(--fluent-bg-backdrop);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border-bottom: 1px solid var(--fluent-stroke-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .brand-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--fluent-brand-tint) 0%, rgba(40, 134, 222, 0.03) 100%);
+      border: 1px solid var(--fluent-brand-border);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fluent-brand);
+      box-shadow: var(--fluent-brand-glow);
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .badge-version {
+      font-size: 0.68rem;
+      font-weight: 600;
+      background: var(--fluent-brand-tint);
+      color: var(--fluent-brand);
+      border: 1px solid var(--fluent-brand-border);
+      padding: 0.12rem 0.55rem;
+      border-radius: var(--radius-pill);
+    }
+
+    .brand-sub {
+      font-size: 0.74rem;
+      color: var(--fluent-fg-muted);
+      font-weight: 400;
+    }
+
+    /* Fluent UI 2 Segmented Control */
+    .segmented-control {
+      display: inline-flex;
+      background: var(--fluent-bg-card-inner);
+      padding: 3px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    .seg-btn {
+      background: transparent;
+      border: none;
+      color: var(--fluent-fg-secondary);
+      padding: 0.42rem 0.95rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      min-height: var(--touch-desktop);
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      user-select: none;
+    }
+
+    .seg-btn:hover {
+      color: var(--fluent-fg-primary);
+      background: rgba(125, 125, 125, 0.08);
+    }
+
+    .seg-btn.active {
+      background: var(--fluent-brand);
+      color: var(--fluent-fg-on-brand);
+      box-shadow: var(--shadow-rest);
+    }
+
+    /* Quick Actions Toolbar */
+    .quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .input-select {
+      background: var(--fluent-bg-card);
+      color: var(--fluent-fg-primary);
+      border: 1px solid var(--fluent-stroke-default);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      padding: 0.42rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      min-height: var(--touch-desktop);
+      cursor: pointer;
+      box-shadow: var(--shadow-rest);
+      transition: border-color var(--transition-fast);
+    }
+
+    .input-select:hover {
+      border-color: var(--fluent-stroke-strong);
+    }
+
+    .btn-action {
+      font-family: inherit;
+      background: var(--fluent-bg-card);
+      color: var(--fluent-fg-primary);
+      border: 1px solid var(--fluent-stroke-default);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      padding: 0.42rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: var(--touch-desktop);
+      box-shadow: var(--shadow-rest);
+      transition: all var(--transition-fast);
+      user-select: none;
+    }
+
+    .btn-action:hover {
+      background: var(--fluent-bg-subtle);
+      border-color: var(--fluent-stroke-strong);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .btn-action:active {
+      transform: scale(0.98);
+    }
+
+    .btn-action.active-toggle {
+      background: var(--status-success-bg);
+      border-color: var(--status-success-border);
+      color: var(--status-success);
+    }
+
+    .btn-pip {
+      background: var(--fluent-brand-tint);
+      border-color: var(--fluent-brand-border);
+      color: var(--fluent-brand);
+    }
+
+    .btn-pip:hover {
+      background: rgba(40, 134, 222, 0.22);
+    }
+
+    .btn-theme-toggle {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ==========================================================================
+       BENTO GRID WORKSPACE
+       ========================================================================== */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.25rem;
+      padding: 1.25rem 1.75rem;
+      max-width: 1680px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    @media (max-width: 1120px) {
+      .bento-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+    }
+
+    .panel {
+      background: var(--fluent-bg-card);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      box-shadow: 
+        0 1px 1px 0 var(--fluent-glass-shine) inset,
+        var(--shadow-rest);
+      transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .panel:hover {
+      box-shadow: 
+        0 1px 1px 0 var(--fluent-glass-shine) inset,
+        var(--shadow-hover);
+    }
+
+    /* ==========================================================================
+       VIEWPORT & RETICLE HUD
+       ========================================================================== */
+    .viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: #020408;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--fluent-stroke-default);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Viseurs d'angles (Coins cliniques HUD) */
+    .viewport::before, .viewport::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
+      z-index: 12;
+      opacity: 0.6;
+    }
+    .viewport::before {
+      top: 10px;
+      left: 10px;
+      border-top: 2px solid var(--fluent-brand);
+      border-left: 2px solid var(--fluent-brand);
+    }
+    .viewport::after {
+      top: 10px;
+      right: 10px;
+      border-top: 2px solid var(--fluent-brand);
+      border-right: 2px solid var(--fluent-brand);
+    }
+
+    video { display: none; }
+
+    canvas#output_canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .camera-placeholder {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(30, 41, 59, 0.4) 0%, rgba(9, 12, 20, 0.95) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.75rem;
+      gap: 0.95rem;
+      z-index: 10;
+      transition: opacity 0.25s ease;
+    }
+
+    .camera-placeholder.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .camera-hero-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--fluent-brand-tint);
+      border: 1px solid var(--fluent-brand-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fluent-brand);
+      box-shadow: var(--fluent-brand-glow);
+    }
+
+    .cta-button {
+      background: var(--fluent-brand);
+      color: var(--fluent-fg-on-brand);
+      border: none;
+      padding: 0.65rem 1.4rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--fluent-brand-glow), var(--shadow-rest);
+      min-height: var(--touch-desktop);
+      transition: all var(--transition-fast);
+    }
+
+    .cta-button:hover {
+      background: var(--fluent-brand-hover);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .cta-button:active {
+      background: var(--fluent-brand-pressed);
+      transform: scale(0.98);
+    }
+
+    /* Compte à Rebours 3-2-1 */
+    .countdown-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 12, 20, 0.9);
+      backdrop-filter: blur(10px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      color: #ffffff;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .countdown-overlay.visible {
+      display: flex;
+    }
+
+    .countdown-number {
+      font-family: var(--font-family-numeric);
+      font-size: 5.5rem;
+      font-weight: 700;
+      color: var(--status-success);
+      animation: pulsePop 1s ease infinite;
+    }
+
+    @keyframes pulsePop {
+      0% { transform: scale(0.85); opacity: 0.8; }
+      50% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.9; }
+    }
+
+    /* Barre Inférieure de Contrôle sous le Viewport */
+    .viewport-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.6rem 0.95rem;
+      background: rgba(9, 12, 20, 0.85);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 15;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--radius-pill);
+      background: var(--fluent-fg-muted);
+      box-shadow: 0 0 10px currentColor;
+      transition: background-color var(--transition-fast);
+    }
+
+    /* ==========================================================================
+       3 JAUGES BIOMÉCANIQUES DE PATHOLOGIES CIBLÉES
+       ========================================================================== */
+    .gauges-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 680px) {
+      .gauges-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gauge-card {
+      background: linear-gradient(180deg, var(--fluent-bg-card-inner) 0%, var(--fluent-bg-card-gradient-end) 100%);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      border-radius: var(--radius-md);
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      box-shadow: var(--shadow-rest);
+      transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    }
+
+    .gauge-card.bad {
+      border-color: var(--status-danger-border);
+      background: var(--status-danger-bg);
+      box-shadow: var(--status-danger-glow);
+    }
+
+    .gauge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--fluent-fg-primary);
+    }
+
+    .gauge-title-box {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .gauge-badge {
+      font-size: 0.74rem;
+      font-family: var(--font-family-numeric);
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-sm);
+      background: var(--fluent-bg-elevated);
+      color: var(--fluent-fg-secondary);
+      border: 1px solid var(--fluent-stroke-subtle);
+    }
+
+    .gauge-card.bad .gauge-badge {
+      background: var(--status-danger);
+      color: #ffffff;
+      border-color: var(--status-danger);
+    }
+
+    .gauge-track {
+      position: relative;
+      width: 100%;
+      height: 8px;
+      background: var(--fluent-stroke-subtle);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    /* Seuil visuel d'avertissement à 70% */
+    .gauge-track::after {
+      content: '';
+      position: absolute;
+      left: 70%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.35);
+      z-index: 2;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--status-success);
+      border-radius: var(--radius-pill);
+      transition: width 0.15s ease, background-color 0.25s ease;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .gauge-caption {
+      font-size: 0.73rem;
+      color: var(--fluent-fg-muted);
+      line-height: 1.35;
+    }
+
+    /* ==========================================================================
+       SECTION HEADINGS & METRIC CARDS
+       ========================================================================== */
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--fluent-fg-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--fluent-stroke-subtle);
+    }
+
+    .section-title-left {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .widget-row {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 500px) {
+      .widget-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .widget-box {
+      background: linear-gradient(180deg, var(--fluent-bg-card-inner) 0%, var(--fluent-bg-card-gradient-end) 100%);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      border-radius: var(--radius-md);
+      padding: 1.05rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      box-shadow: var(--shadow-rest);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .mono-big {
+      font-family: var(--font-family-numeric);
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--fluent-fg-primary);
+    }
+
+    .widget-sub {
+      font-size: 0.75rem;
+      color: var(--fluent-fg-muted);
+    }
+
+    /* ==========================================================================
+       CONFIGURATION MODAL (CENTRE DE CONTRÔLE FLUENT UI 2)
+       ========================================================================== */
+    dialog.fluent-modal {
+      border: 1px solid var(--fluent-stroke-surface);
+      border-radius: var(--radius-xl);
+      background: var(--fluent-bg-surface-flyout);
+      color: var(--fluent-fg-primary);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-modal);
+      max-width: 540px;
+      width: 92%;
+      margin: auto;
+      backdrop-filter: blur(20px);
+    }
+
+    dialog.fluent-modal::backdrop {
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-tabs {
+      display: flex;
+      gap: 0.35rem;
+      border-bottom: 1px solid var(--fluent-stroke-subtle);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.25rem;
+    }
+
+    .modal-tab-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--fluent-fg-muted);
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all var(--transition-fast);
+    }
+
+    .modal-tab-btn:hover {
+      color: var(--fluent-fg-primary);
+      background: var(--fluent-bg-card);
+    }
+
+    .modal-tab-btn.active {
+      color: var(--fluent-brand);
+      background: var(--fluent-brand-tint);
+    }
+
+    .modal-tab-pane {
+      display: none;
+      animation: fadeIn var(--transition-fast);
+    }
+
+    .modal-tab-pane.active {
+      display: block;
+    }
+
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-preset {
+      background: var(--fluent-bg-card);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.4rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .btn-preset:hover {
+      border-color: var(--fluent-brand);
+      background: var(--fluent-brand-tint);
+    }
+
+    .btn-preset strong {
+      font-size: 0.8rem;
+      color: var(--fluent-fg-primary);
+    }
+
+    .btn-preset span {
+      font-size: 0.68rem;
+      color: var(--fluent-fg-muted);
+    }
+
+    .form-group {
+      margin-bottom: 1.05rem;
+    }
+
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--fluent-fg-primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-label-hint {
+      font-size: 0.75rem;
+      font-weight: normal;
+      color: var(--fluent-fg-muted);
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .slider-row input[type="range"] {
+      flex: 1;
+      accent-color: var(--fluent-brand);
+      cursor: pointer;
+    }
+
+    .slider-val-box {
+      min-width: 54px;
+      text-align: right;
+      font-family: var(--font-family-numeric);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--fluent-brand);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.9rem;
+      font-family: var(--font-family-numeric);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--fluent-stroke-surface);
+      background: var(--fluent-bg-canvas);
+      color: var(--fluent-fg-primary);
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color var(--transition-fast);
+    }
+
+    .form-input:focus {
+      border-color: var(--fluent-brand);
+      box-shadow: 0 0 0 2px var(--fluent-brand-tint);
+    }
+
+    /* Timer overtime (dépassement négatif) */
+    .mono-big.overtime {
+      color: var(--status-danger) !important;
+      animation: pulseOvertime 1.2s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseOvertime {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.8; transform: scale(1.02); }
+    }
+
+    /* ==========================================================================
+       ACTIVITY FEED & INCIDENT TIMELINE
+       ========================================================================== */
+    .timeline {
+      background: var(--fluent-bg-card-inner);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      min-height: 280px;
+      max-height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .timeline-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      padding: 0.48rem 0.75rem;
+      background: var(--fluent-bg-card);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-rest);
+      animation: fadeIn var(--transition-fast);
+      gap: 0.5rem;
+    }
+
+    .timeline-item.item-alert {
+      border-left: 3.5px solid var(--status-danger);
+    }
+
+    .timeline-item.item-transition {
+      border-left: 3.5px solid var(--fluent-brand);
+      background: linear-gradient(90deg, var(--fluent-brand-tint) 0%, var(--fluent-bg-card) 60%);
+    }
+
+    .timeline-item.item-summary {
+      border-left: 3.5px solid var(--status-success);
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.12) 0%, var(--fluent-bg-card) 70%);
+    }
+
+    .timeline-content {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .timeline-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .timeline-badge.badge-alert {
+      background: var(--status-danger-bg);
+      color: var(--status-danger);
+    }
+
+    .timeline-badge.badge-transition {
+      background: var(--fluent-brand-tint);
+      color: var(--fluent-brand);
+    }
+
+    .timeline-badge.badge-summary {
+      background: var(--status-success-bg);
+      color: var(--status-success);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .timeline-time {
+      font-family: var(--font-family-mono);
+      font-size: 0.72rem;
+      color: var(--fluent-fg-muted);
+      white-space: nowrap;
+    }
+
+    .btn-lang-toggle {
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.6rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      text-align: center;
+      padding: 1.25rem;
+      font-size: 0.76rem;
+      color: var(--fluent-fg-muted);
+      border-top: 1px solid var(--fluent-stroke-subtle);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRE DE NAVIGATION SUPERIEURE (FLUENT WORKSTATION TOPBAR) -->
+  <header class="topbar" role="banner">
+    <div class="brand">
+      <div class="brand-icon-box" aria-hidden="true">
+        <!-- SVG Bouclier Clinique -->
+        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <div class="brand-title">
+          ErgoVision AI <span class="badge-version">Fluent Workstation v3.2</span>
+        </div>
+        <div class="brand-sub">Copilote Ergonomique • Prévention des TMS en Temps Réel</div>
+      </div>
+    </div>
+
+    <!-- Sélecteur de Mode Segmenté Fluent avec Icônes SVG -->
+    <div class="segmented-control" role="tablist" aria-label="Mode de travail ergonomique">
+      <button id="segAssis" class="seg-btn active" role="tab" aria-selected="true" onclick="setMode('assis')">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+        Bureau Assis
+      </button>
+      <button id="segDebout" class="seg-btn" role="tab" aria-selected="false" onclick="setMode('debout')">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v10"/><path d="m9 12 3-2 3 2"/><path d="m10 21 2-4 2 4"/></svg>
+        Bureau Debout
+      </button>
+      <button id="segPause" class="seg-btn" role="tab" aria-selected="false" onclick="setMode('pause')">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v7"/><path d="m5 10 7-3 7 3"/><path d="m8 21 4-7 4 7"/></svg>
+        Pause &amp; Étirement
+      </button>
+    </div>
+
+    <!-- Actions Rapides & Contrôles Fluent -->
+    <div class="quick-actions" role="toolbar" aria-label="Actions rapides">
+      <select id="sensitivitySelect" class="input-select" title="Sensibilité de tolérance angulaire" aria-label="Tolérance angulaire">
+        <option value="1.25">Tolérance : Souple (Fin de journée)</option>
+        <option value="1.0" selected>Tolérance : Standard</option>
+        <option value="0.8">Tolérance : Stricte (Protection max)</option>
+      </select>
+
+      <button id="btnSound" class="btn-action active-toggle" onclick="toggleSound()" title="Activer / Désactiver le retour audio" aria-label="Couper ou activer le son">
+        <svg id="iconSound" class="icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        <span>Audio</span>
+      </button>
+
+      <button id="btnNotif" class="btn-action" onclick="requestNotifPermission()" title="Autoriser les alertes système" aria-label="Activer les alertes OS">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span>Notifs OS</span>
+      </button>
+
+      <button class="btn-action btn-pip" onclick="togglePiP()" title="Ouvrir la miniature par-dessus vos outils de travail (Teams, VS Code)" aria-label="Ouvrir la fenêtre Picture-in-Picture">
+        <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
+        <span>Mini-Fenêtre</span>
+      </button>
+
+      <button id="btnTheme" class="btn-action btn-theme-toggle" onclick="toggleTheme()" title="Basculer entre Mode Sombre et Mode Clair" aria-label="Basculer le thème">
+        <svg id="iconTheme" class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+
+      <button id="btnLang" class="btn-action btn-lang-toggle" onclick="toggleLanguage()" title="Changer de langue / Switch language" aria-label="Changer la langue de l'application">
+        <span id="labelLang">EN</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENU PRINCIPAL EN GRILLE BENTO -->
+  <main class="bento-grid" role="main">
+
+    <!-- COLONNE GAUCHE : FLUX VIDEO, POSE ESTIMATION & JAUGES EN TEMPS REEL -->
+    <section class="panel" aria-label="Flux vidéo et analyse biomécanique">
+      <div class="viewport" aria-label="Moniteur vidéo de posture">
+        <!-- Écran d'accueil de la caméra -->
+        <div id="cameraPlaceholder" class="camera-placeholder">
+          <div class="camera-hero-icon" aria-hidden="true">
+            <svg class="icon icon-lg" style="width:28px; height:28px;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--fluent-fg-primary);">Protection Posturale Locale & Confidentielle</h2>
+          <p style="font-size: 0.85rem; color: var(--fluent-fg-secondary); max-width: 440px; line-height: 1.5;">
+            L'analyse biomécanique s'exécute à 100% sur votre processeur via WebAssembly. Aucun flux vidéo n'est enregistré ni transmis sur Internet.
+          </p>
+          <div style="display:flex; gap:0.6rem; align-items:center; margin-top:0.5rem; flex-wrap:wrap; justify-content:center;">
+            <button class="cta-button" onclick="startCamera()">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span>Activer le Capteur Optique</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Décompte de calibration 3-2-1 -->
+        <div id="countdownOverlay" class="countdown-overlay" aria-live="assertive">
+          <div style="font-size: 0.95rem; color: #ffffff; margin-bottom: 0.5rem;">
+            Placez-vous face à l'écran, nuque allongée et épaules relâchées...
+          </div>
+          <div id="countdownNum" class="countdown-number">3</div>
+        </div>
+
+        <!-- Éléments vidéo & canvas de rendu -->
+        <video id="input_video" playsinline></video>
+        <canvas id="output_canvas" width="640" height="400"></canvas>
+        <video id="pip_video" muted playsinline style="display:none;"></video>
+
+        <!-- Bandeau d'état inférieur sous le viewport -->
+        <div class="viewport-bar">
+          <div class="status-pill" role="status" aria-live="polite">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="statusText">Capteur en attente</span>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <select id="cameraSelect" class="input-select" style="display:none; font-size:0.75rem; padding:0.25rem 0.5rem;" onchange="switchCamera(this.value)" aria-label="Sélectionner la caméra">
+            </select>
+            <button id="btnCalibrate" class="btn-action" style="background:var(--status-success); color:#ffffff; font-weight:600; border:none;" onclick="startCalibrationCountdown()">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+              <span>Calibrer Point Zéro (3s)</span>
+            </button>
+            <button id="btnStopCam" class="btn-action" style="display:none; background:var(--status-danger-bg); color:var(--status-danger); border-color:var(--status-danger-border);" onclick="stopCamera()">
+              <svg class="icon" viewBox="0 0 24 24"><rect width="14" height="14" x="5" y="5" rx="2"/></svg>
+              <span>Arrêter</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Jauges Dédiées à la Prévention des TMS -->
+      <div class="gauges-grid" role="region" aria-label="Indicateurs de dérives posturales">
+        <div id="cardNeck" class="gauge-card">
+          <div class="gauge-header">
+            <div class="gauge-title-box">
+              <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="m17 5-5-3-5 3"/><path d="m17 19-5 3-5-3"/></svg>
+              <span>1. Projection Nuque</span>
+            </div>
+            <span id="badgeNeck" class="gauge-badge">0%</span>
+          </div>
+          <div class="gauge-track"><div id="fillNeck" class="gauge-fill"></div></div>
+          <div class="gauge-caption">Prévient l'affaissement cervical (« Text-Neck ») et la surcharge cervicale.</div>
+        </div>
+
+        <div id="cardShoulder" class="gauge-card">
+          <div class="gauge-header">
+            <div class="gauge-title-box">
+              <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span>2. Épaules &amp; Trapèzes</span>
+            </div>
+            <span id="badgeShoulder" class="gauge-badge">0%</span>
+          </div>
+          <div class="gauge-track"><div id="fillShoulder" class="gauge-fill"></div></div>
+          <div class="gauge-caption">Surveille l'élévation anormale des épaules et les asymétries posturales.</div>
+        </div>
+
+        <div id="cardTilt" class="gauge-card">
+          <div class="gauge-header">
+            <div class="gauge-title-box">
+              <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 12a4 4 0 0 1-8 0"/></svg>
+              <span>3. Inclinaison Tête</span>
+            </div>
+            <span id="badgeTilt" class="gauge-badge">0%</span>
+          </div>
+          <div class="gauge-track"><div id="fillTilt" class="gauge-fill"></div></div>
+          <div class="gauge-caption">Détecte l'inclinaison latérale prolongée et les tensions asymétriques.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLONNE DROITE : CADENCE, RYTHME & HISTORIQUE -->
+    <section class="panel" aria-label="Cadence de travail et télémétrie">
+      <!-- Pacing & Score de Maintien Neutre -->
+      <div class="widget-row">
+        <div id="pacingWidget" class="widget-box">
+          <div class="section-title" style="border:none; padding:0;">
+            <div class="section-title-left">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span id="timerTitle">Bureau Assis</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.4rem;">
+              <button type="button" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem;" onclick="openPacingModal()" title="Personnaliser les durées">
+                <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Régler</span>
+              </button>
+              <button type="button" style="background:none; border:none; cursor:pointer; color:var(--fluent-brand); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem;" onclick="resetCurrentModeTimer()" title="Réinitialiser le chrono">
+                <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                <span>Reset</span>
+              </button>
+            </div>
+          </div>
+          <div id="timerDigits" class="mono-big">45:00</div>
+          <div id="timerSub" class="widget-sub">Alternance conseillée toutes les 45 min</div>
+        </div>
+
+        <div class="widget-box">
+          <div class="section-title" style="border:none; padding:0;">
+            <div class="section-title-left">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Maintien Neutre</span>
+            </div>
+            <span id="alertCounterBadge" style="color:var(--status-success); font-size:0.75rem; font-weight:600;">0 alerte</span>
+          </div>
+          <div id="scoreDigits" class="mono-big" style="color:var(--status-success);">100%</div>
+          <div class="widget-sub">Ratio de temps en posture conforme</div>
+        </div>
+      </div>
+
+      <!-- Journal des Dérives Posturales -->
+      <div style="display:flex; flex-direction:column; gap:0.6rem; flex:1;">
+        <div class="section-title">
+          <div class="section-title-left">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            <span>Journal des Alertes</span>
+          </div>
+          <div style="display:flex; gap:0.75rem;">
+            <button type="button" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-brand); font-weight:600; display:inline-flex; align-items:center; gap:0.3rem;" onclick="exportLogsCSV()">
+              <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Exporter CSV</span>
+            </button>
+            <button type="button" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-fg-muted); display:inline-flex; align-items:center; gap:0.3rem;" onclick="clearLogs()">
+              <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              <span>Effacer</span>
+            </button>
+          </div>
+        </div>
+        <div id="timelineLog" class="timeline" role="log" aria-live="polite">
+          <div style="color:var(--fluent-fg-muted); font-size:0.8rem; text-align:center; margin:auto;">
+            Aucune compensation posturale enregistrée.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE CONFIGURATION DU CENTRE DE CONTRÔLE FLUENT UI 2 -->
+  <dialog id="pacingModal" class="fluent-modal" aria-labelledby="modalPacingTitle">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h3 id="modalPacingTitle" style="margin:0; font-size:1.1rem; font-weight:700; color:var(--fluent-fg-primary); display:inline-flex; align-items:center; gap:0.5rem;">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span data-i18n="modal_title">Centre de Réglages Posturaux</span>
+      </h3>
+      <button type="button" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-muted); padding:0.25rem; border-radius:var(--radius-sm);" onclick="closePacingModal()" aria-label="Fermer la boîte de dialogue">
+        <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Navigation par Onglets Fluent -->
+    <div class="modal-tabs" role="tablist">
+      <button type="button" id="tabBtnPacing" class="modal-tab-btn active" role="tab" aria-selected="true" onclick="switchModalTab('pacing')">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span data-i18n="tab_pacing">Rythme & Pacing</span>
+      </button>
+      <button type="button" id="tabBtnAudio" class="modal-tab-btn" role="tab" aria-selected="false" onclick="switchModalTab('audio')">
+        <svg class="icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <span data-i18n="tab_audio">Alertes Audio</span>
+      </button>
+      <button type="button" id="tabBtnPrefs" class="modal-tab-btn" role="tab" aria-selected="false" onclick="switchModalTab('prefs')">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span data-i18n="tab_prefs">Préférences & Langue</span>
+      </button>
+    </div>
+
+    <form method="dialog" onsubmit="savePacingConfig(event)">
+      <!-- ONGLET 1 : RYTHME & PACING -->
+      <div id="tabPanePacing" class="modal-tab-pane active" role="tabpanel">
+        <div style="font-size:0.75rem; color:var(--fluent-fg-muted); margin-bottom:0.75rem;" data-i18n="presets_title">
+          Presets ergonomiques recommandés :
+        </div>
+        <div class="presets-grid">
+          <div class="btn-preset" onclick="applyPreset(25, 10, 5)">
+            <strong>Pomodoro 25/5</strong>
+            <span>25m assis • 5m pause</span>
+          </div>
+          <div class="btn-preset" onclick="applyPreset(45, 15, 5)">
+            <strong>Standard 45/15</strong>
+            <span>45m assis • 15m debout</span>
+          </div>
+          <div class="btn-preset" onclick="applyPreset(50, 20, 10)">
+            <strong>Actif 50/10</strong>
+            <span>50m assis • 20m debout</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputSittingMinutes">
+            <span data-i18n="label_sit_duration">Durée Station Assise</span>
+            <span class="form-label-hint" id="hintSitVal">45 min</span>
+          </label>
+          <div class="slider-row">
+            <input type="range" id="rangeSittingMinutes" min="5" max="120" step="5" value="45" oninput="syncPacingInput('sit', this.value)">
+            <input type="number" id="inputSittingMinutes" class="form-input" style="width:75px;" min="5" max="120" step="5" oninput="syncPacingRange('sit', this.value)" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputStandingAlertMinutes">
+            <span data-i18n="label_stand_alert">Alerte Station Debout Prolongée</span>
+            <span class="form-label-hint" id="hintStandVal">15 min</span>
+          </label>
+          <div class="slider-row">
+            <input type="range" id="rangeStandingAlertMinutes" min="3" max="60" step="1" value="15" oninput="syncPacingInput('stand', this.value)">
+            <input type="number" id="inputStandingAlertMinutes" class="form-input" style="width:75px;" min="3" max="60" step="1" oninput="syncPacingRange('stand', this.value)" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputPauseMinutes">
+            <span data-i18n="label_pause_duration">Durée Pause & Étirement Actif</span>
+            <span class="form-label-hint" id="hintPauseVal">5 min</span>
+          </label>
+          <div class="slider-row">
+            <input type="range" id="rangePauseMinutes" min="1" max="30" step="1" value="5" oninput="syncPacingInput('pause', this.value)">
+            <input type="number" id="inputPauseMinutes" class="form-input" style="width:75px;" min="1" max="30" step="1" oninput="syncPacingRange('pause', this.value)" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- ONGLET 2 : ALERTES AUDIO -->
+      <div id="tabPaneAudio" class="modal-tab-pane" role="tabpanel">
+        <div class="form-group">
+          <label class="form-label">
+            <span data-i18n="label_audio_mode">Comportement de l'Alerte Posturale</span>
+            <span class="form-label-hint" data-i18n="hint_audio_mode">Jusqu'au retour neutre</span>
+          </label>
+          <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.35rem;">
+            <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; cursor:pointer;">
+              <input type="radio" name="audioMode" id="audioModePulse" value="pulse" checked>
+              <div>
+                <strong data-i18n="audio_mode_pulse">Pulse cadencé doux (Recommandé)</strong>
+                <div style="font-size:0.72rem; color:var(--fluent-fg-muted);" data-i18n="audio_mode_pulse_desc">Bip discret répété toutes les 1.2s tant que la posture n'est pas corrigée.</div>
+              </div>
+            </label>
+            <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; cursor:pointer;">
+              <input type="radio" name="audioMode" id="audioModeContinuous" value="continuous">
+              <div>
+                <strong data-i18n="audio_mode_continuous">Tonalité continue douce</strong>
+                <div style="font-size:0.72rem; color:var(--fluent-fg-muted);" data-i18n="audio_mode_continuous_desc">Bourdonnement sinusoïdal ininterrompu jusqu'au redressement.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rangeAudioVolume">
+            <span data-i18n="label_audio_volume">Volume Sonore</span>
+            <span class="slider-val-box" id="valAudioVolume">15%</span>
+          </label>
+          <div class="slider-row">
+            <svg class="icon" style="width:16px; height:16px; color:var(--fluent-fg-muted);" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+            <input type="range" id="rangeAudioVolume" min="0" max="100" step="5" value="15" oninput="updateAudioVolume(this.value)">
+            <svg class="icon" style="width:16px; height:16px; color:var(--fluent-brand);" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="selectAlertDelay">
+            <span data-i18n="label_alert_delay">Délai avant déclenchement d'alerte</span>
+            <span class="form-label-hint" data-i18n="hint_alert_delay">Filtre anti-fausse alerte</span>
+          </label>
+          <select id="selectAlertDelay" class="input-select" style="width:100%;">
+            <option value="1.5">1.5 seconde (Sensibilité élevée)</option>
+            <option value="2.5" selected>2.5 secondes (Équilibré standard)</option>
+            <option value="3.5">3.5 secondes (Tolérance aux mouvements naturels)</option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
+          <button type="button" class="btn-action" style="font-size:0.75rem;" onclick="testAlertAudio()">
+            <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span data-i18n="btn_test_alert">Tester alerte posturale</span>
+          </button>
+          <button type="button" class="btn-action" style="font-size:0.75rem;" onclick="testCycleChime()">
+            <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span data-i18n="btn_test_chime">Tester carillon fin de cycle</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ONGLET 3 : PRÉFÉRENCES & LANGUE -->
+      <div id="tabPanePrefs" class="modal-tab-pane" role="tabpanel">
+        <div class="form-group">
+          <label class="form-label" for="selectModalLanguage">
+            <span data-i18n="label_lang_choice">Langue de l'Interface</span>
+            <span class="form-label-hint">Interface language</span>
+          </label>
+          <select id="selectModalLanguage" class="input-select" style="width:100%;" onchange="setLanguage(this.value)">
+            <option value="fr">🇫🇷 Français (French)</option>
+            <option value="en">🇬🇧 English (Anglais)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="selectModalSensitivity">
+            <span data-i18n="label_sensitivity_choice">Sensibilité Biomécanique</span>
+            <span class="form-label-hint" data-i18n="hint_sensitivity">Tolérance angulaire</span>
+          </label>
+          <select id="selectModalSensitivity" class="input-select" style="width:100%;" onchange="syncSensitivity(this.value)">
+            <option value="1.25">Tolérance : Souple (Fin de journée)</option>
+            <option value="1.0" selected>Tolérance : Standard</option>
+            <option value="0.8">Tolérance : Stricte (Protection max)</option>
+          </select>
+        </div>
+
+        <div style="background:var(--fluent-bg-card); padding:0.75rem; border-radius:var(--radius-sm); border:1px solid var(--fluent-stroke-subtle); margin-top:1rem;">
+          <div style="font-weight:600; font-size:0.8rem; color:var(--fluent-fg-primary); margin-bottom:0.25rem;" data-i18n="privacy_guarantee">
+            🔒 Confidentialité & Exécution Locale
+          </div>
+          <div style="font-size:0.72rem; color:var(--fluent-fg-muted); line-height:1.4;" data-i18n="privacy_desc">
+            Le modèle de pose MediaPipe s'exécute à 100% dans votre navigateur via WebAssembly. Vos données de posture et d'activité sont conservées uniquement sur cet appareil.
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem; padding-top:0.75rem; border-top:1px solid var(--fluent-stroke-subtle);">
+        <button type="button" class="btn-action" style="font-size:0.75rem; color:var(--fluent-fg-muted);" onclick="resetPacingDefaults()" data-i18n="btn_defaults">
+          Valeurs par défaut
+        </button>
+        <div style="display:flex; gap:0.6rem;">
+          <button type="button" class="btn-action" onclick="closePacingModal()" data-i18n="btn_cancel">Annuler</button>
+          <button type="submit" class="btn-action btn-primary" data-i18n="btn_save">Enregistrer</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <footer role="contentinfo">
+    ErgoVision AI — Conçu pour la prévention des douleurs posturales, des TMS et le maintien de la chaîne rachidienne au poste de travail.
+  </footer>
+
+  <!-- SCRIPT LOGIQUE & MOTEUR BIOMÉCANIQUE -->
+  <script>
+    // Éléments du DOM
+    const videoElement = document.getElementById('input_video');
+    const canvasElement = document.getElementById('output_canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+    const pipVideo = document.getElementById('pip_video');
+    const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+    const cameraSelect = document.getElementById('cameraSelect');
+    const btnStopCam = document.getElementById('btnStopCam');
+    const btnTheme = document.getElementById('btnTheme');
+
+    // ----------------------------------------------------
+    // GESTION DU THÈME (LIGHT / DARK THEME FLUENT UI 2)
+    // ----------------------------------------------------
+    function initTheme() {
+      const savedTheme = localStorage.getItem('ergovision_theme') || 'dark';
+      setTheme(savedTheme);
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('ergovision_theme', theme);
+      if (btnTheme) {
+        if (theme === 'dark') {
+          btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+          btnTheme.setAttribute('title', 'Passer en Mode Clair');
+        } else {
+          btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+          btnTheme.setAttribute('title', 'Passer en Mode Sombre');
+        }
+      }
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    initTheme();
+
+    // ----------------------------------------------------
+    // SYSTEME D'INTERNATIONALISATION (i18n FR / EN)
+    // ----------------------------------------------------
+    const TRANSLATIONS = {
+      fr: {
+        brand_sub: "Copilote Ergonomique • Prévention des TMS en Temps Réel",
+        mode_sit: "Bureau Assis",
+        mode_stand: "Bureau Debout",
+        mode_pause: "Pause & Étirement",
+        tol_relaxed: "Tolérance : Souple (Fin de journée)",
+        tol_standard: "Tolérance : Standard",
+        tol_strict: "Tolérance : Stricte (Protection max)",
+        btn_audio: "Audio",
+        btn_mute: "Muet",
+        btn_notif: "Notifs OS",
+        btn_pip: "Mini-Fenêtre",
+        hero_title: "Protection Posturale Locale & Confidentielle",
+        hero_desc: "L'analyse biomécanique s'exécute à 100% sur votre processeur via WebAssembly. Aucun flux vidéo n'est enregistré ni transmis sur Internet.",
+        btn_start_sensor: "Activer le Capteur Optique",
+        countdown_hint: "Placez-vous face à l'écran, nuque allongée et épaules relâchées...",
+        sensor_standby: "Capteur en attente",
+        sensor_active: "Capteur actif • Calibrez votre point zéro",
+        btn_calibrate: "Calibrer Point Zéro (3s)",
+        btn_stop: "Arrêter",
+        gauge_neck_title: "1. Projection Nuque",
+        gauge_neck_desc: "Prévient l'affaissement cervical (« Text-Neck ») et la surcharge cervicale.",
+        gauge_shoulder_title: "2. Épaules & Trapèzes",
+        gauge_shoulder_desc: "Surveille l'élévation anormale des épaules et les asymétries posturales.",
+        gauge_tilt_title: "3. Inclinaison Tête",
+        gauge_tilt_desc: "Détecte l'inclinaison latérale prolongée et les tensions asymétriques.",
+        title_sit: "Bureau Assis",
+        title_stand: "Bureau Debout",
+        title_pause: "Pause & Étirement",
+        sub_sit_prefix: "Alternance conseillée toutes les ",
+        sub_sit_suffix: " min",
+        sub_stand_prefix: "Objectif : alterner après ",
+        sub_stand_suffix: " min",
+        sub_pause: "Alertes suspendues • Bougez et étirez-vous",
+        sub_overtime: "⚠️ Dépassement de session : changez de posture !",
+        btn_settings: "Régler",
+        btn_reset: "Reset",
+        title_neutral: "Maintien Neutre",
+        sub_neutral: "Ratio de temps en posture conforme",
+        title_journal: "Journal des Alertes & Activité",
+        btn_export_csv: "Exporter CSV",
+        btn_clear_logs: "Effacer",
+        log_empty: "Aucune compensation posturale enregistrée aujourd'hui.",
+        modal_title: "Centre de Réglages Posturaux",
+        tab_pacing: "Rythme & Pacing",
+        tab_audio: "Alertes Audio",
+        tab_prefs: "Préférences & Langue",
+        presets_title: "Presets ergonomiques recommandés :",
+        label_sit_duration: "Durée Station Assise",
+        label_stand_alert: "Alerte Station Debout Prolongée",
+        label_pause_duration: "Durée Pause & Étirement Actif",
+        label_audio_mode: "Comportement de l'Alerte Posturale",
+        hint_audio_mode: "Jusqu'au retour neutre",
+        audio_mode_pulse: "Pulse cadencé doux (Recommandé)",
+        audio_mode_pulse_desc: "Bip discret répété toutes les 1.2s tant que la posture n'est pas corrigée.",
+        audio_mode_continuous: "Tonalité continue douce",
+        audio_mode_continuous_desc: "Bourdonnement sinusoïdal ininterrompu jusqu'au redressement.",
+        label_audio_volume: "Volume Sonore",
+        label_alert_delay: "Délai avant déclenchement d'alerte",
+        hint_alert_delay: "Filtre anti-fausse alerte",
+        btn_test_alert: "Tester alerte posturale",
+        btn_test_chime: "Tester carillon fin de cycle",
+        label_lang_choice: "Langue de l'Interface",
+        label_sensitivity_choice: "Sensibilité Biomécanique",
+        hint_sensitivity: "Tolérance angulaire",
+        privacy_guarantee: "🔒 Confidentialité & Exécution Locale",
+        privacy_desc: "Le modèle de pose MediaPipe s'exécute à 100% dans votre navigateur via WebAssembly. Vos données de posture et d'activité sont conservées uniquement sur cet appareil.",
+        btn_defaults: "Valeurs par défaut",
+        btn_cancel: "Annuler",
+        btn_save: "Enregistrer",
+        footer_text: "ErgoVision AI — Conçu pour la prévention des douleurs posturales, des TMS et le maintien de la chaîne rachidienne au poste de travail.",
+        hud_neutral: "✅ POSTURE NEUTRE",
+        hud_deviation: "⚠️ DÉVIATION :",
+        hud_correct: "🚨 CORRIGEZ :",
+        hud_pause: "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT",
+        hud_waiting: "EN ATTENTE D'UTILISATEUR",
+        hud_partial: "POSTURE PARTIELLE • RECADREZ-VOUS",
+        reason_neck: "Projection cervicale",
+        reason_shoulder: "Élévation épaule",
+        reason_tilt: "Inclinaison latérale",
+        status_optimal: "Posture optimale",
+        status_alert_prefix: "Alerte : Redressez-vous (",
+        badge_alert: "ALERTE",
+        badge_transition: "PASSAGE",
+        badge_summary: "CYCLE",
+        transition_to: "Bascule vers",
+        cycle_summary_title: "Fin de cycle",
+        standing_warning_sub: "min debout : pensez à changer d'appui",
+        standing_alert_sub: "min atteintes : repassez ASSIS ou faites une pause !"
+      },
+      en: {
+        brand_sub: "Ergonomic Copilot • Real-Time RSI Prevention",
+        mode_sit: "Sitting Desk",
+        mode_stand: "Standing Desk",
+        mode_pause: "Active Break & Stretch",
+        tol_relaxed: "Tolerance: Relaxed (End of day)",
+        tol_standard: "Tolerance: Standard",
+        tol_strict: "Tolerance: Strict (Max protection)",
+        btn_audio: "Audio",
+        btn_mute: "Muted",
+        btn_notif: "OS Alerts",
+        btn_pip: "PiP Mini",
+        hero_title: "Local & Confidential Posture Guardian",
+        hero_desc: "Biomechanical analysis runs 100% on your device via WebAssembly. No video feed is recorded or transmitted over the internet.",
+        btn_start_sensor: "Start Optical Sensor",
+        countdown_hint: "Face your screen, elongate your spine and relax your shoulders...",
+        sensor_standby: "Sensor on standby",
+        sensor_active: "Sensor active • Calibrate zero point",
+        btn_calibrate: "Calibrate Zero Point (3s)",
+        btn_stop: "Stop",
+        gauge_neck_title: "1. Forward Neck",
+        gauge_neck_desc: "Prevents cervical slump ('Text-Neck') and spinal load.",
+        gauge_shoulder_title: "2. Shoulders & Traps",
+        gauge_shoulder_desc: "Monitors shoulder shrug, scapular tension and asymmetric tilt.",
+        gauge_tilt_title: "3. Head Lateral Tilt",
+        gauge_tilt_desc: "Detects sustained lateral tilt and uneven cervical strain.",
+        title_sit: "Sitting Desk",
+        title_stand: "Standing Desk",
+        title_pause: "Active Break & Stretch",
+        sub_sit_prefix: "Recommended alternate every ",
+        sub_sit_suffix: " min",
+        sub_stand_prefix: "Target: alternate after ",
+        sub_stand_suffix: " min",
+        sub_pause: "Alerts paused • Move and stretch freely",
+        sub_overtime: "⚠️ Overtime session: change posture!",
+        btn_settings: "Settings",
+        btn_reset: "Reset",
+        title_neutral: "Neutral Alignment",
+        sub_neutral: "Conforming posture time ratio",
+        title_journal: "Alerts & Activity Log",
+        btn_export_csv: "Export CSV",
+        btn_clear_logs: "Clear",
+        log_empty: "No postural compensation recorded today.",
+        modal_title: "Posture Settings Center",
+        tab_pacing: "Pacing & Rhythm",
+        tab_audio: "Audio Alerts",
+        tab_prefs: "Preferences & Language",
+        presets_title: "Recommended ergonomic presets:",
+        label_sit_duration: "Sitting Session Duration",
+        label_stand_alert: "Standing Prolonged Alert",
+        label_pause_duration: "Active Break Duration",
+        label_audio_mode: "Posture Alert Behavior",
+        hint_audio_mode: "Until neutral posture returns",
+        audio_mode_pulse: "Gentle rhythmic pulse (Recommended)",
+        audio_mode_pulse_desc: "Subtle recurring double-beep every 1.2s until posture is corrected.",
+        audio_mode_continuous: "Gentle continuous drone",
+        audio_mode_continuous_desc: "Uninterrupted sine tone until upright posture is restored.",
+        label_audio_volume: "Sound Volume",
+        label_alert_delay: "Delay before triggering alert",
+        hint_alert_delay: "False alert filter",
+        btn_test_alert: "Test posture alert",
+        btn_test_chime: "Test cycle end chime",
+        label_lang_choice: "Interface Language",
+        label_sensitivity_choice: "Biomechanical Sensitivity",
+        hint_sensitivity: "Angular tolerance",
+        privacy_guarantee: "🔒 Privacy & Local Execution",
+        privacy_desc: "MediaPipe pose model runs 100% locally in your browser via WebAssembly. Your posture and activity data stay strictly on this device.",
+        btn_defaults: "Reset Defaults",
+        btn_cancel: "Cancel",
+        btn_save: "Save",
+        footer_text: "ErgoVision AI — Designed for RSI prevention, cervical health and postural endurance at the workstation.",
+        hud_neutral: "✅ NEUTRAL POSTURE",
+        hud_deviation: "⚠️ DEVIATION:",
+        hud_correct: "🚨 CORRECT:",
+        hud_pause: "🧘 ACTIVE BREAK IN PROGRESS • MOVE & STRETCH FREELY",
+        hud_waiting: "WAITING FOR USER",
+        hud_partial: "PARTIAL POSE • PLEASE RECENTER",
+        reason_neck: "Forward neck",
+        reason_shoulder: "Shoulder shrug",
+        reason_tilt: "Head tilt",
+        status_optimal: "Optimal posture",
+        status_alert_prefix: "Alert: Please straighten up (",
+        badge_alert: "ALERT",
+        badge_transition: "SWITCH",
+        badge_summary: "CYCLE",
+        transition_to: "Switched to",
+        cycle_summary_title: "Cycle completed",
+        standing_warning_sub: "min standing: consider shifting support",
+        standing_alert_sub: "min reached: switch to SITTING or take a break!"
+      }
+    };
+
+    let currentLang = localStorage.getItem('ergovision_lang') || 'fr';
+
+    function t(key) {
+      if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
+        return TRANSLATIONS[currentLang][key];
+      }
+      return (TRANSLATIONS.fr && TRANSLATIONS.fr[key]) || key;
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('ergovision_lang', lang);
+      document.documentElement.lang = lang;
+      
+      const labelLang = document.getElementById('labelLang');
+      if (labelLang) labelLang.innerText = lang === 'fr' ? 'EN' : 'FR';
+      
+      const modalLangSelect = document.getElementById('selectModalLanguage');
+      if (modalLangSelect) modalLangSelect.value = lang;
+
+      // Traduction des éléments avec data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key && TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+          el.innerText = TRANSLATIONS[lang][key];
+        }
+      });
+
+      // Éléments spécifiques
+      document.querySelector('.brand-sub').innerText = t('brand_sub');
+      document.getElementById('segAssis').childNodes[2].nodeValue = " " + t('mode_sit');
+      document.getElementById('segDebout').childNodes[2].nodeValue = " " + t('mode_stand');
+      document.getElementById('segPause').childNodes[2].nodeValue = " " + t('mode_pause');
+
+      const btnSound = document.getElementById('btnSound');
+      if (btnSound) {
+        const span = btnSound.querySelector('span');
+        if (span) span.innerText = soundEnabled ? t('btn_audio') : t('btn_mute');
+      }
+
+      const btnNotif = document.getElementById('btnNotif');
+      if (btnNotif) {
+        const span = btnNotif.querySelector('span');
+        if (span) span.innerText = t('btn_notif');
+      }
+
+      const btnPiP = document.querySelector('.btn-pip');
+      if (btnPiP) {
+        const span = btnPiP.querySelector('span');
+        if (span) span.innerText = t('btn_pip');
+      }
+
+      const sensSelect = document.getElementById('sensitivitySelect');
+      if (sensSelect) {
+        sensSelect.options[0].text = t('tol_relaxed');
+        sensSelect.options[1].text = t('tol_standard');
+        sensSelect.options[2].text = t('tol_strict');
+      }
+
+      const modalSens = document.getElementById('selectModalSensitivity');
+      if (modalSens) {
+        modalSens.options[0].text = t('tol_relaxed');
+        modalSens.options[1].text = t('tol_standard');
+        modalSens.options[2].text = t('tol_strict');
+      }
+
+      // Jauges
+      document.querySelector('#cardNeck .gauge-title-box span').innerText = t('gauge_neck_title');
+      document.querySelector('#cardNeck .gauge-caption').innerText = t('gauge_neck_desc');
+      document.querySelector('#cardShoulder .gauge-title-box span').innerText = t('gauge_shoulder_title');
+      document.querySelector('#cardShoulder .gauge-caption').innerText = t('gauge_shoulder_desc');
+      document.querySelector('#cardTilt .gauge-title-box span').innerText = t('gauge_tilt_title');
+      document.querySelector('#cardTilt .gauge-caption').innerText = t('gauge_tilt_desc');
+
+      // Footer
+      const footer = document.querySelector('footer');
+      if (footer) footer.innerText = t('footer_text');
+
+      // Refresh timer subtitle
+      updateTimerDisplayTitles();
+    }
+
+    function toggleLanguage() {
+      setLanguage(currentLang === 'fr' ? 'en' : 'fr');
+    }
+
+    // ----------------------------------------------------
+    // ÉTATS GLOBAUX & TÉLÉMÉTRIE DE SESSION
+    // ----------------------------------------------------
+    let currentMode = 'assis'; // 'assis' | 'debout' | 'pause'
+    let baseline = null;
+    let currentLandmarks = null;
+    let badPostureStart = null;
+    let alertLatched = false;
+    let lastNotifTime = 0;
+    let soundEnabled = true;
+    let cameraInstance = null;
+    let poseInstance = null;
+    let isCameraActive = false;
+
+    // Métriques globales (toute la session ouverte)
+    let goodFrames = 0;
+    let totalFrames = 0;
+    let alertCount = 0;
+    const todayKey = new Date().toISOString().slice(0, 10);
+    let dailyLogs = [];
+
+    // Télémétrie dédiée au cycle en cours (pour le % de fin de timer)
+    let sessionGoodFrames = 0;
+    let sessionTotalFrames = 0;
+    let sessionCycleLogged = false;
+    let sessionStartTimestamp = Date.now();
+
+    // Timers
+    let timerInterval = null;
+    let remainingSeconds = 45 * 60;
+    let elapsedStanding = 0;
+
+    // ----------------------------------------------------
+    // CONFIGURATION PACING & AUDIO
+    // ----------------------------------------------------
+    const DEFAULT_PACING_CONFIG = {
+      sittingMinutes: 45,
+      standingAlertMinutes: 15,
+      pauseMinutes: 5
+    };
+
+    let pacingConfig = { ...DEFAULT_PACING_CONFIG };
+
+    function loadPacingConfig() {
+      try {
+        const saved = localStorage.getItem('ergovision_pacing_config');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.sittingMinutes && parsed.standingAlertMinutes && parsed.pauseMinutes) {
+            pacingConfig = parsed;
+          }
+        }
+      } catch (e) {
+        console.warn("Échec chargement pacing config :", e);
+      }
+    }
+    loadPacingConfig();
+
+    const DEFAULT_AUDIO_SETTINGS = {
+      mode: 'pulse', // 'pulse' | 'continuous'
+      volume: 0.15,
+      delaySeconds: 2.5
+    };
+
+    let audioSettings = { ...DEFAULT_AUDIO_SETTINGS };
+
+    function loadAudioSettings() {
+      try {
+        const saved = localStorage.getItem('ergovision_audio_settings');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.mode && typeof parsed.volume === 'number') {
+            audioSettings = parsed;
+          }
+        }
+      } catch (e) {
+        console.warn("Échec chargement audio settings :", e);
+      }
+    }
+    loadAudioSettings();
+
+    // ----------------------------------------------------
+    // MODAL RÉGLAGES FLUENT UI 2 & TABS
+    // ----------------------------------------------------
+    function openPacingModal() {
+      const modal = document.getElementById('pacingModal');
+      // Sync Pacing
+      document.getElementById('rangeSittingMinutes').value = pacingConfig.sittingMinutes;
+      document.getElementById('inputSittingMinutes').value = pacingConfig.sittingMinutes;
+      document.getElementById('hintSitVal').innerText = pacingConfig.sittingMinutes + ' min';
+
+      document.getElementById('rangeStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
+      document.getElementById('inputStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
+      document.getElementById('hintStandVal').innerText = pacingConfig.standingAlertMinutes + ' min';
+
+      document.getElementById('rangePauseMinutes').value = pacingConfig.pauseMinutes;
+      document.getElementById('inputPauseMinutes').value = pacingConfig.pauseMinutes;
+      document.getElementById('hintPauseVal').innerText = pacingConfig.pauseMinutes + ' min';
+
+      // Sync Audio
+      if (audioSettings.mode === 'continuous') {
+        document.getElementById('audioModeContinuous').checked = true;
+      } else {
+        document.getElementById('audioModePulse').checked = true;
+      }
+      const volInt = Math.round(audioSettings.volume * 100);
+      document.getElementById('rangeAudioVolume').value = volInt;
+      document.getElementById('valAudioVolume').innerText = volInt + '%';
+      document.getElementById('selectAlertDelay').value = String(audioSettings.delaySeconds);
+
+      // Sync Prefs
+      document.getElementById('selectModalLanguage').value = currentLang;
+      document.getElementById('selectModalSensitivity').value = document.getElementById('sensitivitySelect').value;
+
+      if (typeof modal.showModal === 'function') {
+        modal.showModal();
+      } else {
+        modal.setAttribute('open', '');
+      }
+    }
+
+    function closePacingModal() {
+      const modal = document.getElementById('pacingModal');
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.removeAttribute('open');
+      }
+    }
+
+    function switchModalTab(tabId) {
+      document.querySelectorAll('.modal-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.modal-tab-pane').forEach(pane => pane.classList.remove('active'));
+
+      if (tabId === 'pacing') {
+        document.getElementById('tabBtnPacing').classList.add('active');
+        document.getElementById('tabPanePacing').classList.add('active');
+      } else if (tabId === 'audio') {
+        document.getElementById('tabBtnAudio').classList.add('active');
+        document.getElementById('tabPaneAudio').classList.add('active');
+      } else if (tabId === 'prefs') {
+        document.getElementById('tabBtnPrefs').classList.add('active');
+        document.getElementById('tabPanePrefs').classList.add('active');
+      }
+    }
+
+    function applyPreset(sit, stand, pause) {
+      document.getElementById('rangeSittingMinutes').value = sit;
+      document.getElementById('inputSittingMinutes').value = sit;
+      document.getElementById('hintSitVal').innerText = sit + ' min';
+
+      document.getElementById('rangeStandingAlertMinutes').value = stand;
+      document.getElementById('inputStandingAlertMinutes').value = stand;
+      document.getElementById('hintStandVal').innerText = stand + ' min';
+
+      document.getElementById('rangePauseMinutes').value = pause;
+      document.getElementById('inputPauseMinutes').value = pause;
+      document.getElementById('hintPauseVal').innerText = pause + ' min';
+    }
+
+    function syncPacingInput(type, val) {
+      if (type === 'sit') {
+        document.getElementById('inputSittingMinutes').value = val;
+        document.getElementById('hintSitVal').innerText = val + ' min';
+      } else if (type === 'stand') {
+        document.getElementById('inputStandingAlertMinutes').value = val;
+        document.getElementById('hintStandVal').innerText = val + ' min';
+      } else if (type === 'pause') {
+        document.getElementById('inputPauseMinutes').value = val;
+        document.getElementById('hintPauseVal').innerText = val + ' min';
+      }
+    }
+
+    function syncPacingRange(type, val) {
+      if (type === 'sit') {
+        document.getElementById('rangeSittingMinutes').value = val;
+        document.getElementById('hintSitVal').innerText = val + ' min';
+      } else if (type === 'stand') {
+        document.getElementById('rangeStandingAlertMinutes').value = val;
+        document.getElementById('hintStandVal').innerText = val + ' min';
+      } else if (type === 'pause') {
+        document.getElementById('rangePauseMinutes').value = val;
+        document.getElementById('hintPauseVal').innerText = val + ' min';
+      }
+    }
+
+    function updateAudioVolume(val) {
+      document.getElementById('valAudioVolume').innerText = val + '%';
+      audioSettings.volume = parseFloat(val) / 100;
+    }
+
+    function syncSensitivity(val) {
+      document.getElementById('sensitivitySelect').value = val;
+    }
+
+    function resetPacingDefaults() {
+      applyPreset(DEFAULT_PACING_CONFIG.sittingMinutes, DEFAULT_PACING_CONFIG.standingAlertMinutes, DEFAULT_PACING_CONFIG.pauseMinutes);
+      document.getElementById('audioModePulse').checked = true;
+      document.getElementById('rangeAudioVolume').value = 15;
+      document.getElementById('valAudioVolume').innerText = '15%';
+      document.getElementById('selectAlertDelay').value = '2.5';
+    }
+
+    function savePacingConfig(e) {
+      if (e) e.preventDefault();
+      const sit = parseInt(document.getElementById('inputSittingMinutes').value, 10);
+      const stand = parseInt(document.getElementById('inputStandingAlertMinutes').value, 10);
+      const pause = parseInt(document.getElementById('inputPauseMinutes').value, 10);
+
+      if (sit > 0 && stand > 0 && pause > 0) {
+        pacingConfig = { sittingMinutes: sit, standingAlertMinutes: stand, pauseMinutes: pause };
+        try {
+          localStorage.setItem('ergovision_pacing_config', JSON.stringify(pacingConfig));
+        } catch (err) {
+          console.warn("Erreur sauvegarde localStorage pacing :", err);
+        }
+      }
+
+      const audioMode = document.querySelector('input[name="audioMode"]:checked').value;
+      const vol = parseInt(document.getElementById('rangeAudioVolume').value, 10) / 100;
+      const delay = parseFloat(document.getElementById('selectAlertDelay').value);
+
+      audioSettings = {
+        mode: audioMode,
+        volume: vol,
+        delaySeconds: delay
+      };
+
+      try {
+        localStorage.setItem('ergovision_audio_settings', JSON.stringify(audioSettings));
+      } catch (err) {
+        console.warn("Erreur sauvegarde localStorage audio :", err);
+      }
+
+      resetCurrentModeTimer();
+      closePacingModal();
+    }
+
+    // ----------------------------------------------------
+    // MOTEUR AUDIO AVANCÉ (Web Audio API & Alerte Continue)
+    // ----------------------------------------------------
+    let audioCtx = null;
+    let postureAlertInterval = null;
+    let continuousOscillator = null;
+    let continuousGainNode = null;
+    let isContinuousAlertActive = false;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq = 480, duration = 0.16, type = 'sine', volFactor = 1.0) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const effectiveVol = Math.max(0.01, audioSettings.volume * volFactor);
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(effectiveVol, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (err) {
+        console.warn("Erreur AudioContext playTone :", err);
+      }
+    }
+
+    // Démarrage de l'alerte sonore continue (pulse ou onde continue)
+    function startContinuousPostureAlert() {
+      if (!soundEnabled || isContinuousAlertActive) return;
+      isContinuousAlertActive = true;
+
+      if (audioSettings.mode === 'pulse') {
+        const triggerPulse = () => {
+          if (!soundEnabled || !isContinuousAlertActive) return;
+          // Double-pulse doux et discret
+          playTone(540, 0.12, 'triangle', 0.85);
+          setTimeout(() => {
+            if (isContinuousAlertActive) playTone(640, 0.14, 'triangle', 0.95);
+          }, 150);
+        };
+        triggerPulse();
+        clearInterval(postureAlertInterval);
+        postureAlertInterval = setInterval(triggerPulse, 1200);
+      } else {
+        // Mode tonalité continue douce (sinus)
+        try {
+          const ctx = getAudioContext();
+          continuousOscillator = ctx.createOscillator();
+          continuousGainNode = ctx.createGain();
+          continuousOscillator.type = 'sine';
+          continuousOscillator.frequency.setValueAtTime(440, ctx.currentTime);
+          const vol = Math.max(0.01, audioSettings.volume * 0.7);
+          continuousGainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
+          continuousGainNode.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.1);
+          continuousOscillator.connect(continuousGainNode);
+          continuousGainNode.connect(ctx.destination);
+          continuousOscillator.start();
+        } catch (e) {
+          console.warn("Erreur démarrage tonalité continue :", e);
+        }
+      }
+    }
+
+    // Arrêt instantané dès que la posture repasse en neutre
+    function stopContinuousPostureAlert() {
+      if (!isContinuousAlertActive) return;
+      isContinuousAlertActive = false;
+
+      if (postureAlertInterval) {
+        clearInterval(postureAlertInterval);
+        postureAlertInterval = null;
+      }
+
+      if (continuousOscillator && continuousGainNode) {
+        try {
+          const ctx = getAudioContext();
+          continuousGainNode.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
+          setTimeout(() => {
+            try {
+              if (continuousOscillator) {
+                continuousOscillator.stop();
+                continuousOscillator.disconnect();
+              }
+              continuousOscillator = null;
+              continuousGainNode = null;
+            } catch (err) {}
+          }, 60);
+        } catch (e) {
+          continuousOscillator = null;
+          continuousGainNode = null;
+        }
+      }
+    }
+
+    // Carillon harmonieux relaxant pour la fin de cycle (Do - Mi - Sol)
+    function playCycleEndChime() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            if (!soundEnabled) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            const vol = Math.max(0.02, audioSettings.volume * 1.1);
+            gain.gain.setValueAtTime(vol, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.6);
+          }, idx * 180);
+        });
+      } catch (err) {
+        console.warn("Erreur carillon de cycle :", err);
+      }
+    }
+
+    function testAlertAudio() {
+      playTone(540, 0.14, 'triangle', 0.9);
+      setTimeout(() => playTone(640, 0.16, 'triangle', 1.0), 160);
+    }
+
+    function testCycleChime() {
+      playCycleEndChime();
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('btnSound');
+      btn.classList.toggle('active-toggle', soundEnabled);
+      const icon = soundEnabled 
+        ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>'
+        : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+      btn.innerHTML = `<svg class="icon" viewBox="0 0 24 24">${icon}</svg><span>${soundEnabled ? t('btn_audio') : t('btn_mute')}</span>`;
+      if (soundEnabled) {
+        playTone(520, 0.12);
+      } else {
+        stopContinuousPostureAlert();
+      }
+    }
+
+    // ----------------------------------------------------
+    // NOTIFICATIONS SYSTEME (Windows / Mac / Linux)
+    // ----------------------------------------------------
+    async function requestNotifPermission() {
+      if (!("Notification" in window)) {
+        alert("Les notifications système ne sont pas supportées par votre navigateur.");
+        return;
+      }
+      const perm = await Notification.requestPermission();
+      const btn = document.getElementById('btnNotif');
+      if (perm === "granted") {
+        btn.classList.add('active-toggle');
+        btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Notifs OK</span>';
+        new Notification("ErgoVision AI Activé", {
+          body: "Les alertes posturales s'afficheront même lorsque vous travaillez sur une autre application."
+        });
+      } else {
+        btn.classList.remove('active-toggle');
+        btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Notifs Bloquées</span>';
+      }
+    }
+
+    function triggerAlertNotification(reason) {
+      const now = Date.now();
+      if (now - lastNotifTime < 15000) return;
+      lastNotifTime = now;
+      playTone(560, 0.22, 'triangle', 0.12);
+
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("⚠️ Compensation Détectée : " + reason, {
+          body: "Grandissez doucement la nuque et abaissez votre épaule gauche.",
+          silent: true
+        });
+      }
+    }
+
+    // ----------------------------------------------------
+    // PICTURE-IN-PICTURE (Miniature par-dessus Teams/Jira)
+    // ----------------------------------------------------
+    async function togglePiP() {
+      try {
+        if (!isCameraActive) {
+          alert("Veuillez d'abord activer la caméra avant d'ouvrir la fenêtre flottante (PiP).");
+          return;
+        }
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else {
+          if (!pipVideo.srcObject) {
+            pipVideo.srcObject = canvasElement.captureStream(20);
+            await pipVideo.play();
+          }
+          await pipVideo.requestPictureInPicture();
+        }
+      } catch (err) {
+        console.error("Erreur PiP :", err);
+        alert("Impossible d'activer la fenêtre flottante PiP. Vérifiez que la caméra est active.");
+      }
+    }
+
+    // ----------------------------------------------------
+    // INITIALISATION & CONTRÔLE CAMERA MEDIAPIPE
+    // ----------------------------------------------------
+    async function listVideoDevices() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoInputs = devices.filter(d => d.kind === 'videoinput');
+        if (videoInputs.length > 1) {
+          cameraSelect.innerHTML = '';
+          videoInputs.forEach((dev, idx) => {
+            const opt = document.createElement('option');
+            opt.value = dev.deviceId;
+            opt.text = dev.label || `Caméra ${idx + 1}`;
+            cameraSelect.appendChild(opt);
+          });
+          cameraSelect.style.display = 'inline-block';
+        }
+      } catch (e) {
+        console.warn("Énumération caméras non disponible :", e);
+      }
+    }
+
+    async function startCamera(deviceId = null) {
+      getAudioContext();
+      setStatusUI('var(--status-warning)', 'Démarrage du capteur...');
+
+      try {
+        if (!poseInstance) {
+          poseInstance = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+          });
+          poseInstance.setOptions({
+            modelComplexity: 1,
+            smoothLandmarks: true,
+            enableSegmentation: false,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+          });
+          poseInstance.onResults(onResults);
+        }
+
+        if (cameraInstance) {
+          await cameraInstance.stop();
+        }
+
+        cameraInstance = new Camera(videoElement, {
+          onFrame: async () => {
+            if (isCameraActive) {
+              await poseInstance.send({ image: videoElement });
+            }
+          },
+          width: 640,
+          height: 400
+        });
+
+        await cameraInstance.start();
+        isCameraActive = true;
+        cameraPlaceholder.classList.add('hidden');
+        btnStopCam.style.display = 'inline-flex';
+        await listVideoDevices();
+
+        setStatusUI('var(--status-success)', 'Capteur actif • Calibrez votre point zéro');
+        playTone(600, 0.15);
+      } catch (err) {
+        console.error("Erreur démarrage caméra :", err);
+        setStatusUI('var(--status-danger)', "Échec de l'accès à la caméra");
+        alert("Impossible d'accéder à la webcam. Vérifiez les autorisations de votre navigateur et qu'aucune autre application ne l'utilise.");
+      }
+    }
+
+    async function switchCamera(deviceId) {
+      if (!deviceId) return;
+      await stopCamera();
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } } });
+      videoElement.srcObject = stream;
+      await startCamera(deviceId);
+    }
+
+    async function stopCamera() {
+      if (cameraInstance) {
+        await cameraInstance.stop();
+      }
+      if (videoElement.srcObject) {
+        const tracks = videoElement.srcObject.getTracks();
+        tracks.forEach(t => t.stop());
+        videoElement.srcObject = null;
+      }
+      isCameraActive = false;
+      cameraPlaceholder.classList.remove('hidden');
+      btnStopCam.style.display = 'none';
+      setStatusUI('var(--fluent-fg-muted)', 'Capteur en veille');
+    }
+
+    // ----------------------------------------------------
+    // CALIBRATION GUIDÉE 3 SECONDES (POINT ZÉRO)
+    // ----------------------------------------------------
+    function startCalibrationCountdown() {
+      if (!isCameraActive || !currentLandmarks) {
+        alert("Activez d'abord la caméra et placez-vous bien dans le cadre face à l'écran.");
+        return;
+      }
+
+      const overlay = document.getElementById('countdownOverlay');
+      const numEl = document.getElementById('countdownNum');
+      overlay.classList.add('visible');
+      let count = 3;
+      numEl.innerText = count;
+      playTone(440, 0.12);
+
+      const cd = setInterval(() => {
+        count--;
+        if (count > 0) {
+          numEl.innerText = count;
+          playTone(440, 0.12);
+        } else {
+          clearInterval(cd);
+          overlay.classList.remove('visible');
+          baseline = computeMetrics(currentLandmarks);
+          playTone(880, 0.25, 'triangle', 0.15);
+          setStatusUI('var(--status-success)', `Point Zéro verrouillé (${currentMode.toUpperCase()})`);
+        }
+      }, 1000);
+    }
+
+    function setStatusUI(color, text) {
+      const dot = document.getElementById('statusDot');
+      const txt = document.getElementById('statusText');
+      dot.style.background = color;
+      dot.style.color = color;
+      txt.innerText = text;
+    }
+
+    // ----------------------------------------------------
+    // MOTEUR BIOMÉCANIQUE & ALGORITHME DE CORRECTION
+    // ----------------------------------------------------
+    function computeMetrics(lm) {
+      const nose = lm[0];
+      const leftEar = lm[7];
+      const rightEar = lm[8];
+      const leftShoulder = lm[11];
+      const rightShoulder = lm[12];
+
+      const keyLandmarks = [nose, leftEar, rightEar, leftShoulder, rightShoulder];
+      const allVisible = keyLandmarks.every(pt => (pt.visibility === undefined || pt.visibility > 0.45));
+      if (!allVisible) {
+        return null;
+      }
+
+      const shoulderWidth = Math.hypot(leftShoulder.x - rightShoulder.x, leftShoulder.y - rightShoulder.y) || 0.001;
+      const midShoulderY = (leftShoulder.y + rightShoulder.y) / 2;
+
+      return {
+        neckHeightRatio: (midShoulderY - nose.y) / shoulderWidth,
+        shoulderDiffRatio: (rightShoulder.y - leftShoulder.y) / shoulderWidth,
+        headTiltRatio: Math.abs(leftEar.y - rightEar.y) / shoulderWidth
+      };
+    }
+
+    function updateGauge(cardId, badgeId, fillId, ratioToThreshold) {
+      const pct = Math.min(100, Math.max(0, Math.round(ratioToThreshold * 100)));
+      const isBad = pct >= 100;
+      document.getElementById(cardId).classList.toggle('bad', isBad);
+      document.getElementById(badgeId).innerText = isBad ? 'ALERTE' : `${pct}%`;
+      const fill = document.getElementById(fillId);
+      fill.style.width = `${pct}%`;
+      fill.style.backgroundColor = pct > 95 ? 'var(--status-danger)' : (pct > 65 ? 'var(--status-warning)' : 'var(--status-success)');
+    }
+
+    // ----------------------------------------------------
+    // BOUCLE DE RENDU MEDIAPIPE (ONRESULTS)
+    // ----------------------------------------------------
+    function onResults(results) {
+      canvasCtx.save();
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+      // 1. Retournement miroir en 2D pour conserver une orientation naturelle en PiP
+      canvasCtx.translate(canvasElement.width, 0);
+      canvasCtx.scale(-1, 1);
+      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+      let hudStatus = "POINT ZÉRO NON CALIBRÉ";
+      let hudColor = "rgba(15, 23, 42, 0.88)";
+
+      if (results.poseLandmarks) {
+        currentLandmarks = results.poseLandmarks;
+
+        // Dessin du squelette ergonomique
+        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+          color: 'rgba(40, 134, 222, 0.7)',
+          lineWidth: 2
+        });
+        drawLandmarks(canvasCtx, [
+          results.poseLandmarks[0], // Nez
+          results.poseLandmarks[7], // Oreille G
+          results.poseLandmarks[8], // Oreille D
+          results.poseLandmarks[11], // Épaule G
+          results.poseLandmarks[12]  // Épaule D
+        ], {
+          color: '#34d399',
+          fillColor: '#ffffff',
+          lineWidth: 2,
+          radius: 4
+        });
+
+        const current = computeMetrics(currentLandmarks);
+
+        if (!current) {
+          hudStatus = "POSTURE PARTIELLE • RECADREZ-VOUS";
+          hudColor = "rgba(245, 158, 11, 0.88)";
+        } else if (currentMode === 'pause') {
+          // MODE PAUSE ACTIVE : Alertes sonores et visuelles suspendues pour libre étirement
+          hudStatus = "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT";
+          hudColor = "rgba(40, 134, 222, 0.92)";
+          document.body.classList.remove('alert-active');
+          badPostureStart = null;
+          alertLatched = false;
+          setStatusUI('var(--fluent-brand)', 'Pause active en cours — alertes suspendues');
+          updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
+          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
+          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', 0);
+        } else if (baseline) {
+          const sens = parseFloat(document.getElementById('sensitivitySelect').value);
+
+          const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
+          const shoulderDelta = (current.shoulderDiffRatio - baseline.shoulderDiffRatio);
+          const tiltDelta = (current.headTiltRatio - baseline.headTiltRatio);
+
+          const neckThreshold = 0.13 * sens;
+          const shoulderThreshold = 0.08 * sens;
+          const tiltThreshold = 0.11 * sens;
+
+          updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
+          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
+          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
+
+          const isNeckBad = neckDelta > neckThreshold;
+          const isShoulderBad = shoulderDelta > shoulderThreshold;
+          const isTiltBad = tiltDelta > tiltThreshold;
+          const anyBad = isNeckBad || isShoulderBad || isTiltBad;
+
+          totalFrames++;
+          sessionTotalFrames++;
+          if (!anyBad) {
+            goodFrames++;
+            sessionGoodFrames++;
+          }
+
+          if (totalFrames % 15 === 0) {
+            const score = Math.round((goodFrames / totalFrames) * 100);
+            const scoreEl = document.getElementById('scoreDigits');
+            scoreEl.innerText = `${score}%`;
+            scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
+          }
+
+          if (anyBad) {
+            let reasonKey = isNeckBad ? "reason_neck" : (isShoulderBad ? "reason_shoulder" : "reason_tilt");
+            let reason = t(reasonKey);
+            hudStatus = t('hud_deviation') + " " + reason.toUpperCase();
+            hudColor = "rgba(245, 158, 11, 0.92)";
+
+            if (!badPostureStart) {
+              badPostureStart = Date.now();
+            }
+
+            const alertThresholdMs = (audioSettings.delaySeconds || 2.5) * 1000;
+            if (Date.now() - badPostureStart > alertThresholdMs) {
+              document.body.classList.add('alert-active');
+              hudStatus = t('hud_correct') + " " + reason.toUpperCase();
+              hudColor = "rgba(239, 68, 68, 0.96)";
+              setStatusUI('var(--status-danger)', `${t('status_alert_prefix')}${reason})`);
+
+              // Alerte sonore continue tant que la posture n'est pas revenue en neutre
+              if (!isContinuousAlertActive) {
+                startContinuousPostureAlert();
+              }
+
+              if (!alertLatched) {
+                alertLatched = true;
+                addDailyLog('alert', reason, currentMode);
+                triggerAlertNotification(reason);
+              }
+            }
+          } else {
+            badPostureStart = null;
+            alertLatched = false;
+            // Arrêt instantané de l'alerte continue dès retour au neutre
+            if (isContinuousAlertActive) {
+              stopContinuousPostureAlert();
+            }
+            document.body.classList.remove('alert-active');
+            const modeLabel = t('title_' + currentMode) || currentMode;
+            hudStatus = `${t('hud_neutral')} (${modeLabel.toUpperCase()})`;
+            hudColor = "rgba(16, 185, 129, 0.88)";
+            setStatusUI('var(--status-success)', `${t('status_optimal')} (${modeLabel})`);
+          }
+        }
+      } else {
+        hudStatus = t('hud_waiting');
+        hudColor = "rgba(15, 23, 42, 0.88)";
+        if (isContinuousAlertActive) {
+          stopContinuousPostureAlert();
+        }
+      }
+
+      canvasCtx.restore();
+
+      // Bandeau HUD superposé
+      canvasCtx.save();
+      canvasCtx.fillStyle = hudColor;
+      canvasCtx.fillRect(0, 0, canvasElement.width, 38);
+      canvasCtx.fillStyle = "#ffffff";
+      canvasCtx.font = "bold 13px 'Segoe UI Variable Text', -apple-system, sans-serif";
+      canvasCtx.textBaseline = "middle";
+      canvasCtx.fillText(hudStatus, 14, 19);
+      canvasCtx.restore();
+    }
+
+    // ----------------------------------------------------
+    // PACING POSTURAL AVEC TIMER NÉGATIF & BILAN DE SESSION
+    // ----------------------------------------------------
+    function setMode(mode) {
+      if (currentMode !== mode) {
+        // Enregistre la transition dans le journal quotidien
+        if (sessionTotalFrames > 30 && !sessionCycleLogged) {
+          const partialScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
+          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)} (${partialScore}% ${t('title_neutral').toLowerCase()})`, mode, partialScore);
+        } else {
+          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)}`, mode);
+        }
+      }
+
+      currentMode = mode;
+      document.getElementById('segAssis').classList.toggle('active', mode === 'assis');
+      document.getElementById('segAssis').setAttribute('aria-selected', mode === 'assis');
+      document.getElementById('segDebout').classList.toggle('active', mode === 'debout');
+      document.getElementById('segDebout').setAttribute('aria-selected', mode === 'debout');
+      document.getElementById('segPause').classList.toggle('active', mode === 'pause');
+      document.getElementById('segPause').setAttribute('aria-selected', mode === 'pause');
+
+      if (isContinuousAlertActive) {
+        stopContinuousPostureAlert();
+      }
+
+      resetCurrentModeTimer();
+    }
+
+    function updateTimerDisplayTitles() {
+      const titleEl = document.getElementById('timerTitle');
+      const subEl = document.getElementById('timerSub');
+      if (!titleEl || !subEl) return;
+
+      if (currentMode === 'assis') {
+        titleEl.innerText = t('title_sit');
+        subEl.innerText = `${t('sub_sit_prefix')}${pacingConfig.sittingMinutes}${t('sub_sit_suffix')}`;
+      } else if (currentMode === 'debout') {
+        titleEl.innerText = t('title_stand');
+        subEl.innerText = `${t('sub_stand_prefix')}${pacingConfig.standingAlertMinutes}${t('sub_stand_suffix')}`;
+      } else {
+        titleEl.innerText = t('title_pause');
+        subEl.innerText = t('sub_pause');
+      }
+    }
+
+    function resetCurrentModeTimer() {
+      const widget = document.getElementById('pacingWidget');
+      const digits = document.getElementById('timerDigits');
+      widget.style.borderColor = 'var(--fluent-stroke-subtle)';
+      digits.style.color = 'var(--fluent-fg-primary)';
+      digits.classList.remove('overtime');
+
+      sessionGoodFrames = 0;
+      sessionTotalFrames = 0;
+      sessionCycleLogged = false;
+      sessionStartTimestamp = Date.now();
+
+      updateTimerDisplayTitles();
+
+      if (currentMode === 'assis') {
+        startCountdown(pacingConfig.sittingMinutes * 60);
+      } else if (currentMode === 'debout') {
+        startStandingCountUp();
+      } else {
+        startCountdown(pacingConfig.pauseMinutes * 60);
+      }
+    }
+
+    function formatSec(totalSec) {
+      const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
+      const s = String(totalSec % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function renderTimerDigits(sec) {
+      const digits = document.getElementById('timerDigits');
+      if (sec < 0) {
+        digits.innerText = `-${formatSec(Math.abs(sec))}`;
+      } else {
+        digits.innerText = formatSec(sec);
+      }
+    }
+
+    function startCountdown(sec) {
+      clearInterval(timerInterval);
+      remainingSeconds = sec;
+      renderTimerDigits(remainingSeconds);
+
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        renderTimerDigits(remainingSeconds);
+
+        if (remainingSeconds === 0) {
+          // Fin du temps prescrit : Carillon de fin de cycle et bilan consigné
+          if (!sessionCycleLogged) {
+            sessionCycleLogged = true;
+            const sessionScore = sessionTotalFrames > 0 ? Math.round((sessionGoodFrames / sessionTotalFrames) * 100) : 100;
+            const targetMin = Math.round(sec / 60);
+            const modeTitle = t('title_' + currentMode);
+            const summaryText = `${t('cycle_summary_title')} (${modeTitle}) : ${sessionScore}% ${t('title_neutral').toLowerCase()} (${targetMin} min)`;
+            
+            addDailyLog('summary', summaryText, currentMode, sessionScore);
+            playCycleEndChime();
+            triggerAlertNotification(summaryText);
+          }
+        }
+
+        if (remainingSeconds < 0) {
+          // Défilement en négatif tant que l'utilisateur n'a pas réinitialisé ou changé de mode
+          const widget = document.getElementById('pacingWidget');
+          const digits = document.getElementById('timerDigits');
+          const sub = document.getElementById('timerSub');
+          widget.style.borderColor = 'var(--status-danger)';
+          digits.classList.add('overtime');
+          sub.innerText = `${t('sub_overtime')} (+${formatSec(Math.abs(remainingSeconds))})`;
+        }
+      }, 1000);
+    }
+
+    function startStandingCountUp() {
+      clearInterval(timerInterval);
+      elapsedStanding = 0;
+      renderTimerDigits(0);
+      const widget = document.getElementById('pacingWidget');
+      const digits = document.getElementById('timerDigits');
+      const sub = document.getElementById('timerSub');
+
+      const alertSeconds = pacingConfig.standingAlertMinutes * 60;
+      const warningSeconds = Math.max(60, Math.floor(alertSeconds * 0.7));
+
+      timerInterval = setInterval(() => {
+        elapsedStanding++;
+        renderTimerDigits(elapsedStanding);
+
+        if (elapsedStanding === warningSeconds) {
+          widget.style.borderColor = 'var(--status-warning)';
+          digits.style.color = 'var(--status-warning)';
+          sub.innerText = `⚠️ ${Math.floor(warningSeconds / 60)} ${t('standing_warning_sub')}`;
+          playTone(440, 0.25, 'triangle', 0.8);
+        } else if (elapsedStanding === alertSeconds) {
+          widget.style.borderColor = 'var(--status-danger)';
+          digits.classList.add('overtime');
+          sub.innerText = `🚨 ${pacingConfig.standingAlertMinutes} ${t('standing_alert_sub')}`;
+
+          if (!sessionCycleLogged) {
+            sessionCycleLogged = true;
+            const sessionScore = sessionTotalFrames > 0 ? Math.round((sessionGoodFrames / sessionTotalFrames) * 100) : 100;
+            const summaryText = `${t('cycle_summary_title')} (${t('title_stand')}) : ${sessionScore}% ${t('title_neutral').toLowerCase()} (${pacingConfig.standingAlertMinutes} min)`;
+            
+            addDailyLog('summary', summaryText, 'debout', sessionScore);
+            playCycleEndChime();
+            triggerAlertNotification(summaryText);
+          }
+        } else if (elapsedStanding > alertSeconds) {
+          widget.style.borderColor = 'var(--status-danger)';
+          digits.classList.add('overtime');
+          const overtimeSec = elapsedStanding - alertSeconds;
+          sub.innerText = `🚨 +${formatSec(overtimeSec)} • ${pacingConfig.standingAlertMinutes} ${t('standing_alert_sub')}`;
+        }
+      }, 1000);
+    }
+
+    // ----------------------------------------------------
+    // JOURNAL QUOTIDIEN PERSISTANT (LOCALSTORAGE) & EXPORT CSV
+    // ----------------------------------------------------
+    function loadDailyLogs() {
+      try {
+        const saved = localStorage.getItem('ergovision_daily_log_' + todayKey);
+        if (saved) {
+          dailyLogs = JSON.parse(saved);
+        } else {
+          dailyLogs = [];
+        }
+      } catch (err) {
+        console.warn("Échec chargement journal :", err);
+        dailyLogs = [];
+      }
+
+      renderAllLogs();
+    }
+
+    function saveDailyLogs() {
+      try {
+        localStorage.setItem('ergovision_daily_log_' + todayKey, JSON.stringify(dailyLogs));
+      } catch (err) {
+        console.warn("Échec sauvegarde journal :", err);
+      }
+    }
+
+    function renderAllLogs() {
+      const box = document.getElementById('timelineLog');
+      if (!box) return;
+
+      if (dailyLogs.length === 0) {
+        box.innerHTML = `<div style="color:var(--fluent-fg-muted); font-size:0.8rem; text-align:center; margin:auto;">${t('log_empty')}</div>`;
+        document.getElementById('alertCounterBadge').innerText = `0 ${t('badge_alert').toLowerCase()}`;
+        return;
+      }
+
+      box.innerHTML = '';
+      let alertsToday = 0;
+
+      dailyLogs.forEach(entry => {
+        if (entry.type === 'alert') alertsToday++;
+        const row = createTimelineRow(entry);
+        box.appendChild(row);
+      });
+
+      const badge = document.getElementById('alertCounterBadge');
+      badge.innerText = `${alertsToday} ${t('badge_alert').toLowerCase()}${alertsToday > 1 ? 's' : ''}`;
+      badge.style.color = alertsToday > 0 ? 'var(--status-warning)' : 'var(--status-success)';
+    }
+
+    function createTimelineRow(entry) {
+      const row = document.createElement('div');
+      row.className = `timeline-item item-${entry.type}`;
+
+      let badgeHtml = '';
+      if (entry.type === 'alert') {
+        badgeHtml = `<span class="timeline-badge badge-alert">${t('badge_alert')}</span>`;
+      } else if (entry.type === 'transition') {
+        badgeHtml = `<span class="timeline-badge badge-transition">${t('badge_transition')}</span>`;
+      } else if (entry.type === 'summary') {
+        badgeHtml = `<span class="timeline-badge badge-summary">${t('badge_summary')}</span>`;
+      }
+
+      const scorePart = entry.score !== null && entry.score !== undefined ? ` <strong style="color:var(--status-success)">${entry.score}%</strong>` : '';
+
+      row.innerHTML = `
+        <div class="timeline-content">
+          ${badgeHtml}
+          <span><strong>${entry.title}</strong>${scorePart} <span style="color:var(--fluent-fg-muted)">(${entry.mode})</span></span>
+        </div>
+        <span class="timeline-time">${entry.time}</span>
+      `;
+      return row;
+    }
+
+    function addDailyLog(type, title, mode, score = null) {
+      const time = new Date().toLocaleTimeString(currentLang === 'fr' ? 'fr-FR' : 'en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const entry = {
+        id: Date.now(),
+        time,
+        type,
+        title,
+        mode,
+        score
+      };
+
+      dailyLogs.unshift(entry);
+      saveDailyLogs();
+
+      const box = document.getElementById('timelineLog');
+      if (dailyLogs.length === 1) {
+        box.innerHTML = '';
+      }
+
+      const row = createTimelineRow(entry);
+      box.prepend(row);
+
+      if (type === 'alert') {
+        alertCount++;
+        const badge = document.getElementById('alertCounterBadge');
+        badge.innerText = `${alertCount} ${t('badge_alert').toLowerCase()}${alertCount > 1 ? 's' : ''}`;
+        badge.style.color = 'var(--status-warning)';
+      }
+    }
+
+    function clearLogs() {
+      dailyLogs = [];
+      alertCount = 0;
+      goodFrames = 0;
+      totalFrames = 0;
+      sessionGoodFrames = 0;
+      sessionTotalFrames = 0;
+      try {
+        localStorage.removeItem('ergovision_daily_log_' + todayKey);
+      } catch (e) {}
+
+      document.getElementById('alertCounterBadge').innerText = `0 ${t('badge_alert').toLowerCase()}`;
+      document.getElementById('scoreDigits').innerText = '100%';
+      document.getElementById('timelineLog').innerHTML = `<div style="color:var(--fluent-fg-muted); font-size:0.8rem; text-align:center; margin:auto;">${t('log_empty')}</div>`;
+    }
+
+    function exportLogsCSV() {
+      if (dailyLogs.length === 0) {
+        alert(t('log_empty'));
+        return;
+      }
+      let csv = "Heure,Type,Description,Mode,MaintienNeutre%\n";
+      dailyLogs.forEach(i => {
+        const scoreStr = i.score !== null && i.score !== undefined ? `${i.score}%` : "";
+        csv += `"${i.time}","${i.type}","${i.title}","${i.mode}","${scoreStr}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `ergovision-journal-${todayKey}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // ----------------------------------------------------
+    // INITIALISATION APPLICATIVE
+    // ----------------------------------------------------
+    setLanguage(currentLang);
+    loadDailyLogs();
+    resetCurrentModeTimer();
+  </script>
+</body>
+</html>

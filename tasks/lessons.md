@@ -1,0 +1,37 @@
+# ErgoVision AI - Leçons Apprises & Bonnes Pratiques
+
+## 1. Web Audio API & Autoplay Policy
+- Ne jamais instancier ni démarrer immédiatement un `AudioContext` au chargement de script.
+- Instancier de manière lazy ou appeler `audioCtx.resume()` lors du premier clic utilisateur (ex: clic sur "Activer Capteur", "Calibrer", etc.).
+
+## 2. MediaPipe Canvas & Picture-in-Picture (PiP)
+- La transformation miroir par CSS `transform: scaleX(-1)` ne se propage pas au flux `canvas.captureStream()`.
+- Pour que le PiP soit un vrai miroir naturel, le retournement doit être fait dans le contexte 2D Canvas (`translate(w, 0); scale(-1, 1)`).
+- Tout texte ou HUD superposé doit être dessiné après un `restore()`, sinon le texte est affiché à l'envers.
+
+## 3. Détection Biomécanique & Filtrage Bruit
+- Ne jamais évaluer la posture si les repères clés (nez, épaules, oreilles) ont une visibilité `visibility < 0.5`.
+- Implémenter un verrou anti-rebond (latch) : déclencher l'alerte sonore et la notification une seule fois lors du dépassement du seuil temporel (ex: 2.5s en mauvaise posture), et ne pas ré-inscrire un log à chaque frame d'une même dérive.
+
+## 4. Design System & Ergonomie Visuelle (Fluent UI 2 & WCAG AA)
+- **Typographie numérique tabulaire** : Toujours utiliser des fontes à espacement numérique fixe (`Bahnschrift`, monospace ou `font-variant-numeric: tabular-nums`) pour les compteurs et jauges en temps réel. Cela évite le tressautement visuel (jittering) qui parasite l'attention de l'utilisateur.
+- **Double Focus Ring A11y** : Pour assurer une navigabilité clavier 100% conforme WCAG AA sur des fonds alternant entre clair et sombre, adopter le pattern d'anneau imbriqué (`--focus-ring-inner` et `--focus-ring-outer`).
+- **Thème sans latence** : Initialiser la lecture du thème dans le `<head>` ou dès le chargement du DOM via `localStorage` pour éviter tout effet de flash blanc ou noir indésirable (FOUC).
+- **Matérialité Mica & Acrylique** : Pour dépasser l'aspect "dark mode plat", superposer 3 couches : (1) un mesh radial ambiant sur le canvas, (2) un biseau spéculaire supérieur (`border-top: 1px solid rgba(255, 255, 255, 0.12)`), (3) un dégradé vertical subtil sur les cartes (`linear-gradient(180deg, card-inner 0%, card-bottom 100%)`).
+## 5. Universalisation Ergonomique & Gestion du Contexte d'Activité
+- **Suspension contextuelle des alertes** : Lorsqu'un mode « Pause & Étirement » est actif, suspendre formellement les alertes sonores et visuelles de déviation. Un système d'observation biomécanique ne doit pas pénaliser un utilisateur qui bouge et s'étire volontairement.
+- **Paramétrage des cycles de travail (Pacing)** : Ne jamais hard-coder des durées de pacing arbitraires (ex: 45m assis, 12m debout). Fournir un modal de réglage léger accessible en un clic avec sauvegarde locale (`localStorage`), garantissant l'adéquation avec divers rythmes de travail (Pomodoro 25/5, 45/15, 52/17).
+- **Universalité du modèle sémantique** : Bannir les pathologies médicales ou prescriptions orthopédiques nominatives au sein des libellés d'interface et des schémas d'état généraux. Privilégier des descripteurs fonctionnels anatomiques universels (« Projection cervicale », « Asymétrie scapulaire », « Inclinaison latérale »).
+
+## 6. Feedback Audio Dynamique, Pacing Négatif & Persistance Télémétrique
+- **Alerte Continue vs Agressivité Cognitive** : Une tonalité ininterrompue pure (500Hz) génère une fatigue auditive réflexe en moins de 5 secondes. Privilégier par défaut une pulsation cadencée (double bip doux toutes les 1,2s) avec arrêt instantané dès le retour au neutre. Offrir le choix de l'onde continue et le réglage du volume dans les paramètres.
+- **Carillon de Fin de Cycle distinct** : Ne jamais utiliser le même timbre pour l'alerte posturale punitive et la fin d'un cycle de travail. Employer un accord majeur ascendant ou descendant harmonieux (Do-Mi-Sol) à résonance douce pour féliciter l'effort ergonomique.
+- **Timer à Dépassement Négatif (Overtime Pacing)** : Bloquer un timer à 00:00 ou forcer une bascule de mode sans confirmation casse le flux de concentration (Deep Work). Faire défiler le timer en valeurs négatives (`-01:23`) avec style visuel d'avertissement et consigner le score exact de maintien neutre au moment du déclenchement.
+- **Persistance Quotidienne Indépendante de Session** : Les utilisateurs rafraîchissent fréquemment leur navigateur. Les logs d'alertes, transitions et bilans de session doivent être sérialisés sous une clé journalière (`ergovision_daily_log_YYYY-MM-DD`) pour préserver l'historique sur toute la journée de travail.
+
+## 7. Structuration Hybride Open-Source & Standardisation Internationale
+- **Architecture Duale (Standalone vs Modulaire)** : Conserver à la fois une distribution `index.html` racine 100% autonome (zéro installation, déploiement immédiat en 1 clic sur GitHub Pages) et une architecture ES6 modulaire découplée dans `90_Code_Source/` (`audio`, `biomechanics`, `pacing`, `storage`, `ui`, `vision`). Cela supprime toute friction à l'adoption tout en permettant aux contributeurs internationaux de faire des PRs atomiques et testées.
+- **Documentation Bilingue Miroir & Standard GitHub** : Pour maximiser l'impact mondial d'un projet de santé open source, placer le `README.md` principal en anglais (standard de facto des développeurs internationaux) avec un lien proéminent vers `README.fr.md` en français complet.
+- **Avertissement Ergonomique / Médical Clair** : Sur GitHub, tout outil d'ergonomie ou de vision corporelle doit intégrer un disclaimer explicite rappelant qu'il s'agit d'un copilote d'hygiène posturale et non d'un dispositif médical de diagnostic.
+
+

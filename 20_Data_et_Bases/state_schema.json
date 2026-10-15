@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ErgoVisionSkillExecutionState",
+  "description": "Schéma formel d'état SKILL.state pour le copilote ergonomique et biomécanique ErgoVision AI",
+  "type": "object",
+  "required": [
+    "step_id",
+    "calibration",
+    "biomechanics",
+    "pacing",
+    "latch_status"
+  ],
+  "properties": {
+    "step_id": {
+      "type": "integer",
+      "description": "Index de l'étape d'exécution procédurale courante"
+    },
+    "calibration": {
+      "type": "object",
+      "properties": {
+        "is_calibrated": { "type": "boolean" },
+        "zero_point": {
+          "type": ["object", "null"],
+          "properties": {
+            "shoulder_width": { "type": "number" },
+            "nose_y_ratio": { "type": "number" },
+            "shoulder_slope": { "type": "number" },
+            "ear_slope": { "type": "number" }
+          }
+        },
+        "calibrated_at": { "type": ["string", "null"] }
+      },
+      "required": ["is_calibrated", "zero_point"]
+    },
+    "biomechanics": {
+      "type": "object",
+      "properties": {
+        "neck_projection_deviation": { "type": "number" },
+        "shoulder_asymmetry": { "type": "number" },
+        "lateral_head_tilt": { "type": "number" },
+        "is_out_of_bounds": { "type": "boolean" },
+        "out_of_bounds_duration_ms": { "type": "number" }
+      },
+      "required": ["neck_projection_deviation", "shoulder_asymmetry", "is_out_of_bounds"]
+    },
+    "pacing": {
+      "type": "object",
+      "properties": {
+        "current_mode": {
+          "type": "string",
+          "enum": ["sitting", "standing", "pause", "idle"]
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "sitting_minutes": { "type": "integer", "default": 45 },
+            "standing_alert_minutes": { "type": "integer", "default": 15 },
+            "pause_minutes": { "type": "integer", "default": 5 }
+          }
+        },
+        "elapsed_seconds": { "type": "integer" },
+        "max_allowed_seconds": { "type": "integer" },
+        "is_warning_threshold_reached": { "type": "boolean" },
+        "is_cutoff_reached": { "type": "boolean" }
+      },
+      "required": ["current_mode", "elapsed_seconds", "max_allowed_seconds"]
+    },
+    "latch_status": {
+      "type": "object",
+      "properties": {
+        "alert_triggered": { "type": "boolean" },
+        "last_alert_timestamp": { "type": ["integer", "null"] },
+        "active_alert_type": { "type": ["string", "null"] }
+      },
+      "required": ["alert_triggered"]
+    }
+  }
+}
