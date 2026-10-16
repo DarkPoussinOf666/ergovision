@@ -1335,3 +1335,152 @@
     .kine-btn-primary:hover {
       background: var(--fluent-brand-hover);
     }
+
+    /* ==========================================================================
+       FREEMIUM / PASS ANNUEL 7€ LOCK STYLES & BADGES
+       ========================================================================== */
+    .btn-pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.74rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid var(--fluent-brand-border);
+      background: var(--fluent-brand-tint);
+      color: var(--fluent-brand);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-pro-badge:hover {
+      background: var(--fluent-brand);
+      color: #ffffff;
+      box-shadow: 0 0 10px var(--fluent-brand-tint);
+    }
+
+    .btn-pro-badge.active-pro {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: var(--status-success);
+    }
+
+    .gauge-card.gauge-locked {
+      position: relative;
+      opacity: 0.72;
+      filter: grayscale(0.25);
+      border: 1px dashed var(--fluent-stroke-subtle);
+    }
+
+    .gauge-lock-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s ease;
+    }
+
+    .gauge-lock-overlay:hover {
+      background: rgba(15, 23, 42, 0.82);
+    }
+
+    .lock-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--fluent-brand);
+      color: #ffffff;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .lock-sub {
+      font-size: 0.65rem;
+      color: #e2e8f0;
+    }
+
+    /* ==========================================================================
+       SIDE PANEL / NARROW VIEWPORT ADAPTATION (< 520px)
+       ========================================================================== */
+    @media (max-width: 520px) {
+      body {
+        font-size: 13px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+        padding: 0.6rem 0.75rem;
+      }
+
+      .topbar .brand {
+        justify-content: space-between;
+      }
+
+      .segmented-control {
+        width: 100%;
+        display: flex;
+      }
+
+      .seg-btn {
+        flex: 1;
+        padding: 0.45rem 0.25rem;
+        font-size: 0.72rem;
+        justify-content: center;
+      }
+
+      .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        justify-content: space-between;
+      }
+
+      .quick-actions .btn-action,
+      .quick-actions .input-select {
+        flex: 1 1 calc(50% - 0.35rem);
+        min-height: 32px;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+        gap: 0.75rem;
+      }
+
+      .panel {
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+      }
+
+      .viewport {
+        aspect-ratio: 4 / 3;
+      }
+
+      .gauges-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem;
+      }
+
+      .gauge-card {
+        padding: 0.6rem;
+      }
+
+      .gauge-val {
+        font-size: 1.15rem;
+      }
+
+      .presets-grid {
+        grid-template-columns: 1fr;
+      }
+    }

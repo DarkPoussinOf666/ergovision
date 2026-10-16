@@ -42,7 +42,12 @@ export async function enumerateVideoDevices(selectElement) {
 export async function initPoseModel(onResultsCallback) {
   if (!poseInstance) {
     poseInstance = new window.Pose({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+      locateFile: (file) => {
+        if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
+          return chrome.runtime.getURL(`vendor/mediapipe/${file}`);
+        }
+        return `./vendor/mediapipe/${file}`;
+      }
     });
     poseInstance.setOptions({
       modelComplexity: 1,

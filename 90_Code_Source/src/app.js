@@ -18,6 +18,10 @@ import {
 import { KineRoutineManager } from './kine/routine-timer.js';
 import { KineStudioView } from './ui/kine-studio-view.js';
 import { EyeRestManager } from './pacing/eye-rest-timer.js';
+import { 
+  isProActive, getRemainingDays, getFeatureFlags, activateLicenseKey, loadLicenseState 
+} from './license/license-gate.js';
+import { printKineClinicalReport } from './reports/kine-report.js';
 
 // DOM References
 const videoElement = document.getElementById('input_video');
@@ -520,15 +524,23 @@ function onResults(results) {
       const tiltThreshold = 0.11 * sens;
       const distanceThreshold = 0.22 * sens;
 
+      const flags = getFeatureFlags();
+
       updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
-      updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
-      updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
-      updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
+      if (flags.gaugeShoulderSym) {
+        updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
+      }
+      if (flags.gaugeHeadTilt) {
+        updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
+      }
+      if (flags.gaugeScreenDist) {
+        updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
+      }
 
       const isNeckBad = neckDelta > neckThreshold;
-      const isShoulderBad = shoulderDelta > shoulderThreshold;
-      const isTiltBad = tiltDelta > tiltThreshold;
-      const isDistanceBad = distanceIncrease > distanceThreshold;
+      const isShoulderBad = flags.gaugeShoulderSym && (shoulderDelta > shoulderThreshold);
+      const isTiltBad = flags.gaugeHeadTilt && (tiltDelta > tiltThreshold);
+      const isDistanceBad = flags.gaugeScreenDist && (distanceIncrease > distanceThreshold);
       const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !eyeRestManager.isEyeRestActive;
 
       totalFrames++;
@@ -742,6 +754,7 @@ function setLanguage(lang) {
 
   updateTimerDisplayTitles();
   renderAllLogs();
+  updateLicenseUI();
 }
 
 function toggleLanguage() {
@@ -812,12 +825,131 @@ function switchModalTab(tabId) {
 }
 
 // ----------------------------------------------------
+// LICENSE GATE & FREEMIUM UI
+// ----------------------------------------------------
+function updateLicenseUI() {
+  const flags = getFeatureFlags();
+  const proActive = isProActive();
+  const remainingDays = getRemainingDays();
+
+  // Topbar badge
+  const btnProStatus = document.getElementById('btnProStatus');
+  const labelProBadge = document.getElementById('labelProBadge');
+  if (btnProStatus && labelProBadge) {
+    if (proActive) {
+      btnProStatus.classList.add('active-pro');
+      labelProBadge.innerText = `${t('pro_badge_active_prefix')}${remainingDays}${t('pro_badge_active_suffix')}`;
+    } else {
+      btnProStatus.classList.remove('active-pro');
+      labelProBadge.innerText = t('pro_badge_free');
+    }
+  }
+
+  // Jauges verrouillées
+  ['cardShoulder', 'cardTilt', 'cardDistance'].forEach(cardId => {
+    const cardEl = document.getElementById(cardId);
+    if (!cardEl) return;
+
+    let overlay = cardEl.querySelector('.gauge-lock-overlay');
+    if (!flags.gaugeShoulderSym) {
+      cardEl.classList.add('gauge-locked');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'gauge-lock-overlay';
+        overlay.setAttribute('title', t('lock_tooltip_gauge'));
+        overlay.innerHTML = `
+          <span class="lock-badge">🔒 ${t('pro_badge_free')}</span>
+          <span class="lock-sub">${t('lock_tooltip_gauge')}</span>
+        `;
+        overlay.addEventListener('click', openLicenseModal);
+        cardEl.appendChild(overlay);
+      }
+    } else {
+      cardEl.classList.remove('gauge-locked');
+      if (overlay) overlay.remove();
+    }
+  });
+
+  // Bouton PiP
+  if (btnPiP) {
+    const span = btnPiP.querySelector('span');
+    if (span) {
+      span.innerText = flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`;
+    }
+  }
+}
+
+function openLicenseModal() {
+  const modal = document.getElementById('licenseModal');
+  if (!modal) return;
+  const feedback = document.getElementById('licenseFeedback');
+  if (feedback) feedback.innerText = '';
+  if (typeof modal.showModal === 'function') {
+    modal.showModal();
+  } else {
+    modal.setAttribute('open', '');
+  }
+}
+
+function closeLicenseModal() {
+  const modal = document.getElementById('licenseModal');
+  if (!modal) return;
+  if (typeof modal.close === 'function') {
+    modal.close();
+  } else {
+    modal.removeAttribute('open');
+  }
+}
+
+// ----------------------------------------------------
 // EVENT LISTENERS BINDING
 // ----------------------------------------------------
 document.getElementById('btnStartCamera').addEventListener('click', startCamera);
 btnStopCam.addEventListener('click', stopCamera);
 document.getElementById('btnCalibrate').addEventListener('click', startCalibrationCountdown);
-btnPiP.addEventListener('click', () => togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message)));
+
+btnPiP.addEventListener('click', () => {
+  const flags = getFeatureFlags();
+  if (!flags.pipMiniWindow) {
+    openLicenseModal();
+    return;
+  }
+  togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
+});
+
+const btnPro = document.getElementById('btnProStatus');
+if (btnPro) btnPro.addEventListener('click', openLicenseModal);
+
+const btnCloseLicense = document.getElementById('btnCloseLicenseModal');
+if (btnCloseLicense) btnCloseLicense.addEventListener('click', closeLicenseModal);
+
+const licenseForm = document.getElementById('licenseActivationForm');
+if (licenseForm) {
+  licenseForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('inputLicenseKey');
+    const feedback = document.getElementById('licenseFeedback');
+    const key = (input.value || '').trim();
+    if (!key) return;
+
+    feedback.style.color = 'var(--fluent-brand)';
+    feedback.innerText = 'Vérification de la clé...';
+
+    const res = await activateLicenseKey(key);
+    if (res.success) {
+      feedback.style.color = 'var(--status-success)';
+      feedback.innerText = t('license_success_active');
+      input.value = '';
+      updateLicenseUI();
+      setTimeout(() => closeLicenseModal(), 1800);
+    } else {
+      feedback.style.color = 'var(--status-danger)';
+      feedback.innerText = res.error === 'network_error' 
+        ? t('license_err_network') 
+        : t('license_err_invalid');
+    }
+  });
+}
 btnNotif.addEventListener('click', requestNotifPermission);
 
 document.getElementById('btnToggleLang').addEventListener('click', toggleLanguage);
@@ -898,6 +1030,15 @@ document.getElementById('tabBtnPrefs').addEventListener('click', () => switchMod
 document.getElementById('btnTestAudioAlert').addEventListener('click', testAudioAlert);
 document.getElementById('btnTestCycleChime').addEventListener('click', playCycleChime);
 
+document.getElementById('btnPrintKineReport').addEventListener('click', () => {
+  const flags = getFeatureFlags();
+  if (!flags.kinePdfReport) {
+    openLicenseModal();
+    return;
+  }
+  printKineClinicalReport(dailyLogs);
+});
+
 document.getElementById('btnExportCsv').addEventListener('click', () => {
   if (dailyLogs.length === 0) {
     alert(t('log_empty'));
@@ -966,3 +1107,4 @@ setLanguage(getCurrentLanguage());
 dailyLogs = loadDailyLogs(todayKey);
 renderAllLogs();
 resetCurrentModeTimer();
+updateLicenseUI();

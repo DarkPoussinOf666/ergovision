@@ -130,7 +130,32 @@ export const TRANSLATIONS = {
     ex_thoracic_extension_benefit: "Mobilise la charnière dorsale et redresse la cyphose liée à la fatigue.",
     ex_pelvic_tilt_title: "Bascules Pelviennes Lombo-Sacrées",
     ex_pelvic_tilt_steps: "Assis bien au fond du siège, faites rouler doucement votre bassin d'avant en arrière en creusant puis en arrondissant le bas du dos.",
-    ex_pelvic_tilt_benefit: "Réhydrate les disques lombaires L4-L5-S1 par mouvement doux sans contrainte axiale."
+    ex_pelvic_tilt_benefit: "Réhydrate les disques lombaires L4-L5-S1 par mouvement doux sans contrainte axiale.",
+    
+    // Pass Annuel Éthique (7 € / an) & Monétisation
+    pro_badge_free: "✨ Pass Complet · 7€/an",
+    pro_badge_active_prefix: "🛡️ Pass Actif (",
+    pro_badge_active_suffix: "j restants)",
+    modal_license_title: "Pass Annuel Éthique — 7 € / an",
+    modal_license_manifesto: "Zéro abonnement mensuel. Zéro prélèvement automatique récurrent. Aucun serveur cloud (100% privé sur votre ordinateur). Un prix juste pour soutenir le développement et protéger votre dos toute l'année.",
+    modal_license_features_title: "Fonctionnalités débloquées avec le Pass :",
+    modal_license_f1: "Les 4 jauges biomécaniques simultanées (Nuque, Épaules/Trapèzes, Inclinaison, Distance Z)",
+    modal_license_f2: "Mini-Fenêtre Picture-in-Picture flottante par-dessus VS Code, Teams et Slack",
+    modal_license_f3: "Atelier Kiné complet (McKenzie, Brügger, Extension thoracique, Bascule pelvienne)",
+    modal_license_f4: "Bilan postural imprimable / PDF pour votre Kinésithérapeute ou Ostéopathe",
+    modal_license_f5: "Alerte sonore continue adaptative & bols tibétains réparateurs (432 Hz)",
+    label_license_key: "Clé d'activation du Pass",
+    placeholder_license_key: "ERGO-XXXX-XXXX-XXXX",
+    btn_activate_key: "Activer mon Pass",
+    btn_buy_pass: "Obtenir mon Pass 1 An (7 € TTC)",
+    license_status_free_desc: "Vous utilisez actuellement le socle libre (1 jauge active).",
+    license_success_active: "🎉 Félicitations ! Votre Pass ErgoVision AI est actif pour 365 jours.",
+    license_err_invalid: "❌ Clé invalide ou non reconnue. Vérifiez votre saisie.",
+    license_err_network: "⚠️ Erreur réseau lors de la validation. Réessayez ou vérifiez votre connexion.",
+    lock_tooltip_gauge: "Débloquez les 4 jauges avec le Pass à 7 €/an (zéro abonnement auto)",
+    lock_tooltip_pip: "La miniature Picture-in-Picture fait partie du Pass à 7 €/an",
+    lock_tooltip_kine: "Débloquez les 4 protocoles cliniques avec le Pass à 7 €/an",
+    btn_kine_report: "Imprimer Bilan Kiné (PDF)"
   },
   en: {
     brand_sub: "Ergonomic Copilot • Real-Time RSI Prevention",
@@ -258,7 +283,32 @@ export const TRANSLATIONS = {
     ex_thoracic_extension_benefit: "Mobilizes stiff thoracic spine and reverses fatigue-induced slump.",
     ex_pelvic_tilt_title: "Lumbosacral Pelvic Tilts",
     ex_pelvic_tilt_steps: "Seated back on your chair, gently rock your pelvis forward and backward, slightly arching then rounding the lower back.",
-    ex_pelvic_tilt_benefit: "Rehydrates L4-L5-S1 lumbar discs through gentle motion without vertical load."
+    ex_pelvic_tilt_benefit: "Rehydrates L4-L5-S1 lumbar discs through gentle motion without vertical load.",
+
+    // Ethical Annual Pass ($7 / year) & Monetization
+    pro_badge_free: "✨ Full Pass · $7/yr",
+    pro_badge_active_prefix: "🛡️ Active Pass (",
+    pro_badge_active_suffix: "d left)",
+    modal_license_title: "Ethical Annual Pass — $7 / year",
+    modal_license_manifesto: "No monthly subscriptions. No recurring auto-debits. No cloud servers (100% private on your machine). A fair price to support independent engineering and protect your posture all year long.",
+    modal_license_features_title: "Features unlocked with the Pass:",
+    modal_license_f1: "All 4 simultaneous biomechanical gauges (Forward Neck, Trapezius/Shoulders, Lateral Tilt, Z-Depth)",
+    modal_license_f2: "Floating Picture-in-Picture window over VS Code, Teams and Slack",
+    modal_license_f3: "Full Back Physiotherapy Studio (McKenzie, Brügger, Thoracic Extension, Pelvic Tilts)",
+    modal_license_f4: "Printable / PDF posture compliance report for your Physiotherapist or Chiropractor",
+    modal_license_f5: "Adaptive continuous drone audio & soothing Tibetan singing bowls (432 Hz)",
+    label_license_key: "Pass Activation Key",
+    placeholder_license_key: "ERGO-XXXX-XXXX-XXXX",
+    btn_activate_key: "Activate Pass",
+    btn_buy_pass: "Get My 1-Year Pass ($7)",
+    license_status_free_desc: "You are currently using the free tier (1 active gauge).",
+    license_success_active: "🎉 Congratulations! Your ErgoVision AI Pass is active for 365 days.",
+    license_err_invalid: "❌ Invalid key. Please check your spelling.",
+    license_err_network: "⚠️ Network error during activation. Please check your connection.",
+    lock_tooltip_gauge: "Unlock all 4 gauges with the $7/yr Pass (no auto-renewal)",
+    lock_tooltip_pip: "Floating Picture-in-Picture is part of the $7/yr Pass",
+    lock_tooltip_kine: "Unlock all 4 clinical routines with the $7/yr Pass",
+    btn_kine_report: "Print Physio Report (PDF)"
   }
 };
 

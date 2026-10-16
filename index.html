@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ErgoVision AI — Studio Biomécanique & Gardien Postural</title>
   
-  <!-- MediaPipe Pose & Camera Utilities -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+  <!-- MediaPipe Pose & Camera Utilities (100% Local / Zero CDN) -->
+  <script src="./vendor/mediapipe/camera_utils.js"></script>
+  <script src="./vendor/mediapipe/drawing_utils.js"></script>
+  <script src="./vendor/mediapipe/pose.js"></script>
   <style>
 /**
  * ErgoVision AI — Fluent UI 2 Design Tokens (CSS Custom Properties)
@@ -1570,6 +1570,155 @@
     .kine-btn-primary:hover {
       background: var(--fluent-brand-hover);
     }
+
+    /* ==========================================================================
+       FREEMIUM / PASS ANNUEL 7€ LOCK STYLES & BADGES
+       ========================================================================== */
+    .btn-pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.74rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid var(--fluent-brand-border);
+      background: var(--fluent-brand-tint);
+      color: var(--fluent-brand);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-pro-badge:hover {
+      background: var(--fluent-brand);
+      color: #ffffff;
+      box-shadow: 0 0 10px var(--fluent-brand-tint);
+    }
+
+    .btn-pro-badge.active-pro {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: var(--status-success);
+    }
+
+    .gauge-card.gauge-locked {
+      position: relative;
+      opacity: 0.72;
+      filter: grayscale(0.25);
+      border: 1px dashed var(--fluent-stroke-subtle);
+    }
+
+    .gauge-lock-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s ease;
+    }
+
+    .gauge-lock-overlay:hover {
+      background: rgba(15, 23, 42, 0.82);
+    }
+
+    .lock-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--fluent-brand);
+      color: #ffffff;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .lock-sub {
+      font-size: 0.65rem;
+      color: #e2e8f0;
+    }
+
+    /* ==========================================================================
+       SIDE PANEL / NARROW VIEWPORT ADAPTATION (< 520px)
+       ========================================================================== */
+    @media (max-width: 520px) {
+      body {
+        font-size: 13px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+        padding: 0.6rem 0.75rem;
+      }
+
+      .topbar .brand {
+        justify-content: space-between;
+      }
+
+      .segmented-control {
+        width: 100%;
+        display: flex;
+      }
+
+      .seg-btn {
+        flex: 1;
+        padding: 0.45rem 0.25rem;
+        font-size: 0.72rem;
+        justify-content: center;
+      }
+
+      .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        justify-content: space-between;
+      }
+
+      .quick-actions .btn-action,
+      .quick-actions .input-select {
+        flex: 1 1 calc(50% - 0.35rem);
+        min-height: 32px;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+        gap: 0.75rem;
+      }
+
+      .panel {
+        padding: 0.75rem;
+        border-radius: var(--radius-md);
+      }
+
+      .viewport {
+        aspect-ratio: 4 / 3;
+      }
+
+      .gauges-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem;
+      }
+
+      .gauge-card {
+        padding: 0.6rem;
+      }
+
+      .gauge-val {
+        font-size: 1.15rem;
+      }
+
+      .presets-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1626,6 +1775,10 @@
       <button id="btnPiP" class="btn-action btn-pip" title="Ouvrir la miniature par-dessus vos outils de travail (Teams, VS Code)" aria-label="Ouvrir la fenêtre Picture-in-Picture">
         <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
         <span>Mini-Fenêtre</span>
+      </button>
+
+      <button id="btnProStatus" class="btn-pro-badge" title="Gérer votre Pass Annuel Éthique (7 € / an)" aria-label="Gérer votre Pass Annuel">
+        <span id="labelProBadge">✨ Pass Complet · 7€/an</span>
       </button>
 
       <button id="btnTheme" class="btn-action btn-theme-toggle" title="Basculer entre Mode Sombre et Mode Clair" aria-label="Basculer le thème">
@@ -1812,7 +1965,11 @@
             <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
             <span>Journal des Alertes</span>
           </div>
-          <div style="display:flex; gap:0.75rem;">
+          <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+            <button type="button" id="btnPrintKineReport" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--status-success); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Imprimer ou enregistrer le rapport en PDF pour votre Kiné">
+              <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <span data-i18n="btn_kine_report">Bilan Kiné (PDF)</span>
+            </button>
             <button type="button" id="btnExportCsv" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-brand); font-weight:600; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <span>Exporter CSV</span>
@@ -2023,6 +2180,67 @@
       </div>
     </form>
   </dialog>
+ 
+   <!-- MODAL FLUENT UI 2 : PASS ANNUEL ÉTHIQUE (7 € / AN) -->
+   <dialog id="licenseModal" class="fluent-modal" aria-labelledby="modalLicenseTitle">
+     <div class="modal-header">
+       <div class="modal-title-box">
+         <svg class="icon modal-title-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+         <h2 id="modalLicenseTitle" class="modal-title" data-i18n="modal_license_title">Pass Annuel Éthique — 7 € / an</h2>
+       </div>
+       <button type="button" class="btn-close-modal" id="btnCloseLicenseModal" aria-label="Fermer la fenêtre">
+         <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+       </button>
+     </div>
+
+     <div style="padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1.15rem;">
+       <!-- Manifeste Éthique -->
+       <div style="background: linear-gradient(135deg, rgba(15, 108, 189, 0.12) 0%, rgba(16, 124, 65, 0.12) 100%); border: 1px solid var(--fluent-brand-border); border-radius: var(--radius-sm); padding: 0.9rem;">
+         <div style="font-weight: 700; font-size: 0.82rem; color: var(--fluent-brand); margin-bottom: 0.35rem;">
+           🛡️ Notre Engagement : Juste, Local & Sans Prélèvement Caché
+         </div>
+         <p style="font-size: 0.76rem; color: var(--fluent-fg-secondary); line-height: 1.45; margin: 0;" data-i18n="modal_license_manifesto">
+           Zéro abonnement mensuel. Zéro prélèvement automatique récurrent. Aucun serveur cloud (100% privé sur votre ordinateur). Un prix juste pour soutenir le développement et protéger votre dos toute l'année.
+         </p>
+       </div>
+
+       <!-- Liste des déblocages -->
+       <div>
+         <div style="font-size: 0.8rem; font-weight: 700; color: var(--fluent-fg-primary); margin-bottom: 0.5rem;" data-i18n="modal_license_features_title">
+           Fonctionnalités débloquées avec le Pass :
+         </div>
+         <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.76rem; color: var(--fluent-fg-secondary); line-height: 1.6;">
+           <li data-i18n="modal_license_f1">Les 4 jauges biomécaniques simultanées (Nuque, Épaules/Trapèzes, Inclinaison, Distance Z)</li>
+           <li data-i18n="modal_license_f2">Mini-Fenêtre Picture-in-Picture flottante par-dessus VS Code, Teams et Slack</li>
+           <li data-i18n="modal_license_f3">Atelier Kiné complet (McKenzie, Brügger, Extension thoracique, Bascule pelvienne)</li>
+           <li data-i18n="modal_license_f4">Bilan postural imprimable / PDF pour votre Kinésithérapeute ou Ostéopathe</li>
+           <li data-i18n="modal_license_f5">Alerte sonore continue adaptative & bols tibétains réparateurs (432 Hz)</li>
+         </ul>
+       </div>
+
+       <!-- Achat externe -->
+       <div style="display: flex; justify-content: center; margin: 0.25rem 0;">
+         <a href="https://lemonsqueezy.com" target="_blank" rel="noopener noreferrer" id="linkBuyPass" class="btn-action btn-primary" style="text-decoration: none; padding: 0.65rem 1.25rem; font-size: 0.84rem; font-weight: 700; border-radius: var(--radius-sm);" data-i18n="btn_buy_pass">
+           Obtenir mon Pass 1 An (7 € TTC)
+         </a>
+       </div>
+
+       <!-- Formulaire d'activation de clé -->
+       <form id="licenseActivationForm" style="display: flex; flex-direction: column; gap: 0.6rem; border-top: 1px solid var(--fluent-stroke-subtle); padding-top: 1rem;">
+         <label for="inputLicenseKey" class="form-label" style="margin-bottom: 0;">
+           <span data-i18n="label_license_key">Clé d'activation du Pass</span>
+           <span class="form-label-hint">Ex: ERGO-XXXX ou LemonSqueezy</span>
+         </label>
+         <div style="display: flex; gap: 0.5rem;">
+           <input type="text" id="inputLicenseKey" class="form-input" placeholder="ERGO-XXXX-XXXX-XXXX" style="flex: 1;" required autocomplete="off" spellcheck="false">
+           <button type="submit" id="btnSubmitLicense" class="btn-action btn-primary" style="white-space: nowrap;" data-i18n="btn_activate_key">
+             Activer
+           </button>
+         </div>
+         <div id="licenseFeedback" style="font-size: 0.75rem; font-weight: 600; min-height: 1.2rem;"></div>
+       </form>
+     </div>
+   </dialog>
 
   <footer role="contentinfo">
     ErgoVision AI — Conçu pour la prévention des douleurs posturales, des TMS et le maintien de la chaîne rachidienne au poste de travail.
@@ -2168,7 +2386,32 @@
         ex_thoracic_extension_benefit: "Mobilise la charnière dorsale et redresse la cyphose liée à la fatigue.",
         ex_pelvic_tilt_title: "Bascules Pelviennes Lombo-Sacrées",
         ex_pelvic_tilt_steps: "Assis bien au fond du siège, faites rouler doucement votre bassin d'avant en arrière en creusant puis en arrondissant le bas du dos.",
-        ex_pelvic_tilt_benefit: "Réhydrate les disques lombaires L4-L5-S1 par mouvement doux sans contrainte axiale."
+        ex_pelvic_tilt_benefit: "Réhydrate les disques lombaires L4-L5-S1 par mouvement doux sans contrainte axiale.",
+        
+        // Pass Annuel Éthique (7 € / an) & Monétisation
+        pro_badge_free: "✨ Pass Complet · 7€/an",
+        pro_badge_active_prefix: "🛡️ Pass Actif (",
+        pro_badge_active_suffix: "j restants)",
+        modal_license_title: "Pass Annuel Éthique — 7 € / an",
+        modal_license_manifesto: "Zéro abonnement mensuel. Zéro prélèvement automatique récurrent. Aucun serveur cloud (100% privé sur votre ordinateur). Un prix juste pour soutenir le développement et protéger votre dos toute l'année.",
+        modal_license_features_title: "Fonctionnalités débloquées avec le Pass :",
+        modal_license_f1: "Les 4 jauges biomécaniques simultanées (Nuque, Épaules/Trapèzes, Inclinaison, Distance Z)",
+        modal_license_f2: "Mini-Fenêtre Picture-in-Picture flottante par-dessus VS Code, Teams et Slack",
+        modal_license_f3: "Atelier Kiné complet (McKenzie, Brügger, Extension thoracique, Bascule pelvienne)",
+        modal_license_f4: "Bilan postural imprimable / PDF pour votre Kinésithérapeute ou Ostéopathe",
+        modal_license_f5: "Alerte sonore continue adaptative & bols tibétains réparateurs (432 Hz)",
+        label_license_key: "Clé d'activation du Pass",
+        placeholder_license_key: "ERGO-XXXX-XXXX-XXXX",
+        btn_activate_key: "Activer mon Pass",
+        btn_buy_pass: "Obtenir mon Pass 1 An (7 € TTC)",
+        license_status_free_desc: "Vous utilisez actuellement le socle libre (1 jauge active).",
+        license_success_active: "🎉 Félicitations ! Votre Pass ErgoVision AI est actif pour 365 jours.",
+        license_err_invalid: "❌ Clé invalide ou non reconnue. Vérifiez votre saisie.",
+        license_err_network: "⚠️ Erreur réseau lors de la validation. Réessayez ou vérifiez votre connexion.",
+        lock_tooltip_gauge: "Débloquez les 4 jauges avec le Pass à 7 €/an (zéro abonnement auto)",
+        lock_tooltip_pip: "La miniature Picture-in-Picture fait partie du Pass à 7 €/an",
+        lock_tooltip_kine: "Débloquez les 4 protocoles cliniques avec le Pass à 7 €/an",
+        btn_kine_report: "Imprimer Bilan Kiné (PDF)"
       },
       en: {
         brand_sub: "Ergonomic Copilot • Real-Time RSI Prevention",
@@ -2296,7 +2539,32 @@
         ex_thoracic_extension_benefit: "Mobilizes stiff thoracic spine and reverses fatigue-induced slump.",
         ex_pelvic_tilt_title: "Lumbosacral Pelvic Tilts",
         ex_pelvic_tilt_steps: "Seated back on your chair, gently rock your pelvis forward and backward, slightly arching then rounding the lower back.",
-        ex_pelvic_tilt_benefit: "Rehydrates L4-L5-S1 lumbar discs through gentle motion without vertical load."
+        ex_pelvic_tilt_benefit: "Rehydrates L4-L5-S1 lumbar discs through gentle motion without vertical load.",
+    
+        // Ethical Annual Pass ($7 / year) & Monetization
+        pro_badge_free: "✨ Full Pass · $7/yr",
+        pro_badge_active_prefix: "🛡️ Active Pass (",
+        pro_badge_active_suffix: "d left)",
+        modal_license_title: "Ethical Annual Pass — $7 / year",
+        modal_license_manifesto: "No monthly subscriptions. No recurring auto-debits. No cloud servers (100% private on your machine). A fair price to support independent engineering and protect your posture all year long.",
+        modal_license_features_title: "Features unlocked with the Pass:",
+        modal_license_f1: "All 4 simultaneous biomechanical gauges (Forward Neck, Trapezius/Shoulders, Lateral Tilt, Z-Depth)",
+        modal_license_f2: "Floating Picture-in-Picture window over VS Code, Teams and Slack",
+        modal_license_f3: "Full Back Physiotherapy Studio (McKenzie, Brügger, Thoracic Extension, Pelvic Tilts)",
+        modal_license_f4: "Printable / PDF posture compliance report for your Physiotherapist or Chiropractor",
+        modal_license_f5: "Adaptive continuous drone audio & soothing Tibetan singing bowls (432 Hz)",
+        label_license_key: "Pass Activation Key",
+        placeholder_license_key: "ERGO-XXXX-XXXX-XXXX",
+        btn_activate_key: "Activate Pass",
+        btn_buy_pass: "Get My 1-Year Pass ($7)",
+        license_status_free_desc: "You are currently using the free tier (1 active gauge).",
+        license_success_active: "🎉 Congratulations! Your ErgoVision AI Pass is active for 365 days.",
+        license_err_invalid: "❌ Invalid key. Please check your spelling.",
+        license_err_network: "⚠️ Network error during activation. Please check your connection.",
+        lock_tooltip_gauge: "Unlock all 4 gauges with the $7/yr Pass (no auto-renewal)",
+        lock_tooltip_pip: "Floating Picture-in-Picture is part of the $7/yr Pass",
+        lock_tooltip_kine: "Unlock all 4 clinical routines with the $7/yr Pass",
+        btn_kine_report: "Print Physio Report (PDF)"
       }
     };
     
@@ -2834,7 +3102,12 @@
     export async function initPoseModel(onResultsCallback) {
       if (!poseInstance) {
         poseInstance = new window.Pose({
-          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+          locateFile: (file) => {
+            if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
+              return chrome.runtime.getURL(`vendor/mediapipe/${file}`);
+            }
+            return `./vendor/mediapipe/${file}`;
+          }
         });
         poseInstance.setOptions({
           modelComplexity: 1,
@@ -3585,6 +3858,8 @@
     
     
     
+    
+    
     // DOM References
     const videoElement = document.getElementById('input_video');
     const canvasElement = document.getElementById('output_canvas');
@@ -4086,15 +4361,23 @@
           const tiltThreshold = 0.11 * sens;
           const distanceThreshold = 0.22 * sens;
     
+          const flags = getFeatureFlags();
+    
           updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
-          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
-          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
-          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
+          if (flags.gaugeShoulderSym) {
+            updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
+          }
+          if (flags.gaugeHeadTilt) {
+            updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
+          }
+          if (flags.gaugeScreenDist) {
+            updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
+          }
     
           const isNeckBad = neckDelta > neckThreshold;
-          const isShoulderBad = shoulderDelta > shoulderThreshold;
-          const isTiltBad = tiltDelta > tiltThreshold;
-          const isDistanceBad = distanceIncrease > distanceThreshold;
+          const isShoulderBad = flags.gaugeShoulderSym && (shoulderDelta > shoulderThreshold);
+          const isTiltBad = flags.gaugeHeadTilt && (tiltDelta > tiltThreshold);
+          const isDistanceBad = flags.gaugeScreenDist && (distanceIncrease > distanceThreshold);
           const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !eyeRestManager.isEyeRestActive;
     
           totalFrames++;
@@ -4308,6 +4591,7 @@
     
       updateTimerDisplayTitles();
       renderAllLogs();
+      updateLicenseUI();
     }
     
     function toggleLanguage() {
@@ -4378,12 +4662,131 @@
     }
     
     // ----------------------------------------------------
+    // LICENSE GATE & FREEMIUM UI
+    // ----------------------------------------------------
+    function updateLicenseUI() {
+      const flags = getFeatureFlags();
+      const proActive = isProActive();
+      const remainingDays = getRemainingDays();
+    
+      // Topbar badge
+      const btnProStatus = document.getElementById('btnProStatus');
+      const labelProBadge = document.getElementById('labelProBadge');
+      if (btnProStatus && labelProBadge) {
+        if (proActive) {
+          btnProStatus.classList.add('active-pro');
+          labelProBadge.innerText = `${t('pro_badge_active_prefix')}${remainingDays}${t('pro_badge_active_suffix')}`;
+        } else {
+          btnProStatus.classList.remove('active-pro');
+          labelProBadge.innerText = t('pro_badge_free');
+        }
+      }
+    
+      // Jauges verrouillées
+      ['cardShoulder', 'cardTilt', 'cardDistance'].forEach(cardId => {
+        const cardEl = document.getElementById(cardId);
+        if (!cardEl) return;
+    
+        let overlay = cardEl.querySelector('.gauge-lock-overlay');
+        if (!flags.gaugeShoulderSym) {
+          cardEl.classList.add('gauge-locked');
+          if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'gauge-lock-overlay';
+            overlay.setAttribute('title', t('lock_tooltip_gauge'));
+            overlay.innerHTML = `
+              <span class="lock-badge">🔒 ${t('pro_badge_free')}</span>
+              <span class="lock-sub">${t('lock_tooltip_gauge')}</span>
+            `;
+            overlay.addEventListener('click', openLicenseModal);
+            cardEl.appendChild(overlay);
+          }
+        } else {
+          cardEl.classList.remove('gauge-locked');
+          if (overlay) overlay.remove();
+        }
+      });
+    
+      // Bouton PiP
+      if (btnPiP) {
+        const span = btnPiP.querySelector('span');
+        if (span) {
+          span.innerText = flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`;
+        }
+      }
+    }
+    
+    function openLicenseModal() {
+      const modal = document.getElementById('licenseModal');
+      if (!modal) return;
+      const feedback = document.getElementById('licenseFeedback');
+      if (feedback) feedback.innerText = '';
+      if (typeof modal.showModal === 'function') {
+        modal.showModal();
+      } else {
+        modal.setAttribute('open', '');
+      }
+    }
+    
+    function closeLicenseModal() {
+      const modal = document.getElementById('licenseModal');
+      if (!modal) return;
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.removeAttribute('open');
+      }
+    }
+    
+    // ----------------------------------------------------
     // EVENT LISTENERS BINDING
     // ----------------------------------------------------
     document.getElementById('btnStartCamera').addEventListener('click', startCamera);
     btnStopCam.addEventListener('click', stopCamera);
     document.getElementById('btnCalibrate').addEventListener('click', startCalibrationCountdown);
-    btnPiP.addEventListener('click', () => togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message)));
+    
+    btnPiP.addEventListener('click', () => {
+      const flags = getFeatureFlags();
+      if (!flags.pipMiniWindow) {
+        openLicenseModal();
+        return;
+      }
+      togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
+    });
+    
+    const btnPro = document.getElementById('btnProStatus');
+    if (btnPro) btnPro.addEventListener('click', openLicenseModal);
+    
+    const btnCloseLicense = document.getElementById('btnCloseLicenseModal');
+    if (btnCloseLicense) btnCloseLicense.addEventListener('click', closeLicenseModal);
+    
+    const licenseForm = document.getElementById('licenseActivationForm');
+    if (licenseForm) {
+      licenseForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('inputLicenseKey');
+        const feedback = document.getElementById('licenseFeedback');
+        const key = (input.value || '').trim();
+        if (!key) return;
+    
+        feedback.style.color = 'var(--fluent-brand)';
+        feedback.innerText = 'Vérification de la clé...';
+    
+        const res = await activateLicenseKey(key);
+        if (res.success) {
+          feedback.style.color = 'var(--status-success)';
+          feedback.innerText = t('license_success_active');
+          input.value = '';
+          updateLicenseUI();
+          setTimeout(() => closeLicenseModal(), 1800);
+        } else {
+          feedback.style.color = 'var(--status-danger)';
+          feedback.innerText = res.error === 'network_error' 
+            ? t('license_err_network') 
+            : t('license_err_invalid');
+        }
+      });
+    }
     btnNotif.addEventListener('click', requestNotifPermission);
     
     document.getElementById('btnToggleLang').addEventListener('click', toggleLanguage);
@@ -4464,6 +4867,15 @@
     document.getElementById('btnTestAudioAlert').addEventListener('click', testAudioAlert);
     document.getElementById('btnTestCycleChime').addEventListener('click', playCycleChime);
     
+    document.getElementById('btnPrintKineReport').addEventListener('click', () => {
+      const flags = getFeatureFlags();
+      if (!flags.kinePdfReport) {
+        openLicenseModal();
+        return;
+      }
+      printKineClinicalReport(dailyLogs);
+    });
+    
     document.getElementById('btnExportCsv').addEventListener('click', () => {
       if (dailyLogs.length === 0) {
         alert(t('log_empty'));
@@ -4532,6 +4944,7 @@
     dailyLogs = loadDailyLogs(todayKey);
     renderAllLogs();
     resetCurrentModeTimer();
+    updateLicenseUI();
 
   })();
   </script>
