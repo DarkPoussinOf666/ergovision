@@ -89,9 +89,16 @@ export function playTone(freq = 480, duration = 0.16, type = 'sine', volFactor =
   }
 }
 
+let stopTimeoutId = null;
+
 export function startContinuousPostureAlert() {
   if (!soundEnabled || isContinuousAlertActive) return;
   isContinuousAlertActive = true;
+
+  if (stopTimeoutId) {
+    clearTimeout(stopTimeoutId);
+    stopTimeoutId = null;
+  }
 
   if (audioSettings.mode === 'pulse') {
     const triggerPulse = () => {
@@ -107,6 +114,11 @@ export function startContinuousPostureAlert() {
   } else {
     try {
       const ctx = getAudioContext();
+      if (continuousOscillator) {
+        try { continuousOscillator.stop(); } catch(_) {}
+        try { continuousOscillator.disconnect(); } catch(_) {}
+        continuousOscillator = null;
+      }
       continuousOscillator = ctx.createOscillator();
       continuousGainNode = ctx.createGain();
       continuousOscillator.type = 'sine';
@@ -124,7 +136,6 @@ export function startContinuousPostureAlert() {
 }
 
 export function stopContinuousPostureAlert() {
-  if (!isContinuousAlertActive) return;
   isContinuousAlertActive = false;
 
   if (postureAlertInterval) {
@@ -132,20 +143,27 @@ export function stopContinuousPostureAlert() {
     postureAlertInterval = null;
   }
 
+  if (stopTimeoutId) {
+    clearTimeout(stopTimeoutId);
+    stopTimeoutId = null;
+  }
+
   if (continuousOscillator && continuousGainNode) {
     try {
       const ctx = getAudioContext();
-      continuousGainNode.gain.setValueAtTime(continuousGainNode.gain.value, ctx.currentTime);
-      continuousGainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
-      setTimeout(() => {
-        if (continuousOscillator) {
-          try { continuousOscillator.stop(); } catch(e) {}
-          continuousOscillator.disconnect();
-          continuousGainNode.disconnect();
-          continuousOscillator = null;
-          continuousGainNode = null;
-        }
-      }, 160);
+      const oscToStop = continuousOscillator;
+      const gainToStop = continuousGainNode;
+      continuousOscillator = null;
+      continuousGainNode = null;
+
+      gainToStop.gain.setValueAtTime(gainToStop.gain.value, ctx.currentTime);
+      gainToStop.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12);
+      stopTimeoutId = setTimeout(() => {
+        try { oscToStop.stop(); } catch(e) {}
+        try { oscToStop.disconnect(); } catch(e) {}
+        try { gainToStop.disconnect(); } catch(e) {}
+        stopTimeoutId = null;
+      }, 130);
     } catch (err) {
       console.warn("Erreur arrêt onde continue :", err);
     }

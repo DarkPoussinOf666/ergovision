@@ -188,6 +188,81 @@
   - [x] 12.3.2 Rétro-porter les modules et composants dans la version autonome `index.html`.
   - [x] 12.3.3 Tests automatisés de non-régression et mise à jour de la documentation.
 
+---
+
+## 🛠️ Phase 13 : Plan de Remédiation & Stabilisation v2.2 (Post-Audit 360°)
+
+- [x] **Chantier 1 : Parité Duale & Rétablissement de `90_Code_Source/` (Bloquant)**
+  - [x] 13.1.1 Nettoyer `90_Code_Source/index.html` (suppression du double `</head>`, alignement des 14 IDs DOM avec `app.js`, retrait des `onclick` inline).
+  - [x] 13.1.2 Corriger l'état du bouton audio dans `app.js` et porter les fonctions modales manquantes (`switchCamera`, synchronisation temps réel des sliders).
+  - [x] 13.1.3 Neutraliser les scripts `tasks/build_*.js` obsolètes et créer un script de build sécurisé et déterministe (`tasks/build_standalone.js`).
+- [x] **Chantier 2 : Exactitude Biomécanique, Audio, Kiné & i18n**
+  - [x] 13.2.1 Supprimer le code mort dans `posture-engine.js` et corriger l'asymétrie de détection de l'épaule droite (`Math.abs` sur le delta par rapport au `baseline`).
+  - [x] 13.2.2 Corriger l'angle mort sur l'inclinaison latérale et stabiliser la Profondeur Z face aux rotations de tête.
+  - [x] 13.2.3 Éliminer la race condition Web Audio (oscillateur continu orphelin) et couper le son/halo sur perte de repères (`!current`) ou arrêt caméra.
+  - [x] 13.2.4 Préserver `KineStudioView.updateComplete()` en fin de routine Kiné et distinguer `skipRest()` de `endRest()` dans le gardien oculaire.
+  - [x] 13.2.5 Corriger le bug des clés `t('title_' + currentMode)` et connecter les 12 éléments orphelins au switch de langue bilingue FR/EN.
+- [x] **Chantier 3 : Design System Fluent UI 2 & Accessibilité WCAG 2.1 AA**
+  - [x] 13.3.1 Déclarer les 4 variables CSS manquantes (`--fluent-bg-surface-flyout`, `--fluent-stroke-surface`, `--radius-xl`, `--transition-normal`) et réparer les SVG de `src/kine/exercises.js`.
+  - [x] 13.3.2 Corriger 100 % des ruptures de contraste Light et Dark (texte sur `#cameraPlaceholder`, boutons `#btnCalibrate` et badges d'alerte en Dark Mode, bandeaux HUD Canvas).
+  - [x] 13.3.3 Convertir `.btn-preset` en `<button>`, agrandir les cibles tactiles < 32px, ajouter `aria-selected`, `aria-live="polite"` et stopper le tressautement numérique avec `tabular-nums`.
+  - [x] 13.3.4 Réorganiser `.gauges-grid` en 2×2 sous 1480px pour les écrans portables 13"/14".
+- [x] **Chantier 4 : Sécurité, Performance 30 FPS & CI/CD**
+  - [x] 13.4.1 Sécuriser `createTimelineRow` contre le DOM XSS, épingler les scripts MediaPipe CDN et assainir l'export CSV.
+  - [x] 13.4.2 Mettre en cache les nœuds DOM dans `onResults` et fiabiliser les décomptes temporels en arrière-plan via `Date.now()`.
+  - [x] 13.4.3 Restreindre le déploiement GitHub Pages dans `.github/workflows/deploy.yml` pour masquer les dossiers internes.
+
+---
+
+## 🧩 Phase 14 : Extension Navigateur (Chrome & Firefox) & Monétisation Éthique (Pass 7 €/an) [PLANIFIÉ]
+
+- [ ] **Phase 14.1 : Socle WebExtension Cross-Browser (Manifest V3 Chrome & Firefox)**
+  - [ ] **14.1.1 Création des Manifestes Spécifiques (`90_Code_Source/manifest.chrome.json` & `manifest.firefox.json`)**
+    - [ ] Configurer `"manifest_version": 3`, `"version": "3.0.0"`, permissions minimales `["storage", "alarms", "notifications", "sidePanel"]` (sans `"sidePanel"` sur Firefox).
+    - [ ] Définir la CSP stricte : `"extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://api.lemonsqueezy.com;"`.
+    - [ ] Déclarer `"side_panel": { "default_path": "index.html" }` pour Chrome et `"sidebar_action"` + `"browser_specific_settings.gecko"` (`id: "ergovision-ai@ergovision.app"`, `strict_min_version: "115.0"`) pour Firefox.
+  - [ ] **14.1.2 Rapatriement Local des Binaires MediaPipe Wasm (`90_Code_Source/vendor/mediapipe/`)**
+    - [ ] Créer `tasks/fetch_mediapipe_vendor.js` pour télécharger localement `pose.js`, `camera_utils.js`, `drawing_utils.js`, `pose_solution_packed_assets.data`, `pose_solution_simd_wasm_bin.js/.wasm` et les modèles `.tflite`.
+    - [ ] Remplacer les 3 balises `<script src="https://cdn.jsdelivr.net/...">` dans `90_Code_Source/index.html` par les chemins locaux `./vendor/mediapipe/*.js`.
+    - [ ] Mettre à jour `locateFile` dans `90_Code_Source/src/app.js` pour résoudre les binaires via `chrome.runtime.getURL('vendor/mediapipe/' + file)` en contexte extension et `./vendor/mediapipe/` en contexte web.
+    - [ ] Ajouter un fallback d'onboarding caméra (`onboarding-camera.html`) dans `src/vision/camera-stream.js` si `getUserMedia` lève `NotAllowedError` au tout premier lancement dans le Side Panel Chrome.
+  - [ ] **14.1.3 Service Worker d'Arrière-Plan (`90_Code_Source/src/extension/background.js`)**
+    - [ ] Activer `chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })` sur Chrome et `browser.sidebarAction.toggle()` au clic sur l'icône sur Firefox.
+    - [ ] Implémenter le récepteur `chrome.runtime.onMessage` (`POSTURE_STATUS_CHANGED`, `PACING_TICK`) pour mettre à jour le badge de l'icône en temps réel (`OK` vert `#107c41`, `!` rouge `#d13438`, ou minutes restantes `45m`).
+    - [ ] Programmer `chrome.alarms` (`ergovision-eye-rest`) pour maintenir les notifications 20-20-20 même si le panneau latéral est fermé.
+  - [ ] **14.1.4 Adaptation Responsive « Side Panel Mode » (`90_Code_Source/css/style.css`)**
+    - [ ] Créer le breakpoint `@media (max-width: 520px)` adaptant `.topbar` en colonne compacte, `.bento-grid` en `1fr`, `.gauges-grid` en `2x2` condensé et le viewport vidéo en `4/3` sans aucun scroll horizontal jusqu'à `320px` de large.
+  - [ ] **14.1.5 Pack d'Icônes Store (`90_Code_Source/assets/icons/`)**
+    - [ ] Générer `icon.svg` et les déclinaisons PNG `16x16`, `32x32`, `48x48` et `128x128`.
+
+- [ ] **Phase 14.2 : Moteur de Licence « Socle Libre + Pass 7 €/an » (`90_Code_Source/src/license/`)**
+  - [ ] **14.2.1 Module `src/license/license-gate.js`**
+    - [ ] Définir le schéma de persistance `ergovision_license_v1` (`tier`, `licenseKey`, `activatedAt`, `expiresAt` à +365 jours sans renouvellement auto, `instanceId`, `practitionerCode`).
+    - [ ] Implémenter `getFeatureFlags()` : débloquer uniquement la Jauge 1 (`gaugeNeckSlump: true`), le 20-20-20 (`eyeRest202020: true`) et le 1er exercice Kiné (`['mckenzie']`) en mode `FREE` ; tout débloquer en mode `PRO_ANNUAL_PASS`.
+    - [ ] Implémenter `activateLicenseKey(key)` avec support de l'API LemonSqueezy (`POST /v1/licenses/activate`) + vérificateur de clés hors-ligne signées (`ERGO-...`) pour les tests cabinets kiné et les reviewers Google/Mozilla.
+  - [ ] **14.2.2 Verrouillage Visuel Bienveillant dans le DOM & le Moteur (`app.js`, `kine-studio-view.js`, `style.css`)**
+    - [ ] Appliquer la classe `.gauge-locked` et un badge cliquable `🔒 Pass 7€/an` sur les cartes `#cardShoulder`, `#cardTilt` et `#cardDepth` en mode Gratuit.
+    - [ ] Restreindre le déclenchement de l'alerte sonore `anyBad` dans `app.js` à la seule jauge active (`badNeck`) en mode Gratuit pour éviter toute alerte fantôme.
+    - [ ] Ajouter le verrou sur le bouton `#btnPiP` (Mini-Fenêtre) et sur les exercices Kiné 2, 3 et 4 (Brügger, Extension thoracique, Bascule pelvienne) avec ouverture directe de la modale d'activation au clic.
+  - [ ] **14.2.3 Modale Fluent UI 2 d'Activation (`#licenseModal` dans `index.html`)**
+    - [ ] Ajouter le bouton d'état `#btnProStatus` dans la `.topbar` (`✨ Pass Complet · 7€/an` vs `🛡️ Pass Actif · XXXj`).
+    - [ ] Construire `<dialog id="licenseModal">` présentant la charte éthique (*7 €/an fixe, zéro abonnement automatique, 100 % local*), le récapitulatif des fonctionnalités débloquées, le lien d'achat et le champ de saisie de clé `#inputLicenseKey`.
+  - [ ] **14.2.4 Internationalisation FR / EN (`src/i18n/translations.js`)**
+    - [ ] Ajouter les ~25 clés de traduction relatives au Pass 7 €/an, aux cadenas d'aperçu et aux messages de validation de clé.
+
+- [ ] **Phase 14.3 : Bilan Postural Imprimable / PDF pour le Kiné (`src/reports/kine-report.js`)**
+  - [ ] **14.3.1 Agrégateur & Vue d'Impression Clinique A4**
+    - [ ] Créer `90_Code_Source/src/reports/kine-report.js` agrégeant les logs `ergovision_daily_log_*` sur 7 à 30 jours (score moyen de posture neutre, répartition des dérives C7-C8 / Trapèzes / Inclinaison / Proximité, nombre de routines Kiné complétées, ratio Assis/Debout).
+    - [ ] Concevoir la feuille de style `@media print` générant un bilan A4 d'une page avec graphiques SVG vectoriels et encart d'observations pour le kinésithérapeute via `window.print()`.
+
+- [ ] **Phase 14.4 : Pipeline de Build Multi-Cibles & Dossier de Soumission Stores**
+  - [ ] **14.4.1 Script `tasks/build_extension.js`**
+    - [ ] Automatiser l'assemblage de `dist/chrome/` (`manifest.chrome.json` -> `manifest.json`) et `dist/firefox/` (`manifest.firefox.json` -> `manifest.json`), vérifier l'absence de tout lien CDN externe et générer les archives `dist/ergovision-chrome-mv3.zip` et `dist/ergovision-firefox-mv3.zip`.
+  - [ ] **14.4.2 Guide & Textes de Soumission (`80_Tests_et_Deploiement/STORE_SUBMISSION_GUIDE.md`)**
+    - [ ] Rédiger les textes prêts à copier-coller pour Chrome Web Store et Firefox AMO : *Single Purpose*, justifications des permissions (`storage`, `alarms`, `notifications`, `sidePanel`, `camera` local), Politique de Confidentialité Zero-Data et clé de test reviewer (`ERGO-REVIEWER-2026`).
+
+---
+
 ## Logique et Apprentissage
 
 ### Phases 11 & 12 : V2.0 et V2.1 — Kiné du Dos & Hygiène Visuelle Oculaire

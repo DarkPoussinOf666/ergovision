@@ -40,5 +40,11 @@
 - **Détection de Profondeur Z sans Capteur LiDAR** : En normalisant la largeur faciale inter-oculaire et bi-auriculaire par la largeur d'épaules et en comparant cette valeur relative à celle mesurée lors de la calibration, on détecte avec fiabilité l'avancement du buste vers l'écran (<50cm, seuil de risque visuel et cervical).
 - **Suspension Croisée d'Alertes en Phase Oculaire** : Durant la pause 20-20-20, l'utilisateur tourne le regard vers l'horizon (au moins 6 mètres). Couper les alertes de posture durant ces 20 secondes évite les faux positifs et garantit une expérience utilisateur fluide et apaisante.
 
+## 10. Architecture Duale Déterministe & Symétrie Biomécanique (v2.2)
+- **Source Unique de Vérité Modulaire (`Single Source of Truth`)** : Ne jamais maintenir en parallèle et manuellement un fichier monolithique (`index.html`) et une arborescence ES6 modulaire (`90_Code_Source/`). Le code source réside exclusivement dans les modules ES6, et la distribution autonome de production est compilée par un script Node.js déterministe (`tasks/build_standalone.js`) validé en CI.
+- **Symétrie Bilatérale des Deltas Posturaux** : Pour évaluer une asymétrie scapulaire ou cervicale, toujours appliquer `Math.abs(current - baseline)` sur le delta par rapport au point zéro, et non sur la coordonnée brute en amont.
+- **Verrouillage de l'AudioContext contre les Race Conditions** : Lors de l'arrêt progressif (fade-out) d'un oscillateur sonore continu, annuler systématiquement les timeouts de coupure antérieurs lors d'un nouveau déclenchement pour éviter tout son orphelin infini dans l'AudioContext.
+- **Conformité des Matériaux Fluent & Variables Fantômes** : Chaque variable CSS utilisée dans un composant (telle que `--fluent-bg-surface-flyout` ou `--fluent-stroke-surface`) doit posséder une définition explicite dans `:root` (Light) et `[data-theme="dark"]` pour bannir les fonds transparents accidentels.
+
 
 

@@ -65,6 +65,9 @@ if (document.getElementById('kineStudioContainer')) {
   kineStudioView = new KineStudioView('kineStudioContainer', kineRoutineManager);
   kineRoutineManager.setCallbacks({
     onRoutineComplete: () => {
+      if (kineStudioView) {
+        kineStudioView.updateComplete();
+      }
       addDailyLog('summary', t('kine_phase_done'), 'pause');
     }
   });
@@ -89,11 +92,14 @@ eyeRestManager.setCallbacks({
   onRestStart: () => {
     if (eyeRestBanner) eyeRestBanner.style.display = 'flex';
     stopContinuousPostureAlert();
-    triggerAlertNotification(t('eye_rest_title'));
+    document.body.classList.remove('alert-active');
   },
   onRestEnd: () => {
     if (eyeRestBanner) eyeRestBanner.style.display = 'none';
     addDailyLog('summary', t('eye_rest_complete'), currentMode);
+  },
+  onRestSkip: () => {
+    if (eyeRestBanner) eyeRestBanner.style.display = 'none';
   }
 });
 eyeRestManager.start();
@@ -141,8 +147,12 @@ function triggerAlertNotification(reason) {
   playTone(560, 0.22, 'triangle', 0.12);
 
   if ("Notification" in window && Notification.permission === "granted") {
-    new Notification("⚠️ Compensation Détectée : " + reason, {
-      body: "Grandissez doucement la nuque et abaissez votre épaule gauche.",
+    const notifTitle = `${t('status_alert_prefix')}${reason})`;
+    const notifBody = getCurrentLanguage() === 'fr' 
+      ? "Réalignez doucement votre posture et retrouvez votre point zéro."
+      : "Gently realign your posture and return to neutral.";
+    new Notification(notifTitle, {
+      body: notifBody,
       silent: true
     });
   }
@@ -151,27 +161,42 @@ function triggerAlertNotification(reason) {
 // ----------------------------------------------------
 // TIMELINE LOGS
 // ----------------------------------------------------
+function escapeText(str) {
+  if (typeof str !== 'string') return String(str || '');
+  return str.replace(/[&<>"']/g, (m) => {
+    switch (m) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '"': return '&quot;';
+      case "'": return '&#39;';
+      default: return m;
+    }
+  });
+}
+
 function createTimelineRow(entry) {
   const row = document.createElement('div');
-  row.className = `timeline-item item-${entry.type}`;
+  row.className = `timeline-item item-${escapeText(entry.type)}`;
 
-  let badgeHtml = '';
-  if (entry.type === 'alert') {
-    badgeHtml = `<span class="timeline-badge badge-alert">${t('badge_alert')}</span>`;
-  } else if (entry.type === 'transition') {
-    badgeHtml = `<span class="timeline-badge badge-transition">${t('badge_transition')}</span>`;
+  let badgeText = t('badge_alert');
+  let badgeClass = 'badge-alert';
+  if (entry.type === 'transition') {
+    badgeText = t('badge_transition');
+    badgeClass = 'badge-transition';
   } else if (entry.type === 'summary') {
-    badgeHtml = `<span class="timeline-badge badge-summary">${t('badge_summary')}</span>`;
+    badgeText = t('badge_summary');
+    badgeClass = 'badge-summary';
   }
 
-  const scorePart = entry.score !== null && entry.score !== undefined ? ` <strong style="color:var(--status-success)">${entry.score}%</strong>` : '';
+  const scorePart = entry.score !== null && entry.score !== undefined ? ` <strong style="color:var(--status-success)">${escapeText(entry.score)}%</strong>` : '';
 
   row.innerHTML = `
     <div class="timeline-content">
-      ${badgeHtml}
-      <span><strong>${entry.title}</strong>${scorePart} <span style="color:var(--fluent-fg-muted)">(${entry.mode})</span></span>
+      <span class="timeline-badge ${badgeClass}">${escapeText(badgeText)}</span>
+      <span><strong>${escapeText(entry.title)}</strong>${scorePart} <span style="color:var(--fluent-fg-muted)">(${escapeText(entry.mode)})</span></span>
     </div>
-    <span class="timeline-time">${entry.time}</span>
+    <span class="timeline-time">${escapeText(entry.time)}</span>
   `;
   return row;
 }
@@ -194,6 +219,7 @@ function renderAllLogs() {
     box.appendChild(createTimelineRow(entry));
   });
 
+  alertCount = alertsToday;
   const badge = document.getElementById('alertCounterBadge');
   badge.innerText = `${alertsToday} ${t('badge_alert').toLowerCase()}${alertsToday > 1 ? 's' : ''}`;
   badge.style.color = alertsToday > 0 ? 'var(--status-warning)' : 'var(--status-success)';
@@ -369,14 +395,29 @@ function setMode(mode) {
 // ----------------------------------------------------
 // BIOMECHANICS & GAUGES
 // ----------------------------------------------------
+const gaugeCache = {};
+
 function updateGauge(cardId, badgeId, fillId, ratioToThreshold) {
   const pct = Math.min(100, Math.max(0, Math.round(ratioToThreshold * 100)));
   const isBad = pct >= 100;
-  document.getElementById(cardId).classList.toggle('bad', isBad);
-  document.getElementById(badgeId).innerText = isBad ? 'ALERTE' : `${pct}%`;
+  
+  const cacheKey = `${cardId}_${badgeId}_${fillId}`;
+  const prev = gaugeCache[cacheKey];
+  if (prev && prev.pct === pct && prev.isBad === isBad) {
+    return;
+  }
+  gaugeCache[cacheKey] = { pct, isBad };
+
+  const card = document.getElementById(cardId);
+  const badge = document.getElementById(badgeId);
   const fill = document.getElementById(fillId);
-  fill.style.width = `${pct}%`;
-  fill.style.backgroundColor = pct > 95 ? 'var(--status-danger)' : (pct > 65 ? 'var(--status-warning)' : 'var(--status-success)');
+
+  if (card) card.classList.toggle('bad', isBad);
+  if (badge) badge.innerText = isBad ? t('badge_alert') : `${pct}%`;
+  if (fill) {
+    fill.style.width = `${pct}%`;
+    fill.style.backgroundColor = pct > 95 ? 'var(--status-danger)' : (pct > 65 ? 'var(--status-warning)' : 'var(--status-success)');
+  }
 }
 
 function startCalibrationCountdown() {
@@ -448,14 +489,19 @@ function onResults(results) {
     const current = computeMetrics(currentLandmarks);
 
     if (!current) {
-      hudStatus = "POSTURE PARTIELLE • RECADREZ-VOUS";
+      hudStatus = t('hud_partial') || "POSTURE PARTIELLE • RECADREZ-VOUS";
       hudColor = "rgba(245, 158, 11, 0.88)";
+      badPostureStart = null;
+      alertLatched = false;
+      stopContinuousPostureAlert();
+      document.body.classList.remove('alert-active');
     } else if (currentMode === 'pause') {
-      hudStatus = "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT";
+      hudStatus = t('hud_pause') || "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT";
       hudColor = "rgba(40, 134, 222, 0.92)";
       document.body.classList.remove('alert-active');
       badPostureStart = null;
       alertLatched = false;
+      stopContinuousPostureAlert();
       setStatusUI('var(--fluent-brand)', 'Pause active en cours — alertes suspendues');
       updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
       updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
@@ -465,8 +511,8 @@ function onResults(results) {
       const sens = parseFloat(sensitivitySelect.value);
 
       const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
-      const shoulderDelta = (current.shoulderDiffRatio - baseline.shoulderDiffRatio);
-      const tiltDelta = (current.headTiltRatio - baseline.headTiltRatio);
+      const shoulderDelta = Math.abs(current.shoulderDiffRatio - baseline.shoulderDiffRatio);
+      const tiltDelta = Math.abs(current.headTiltRatio - baseline.headTiltRatio);
       const distanceIncrease = baseline.faceWidth > 0 ? (current.faceWidth - baseline.faceWidth) / baseline.faceWidth : 0;
 
       const neckThreshold = 0.13 * sens;
@@ -529,7 +575,8 @@ function onResults(results) {
         alertLatched = false;
         stopContinuousPostureAlert();
         document.body.classList.remove('alert-active');
-        const modeLabel = t('title_' + currentMode) || currentMode;
+        const modeKeyMap = { assis: 'title_sit', debout: 'title_stand', pause: 'title_pause' };
+        const modeLabel = t(modeKeyMap[currentMode]) || currentMode;
         hudStatus = `${t('hud_neutral')} (${modeLabel.toUpperCase()})`;
         hudColor = "rgba(16, 185, 129, 0.88)";
         setStatusUI('var(--status-success)', `${t('status_optimal')} (${modeLabel})`);
@@ -539,6 +586,7 @@ function onResults(results) {
     hudStatus = t('hud_waiting');
     hudColor = "rgba(15, 23, 42, 0.88)";
     stopContinuousPostureAlert();
+    document.body.classList.remove('alert-active');
   }
 
   canvasCtx.restore();
@@ -557,15 +605,18 @@ function onResults(results) {
 // ----------------------------------------------------
 // CAMERA WORKFLOW
 // ----------------------------------------------------
-async function startCamera() {
+async function startCamera(deviceId = null) {
   getAudioContext();
   setStatusUI('var(--status-warning)', 'Démarrage du capteur...');
 
   try {
-    await startCameraStream(videoElement, onResults);
+    await startCameraStream(videoElement, onResults, deviceId);
     cameraPlaceholder.classList.add('hidden');
     btnStopCam.style.display = 'inline-flex';
     await enumerateVideoDevices(cameraSelect);
+    if (deviceId && cameraSelect) {
+      cameraSelect.value = deviceId;
+    }
     setStatusUI('var(--status-success)', 'Capteur actif • Calibrez votre point zéro');
     playTone(600, 0.15);
   } catch (err) {
@@ -576,10 +627,17 @@ async function startCamera() {
 }
 
 async function stopCamera() {
-  await stopCameraStream(videoElement);
+  await stopCameraStream(videoElement, pipVideo);
+  stopContinuousPostureAlert();
+  document.body.classList.remove('alert-active');
   cameraPlaceholder.classList.remove('hidden');
   btnStopCam.style.display = 'none';
   setStatusUI('var(--fluent-fg-muted)', 'Capteur en veille');
+}
+
+async function switchCamera(deviceId) {
+  if (!deviceId) return;
+  await startCamera(deviceId);
 }
 
 // ----------------------------------------------------
@@ -627,17 +685,60 @@ function setLanguage(lang) {
     kineStudioView.updateExercise(kineRoutineManager.getCurrentExercise(), kineRoutineManager.currentIndex, kineRoutineManager.exercises.length);
   }
 
+  // Gauges titles & descriptions
+  const cardNeckTitle = document.querySelector('#cardNeck .gauge-title-box span');
+  const cardNeckCaption = document.querySelector('#cardNeck .gauge-caption');
+  if (cardNeckTitle) cardNeckTitle.innerText = t('gauge_neck_title');
+  if (cardNeckCaption) cardNeckCaption.innerText = t('gauge_neck_desc');
+
+  const cardShoulderTitle = document.querySelector('#cardShoulder .gauge-title-box span');
+  const cardShoulderCaption = document.querySelector('#cardShoulder .gauge-caption');
+  if (cardShoulderTitle) cardShoulderTitle.innerText = t('gauge_shoulder_title');
+  if (cardShoulderCaption) cardShoulderCaption.innerText = t('gauge_shoulder_desc');
+
+  const cardTiltTitle = document.getElementById('titleGaugeTilt');
+  const cardTiltCaption = document.getElementById('descGaugeTilt');
+  if (cardTiltTitle) cardTiltTitle.innerText = t('gauge_tilt_title');
+  if (cardTiltCaption) cardTiltCaption.innerText = t('gauge_tilt_desc');
+
   const titleDist = document.getElementById('titleGaugeDistance');
   const descDist = document.getElementById('descGaugeDistance');
   if (titleDist) titleDist.innerText = t('gauge_distance_title');
   if (descDist) descDist.innerText = t('gauge_distance_desc');
 
+  // Eye rest banner
   const eyeTitle = document.getElementById('eyeRestTitle');
   const eyeDesc = document.getElementById('eyeRestDesc');
   const btnSkipEye = document.querySelector('#btnSkipEyeRest span');
   if (eyeTitle) eyeTitle.innerText = t('eye_rest_title');
   if (eyeDesc) eyeDesc.innerText = t('eye_rest_desc');
   if (btnSkipEye) btnSkipEye.innerText = t('btn_skip_eye_rest');
+
+  // Viewport and buttons
+  const heroH2 = document.querySelector('#cameraPlaceholder h2');
+  const heroP = document.querySelector('#cameraPlaceholder p');
+  const btnStartSpan = document.querySelector('#btnStartCamera span');
+  if (heroH2) heroH2.innerText = t('hero_title');
+  if (heroP) heroP.innerText = t('hero_desc');
+  if (btnStartSpan) btnStartSpan.innerText = t('btn_start_sensor');
+
+  const btnCalibrateSpan = document.querySelector('#btnCalibrate span');
+  const btnStopCamSpan = document.querySelector('#btnStopCam span');
+  if (btnCalibrateSpan) btnCalibrateSpan.innerText = t('btn_calibrate');
+  if (btnStopCamSpan) btnStopCamSpan.innerText = t('btn_stop');
+
+  // Pacing & Journal widgets
+  const btnSettingsSpan = document.querySelector('#btnPacingSettings span');
+  const btnResetSpan = document.querySelector('#btnResetTimer span');
+  const btnExportSpan = document.querySelector('#btnExportCsv span');
+  const btnClearSpan = document.querySelector('#btnClearLogs span');
+  if (btnSettingsSpan) btnSettingsSpan.innerText = t('btn_settings');
+  if (btnResetSpan) btnResetSpan.innerText = t('btn_reset');
+  if (btnExportSpan) btnExportSpan.innerText = t('btn_export_csv');
+  if (btnClearSpan) btnClearSpan.innerText = t('btn_clear_logs');
+
+  const footer = document.querySelector('footer');
+  if (footer) footer.innerText = t('footer_text');
 
   updateTimerDisplayTitles();
   renderAllLogs();
@@ -724,17 +825,71 @@ document.getElementById('btnToggleLang').addEventListener('click', toggleLanguag
 btnSound.addEventListener('click', () => {
   const next = !isSoundEnabled();
   setSoundEnabled(next);
-  btnSound.classList.toggle('active-toggle', !next);
+  btnSound.classList.toggle('active-toggle', next);
+  btnSound.setAttribute('aria-pressed', next ? 'true' : 'false');
   btnSound.querySelector('span').innerText = next ? t('btn_audio') : t('btn_mute');
+  const iconSound = document.getElementById('iconSound');
+  if (iconSound) {
+    iconSound.innerHTML = next 
+      ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>'
+      : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+  }
 });
+
+cameraSelect.addEventListener('change', (e) => switchCamera(e.target.value));
 
 document.getElementById('segAssis').addEventListener('click', () => setMode('assis'));
 document.getElementById('segDebout').addEventListener('click', () => setMode('debout'));
 document.getElementById('segPause').addEventListener('click', () => setMode('pause'));
 
 document.getElementById('btnPacingSettings').addEventListener('click', openPacingModal);
+document.getElementById('btnResetTimer').addEventListener('click', resetCurrentModeTimer);
 document.getElementById('btnClosePacingModal').addEventListener('click', closePacingModal);
 document.getElementById('btnCancelPacingModal').addEventListener('click', closePacingModal);
+
+// Modal sliders 2-way sync
+const rangeSit = document.getElementById('rangeSittingMinutes');
+const inputSit = document.getElementById('inputSittingMinutes');
+const hintSit = document.getElementById('hintSitVal');
+rangeSit.addEventListener('input', () => { inputSit.value = rangeSit.value; hintSit.innerText = rangeSit.value + ' min'; });
+inputSit.addEventListener('input', () => { rangeSit.value = inputSit.value; hintSit.innerText = inputSit.value + ' min'; });
+
+const rangeStand = document.getElementById('rangeStandingAlertMinutes');
+const inputStand = document.getElementById('inputStandingAlertMinutes');
+const hintStand = document.getElementById('hintStandVal');
+rangeStand.addEventListener('input', () => { inputStand.value = rangeStand.value; hintStand.innerText = rangeStand.value + ' min'; });
+inputStand.addEventListener('input', () => { rangeStand.value = inputStand.value; hintStand.innerText = inputStand.value + ' min'; });
+
+const rangePause = document.getElementById('rangePauseMinutes');
+const inputPause = document.getElementById('inputPauseMinutes');
+const hintPause = document.getElementById('hintPauseVal');
+rangePause.addEventListener('input', () => { inputPause.value = rangePause.value; hintPause.innerText = rangePause.value + ' min'; });
+inputPause.addEventListener('input', () => { rangePause.value = inputPause.value; hintPause.innerText = inputPause.value + ' min'; });
+
+const rangeVol = document.getElementById('rangeAudioVolume');
+const valVol = document.getElementById('valAudioVolume');
+rangeVol.addEventListener('input', () => {
+  valVol.innerText = rangeVol.value + '%';
+  audioSettings.volume = parseInt(rangeVol.value, 10) / 100;
+});
+
+const modalSens = document.getElementById('selectModalSensitivity');
+modalSens.addEventListener('change', () => {
+  sensitivitySelect.value = modalSens.value;
+});
+
+const modalLang = document.getElementById('selectModalLanguage');
+modalLang.addEventListener('change', () => {
+  setLanguage(modalLang.value);
+});
+
+document.getElementById('btnResetDefaults').addEventListener('click', () => {
+  document.getElementById('presetStandard').click();
+  document.getElementById('audioModePulse').checked = true;
+  rangeVol.value = 15;
+  valVol.innerText = '15%';
+  document.getElementById('selectAlertDelay').value = '2.5';
+});
 
 document.getElementById('tabBtnPacing').addEventListener('click', () => switchModalTab('pacing'));
 document.getElementById('tabBtnAudio').addEventListener('click', () => switchModalTab('audio'));
@@ -765,60 +920,42 @@ document.getElementById('btnClearLogs').addEventListener('click', () => {
 
 // Modal presets
 document.getElementById('presetPomodoro').addEventListener('click', () => {
-  document.getElementById('rangeSittingMinutes').value = 25;
-  document.getElementById('inputSittingMinutes').value = 25;
-  document.getElementById('hintSitVal').innerText = '25 min';
-  document.getElementById('rangeStandingAlertMinutes').value = 10;
-  document.getElementById('inputStandingAlertMinutes').value = 10;
-  document.getElementById('hintStandVal').innerText = '10 min';
-  document.getElementById('rangePauseMinutes').value = 5;
-  document.getElementById('inputPauseMinutes').value = 5;
-  document.getElementById('hintPauseVal').innerText = '5 min';
+  rangeSit.value = 25; inputSit.value = 25; hintSit.innerText = '25 min';
+  rangeStand.value = 10; inputStand.value = 10; hintStand.innerText = '10 min';
+  rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
 });
 
 document.getElementById('presetStandard').addEventListener('click', () => {
-  document.getElementById('rangeSittingMinutes').value = 45;
-  document.getElementById('inputSittingMinutes').value = 45;
-  document.getElementById('hintSitVal').innerText = '45 min';
-  document.getElementById('rangeStandingAlertMinutes').value = 15;
-  document.getElementById('inputStandingAlertMinutes').value = 15;
-  document.getElementById('hintStandVal').innerText = '15 min';
-  document.getElementById('rangePauseMinutes').value = 5;
-  document.getElementById('inputPauseMinutes').value = 5;
-  document.getElementById('hintPauseVal').innerText = '5 min';
+  rangeSit.value = 45; inputSit.value = 45; hintSit.innerText = '45 min';
+  rangeStand.value = 15; inputStand.value = 15; hintStand.innerText = '15 min';
+  rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
 });
 
 document.getElementById('presetActive').addEventListener('click', () => {
-  document.getElementById('rangeSittingMinutes').value = 50;
-  document.getElementById('inputSittingMinutes').value = 50;
-  document.getElementById('hintSitVal').innerText = '50 min';
-  document.getElementById('rangeStandingAlertMinutes').value = 20;
-  document.getElementById('inputStandingAlertMinutes').value = 20;
-  document.getElementById('hintStandVal').innerText = '20 min';
-  document.getElementById('rangePauseMinutes').value = 10;
-  document.getElementById('inputPauseMinutes').value = 10;
-  document.getElementById('hintPauseVal').innerText = '10 min';
+  rangeSit.value = 50; inputSit.value = 50; hintSit.innerText = '50 min';
+  rangeStand.value = 20; inputStand.value = 20; hintStand.innerText = '20 min';
+  rangePause.value = 10; inputPause.value = 10; hintPause.innerText = '10 min';
 });
 
 // Modal form submit
 document.getElementById('pacingForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  const sit = parseInt(document.getElementById('inputSittingMinutes').value, 10);
-  const stand = parseInt(document.getElementById('inputStandingAlertMinutes').value, 10);
-  const pause = parseInt(document.getElementById('inputPauseMinutes').value, 10);
+  const sit = parseInt(inputSit.value, 10);
+  const stand = parseInt(inputStand.value, 10);
+  const pause = parseInt(inputPause.value, 10);
 
   if (sit > 0 && stand > 0 && pause > 0) {
     pacingConfig = savePacingConfig({ sittingMinutes: sit, standingAlertMinutes: stand, pauseMinutes: pause });
   }
 
   const audioMode = document.querySelector('input[name="audioMode"]:checked').value;
-  const vol = parseInt(document.getElementById('rangeAudioVolume').value, 10) / 100;
+  const vol = parseInt(rangeVol.value, 10) / 100;
   const delay = parseFloat(document.getElementById('selectAlertDelay').value);
 
   audioSettings = saveAudioSettings({ mode: audioMode, volume: vol, delaySeconds: delay });
 
-  setLanguage(document.getElementById('selectModalLanguage').value);
-  sensitivitySelect.value = document.getElementById('selectModalSensitivity').value;
+  setLanguage(modalLang.value);
+  sensitivitySelect.value = modalSens.value;
 
   resetCurrentModeTimer();
   closePacingModal();

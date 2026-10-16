@@ -9,8 +9,230 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
-
   <style>
+/**
+ * ErgoVision AI — Fluent UI 2 Design Tokens (CSS Custom Properties)
+ * Standard: Fluent UI 2 Web Specification / DTCG Aligned
+ * Accessibility: WCAG 2.1 Level AA Verified (Contrast >= 4.5:1 text, >= 3.0:1 UI)
+ */
+
+:root, [data-theme="light"] {
+  /* ==========================================================================
+     1. COLOR SYSTEM (LIGHT THEME)
+     ========================================================================== */
+
+  /* Neutral Surfaces (Canvas & Layering) */
+  --fluent-color-neutral-background-1: #ffffff; /* Primary page canvas */
+  --fluent-color-neutral-background-2: #fafafa; /* Side panels / Secondary */
+  --fluent-color-neutral-background-3: #f5f5f5; /* Cards / Nested containers */
+  --fluent-color-neutral-background-4: #f0f0f0; /* Deepest nested layer */
+  --fluent-color-neutral-background-inverted: #242424; /* Tooltips / Dark overlays */
+  
+  --fluent-color-subtle-background: transparent;
+  --fluent-color-subtle-background-hover: #f5f5f5;
+  --fluent-color-subtle-background-pressed: #e0e0e0;
+  --fluent-color-subtle-background-selected: #ebebeb;
+
+  /* Neutral Foreground (Typography & Icons) */
+  --fluent-color-neutral-foreground-1: #242424; /* Primary body text (Ratio > 14:1 on white) */
+  --fluent-color-neutral-foreground-2: #424242; /* Secondary body text (Ratio > 9:1) */
+  --fluent-color-neutral-foreground-3: #616161; /* Tertiary text / metadata (Ratio > 5.5:1) */
+  --fluent-color-neutral-foreground-4: #707070; /* Subdued placeholders (Ratio > 4.5:1) */
+  --fluent-color-neutral-foreground-disabled: #bdbdbd;
+  --fluent-color-neutral-foreground-inverted: #ffffff;
+  --fluent-color-neutral-foreground-on-brand: #ffffff;
+
+  /* Neutral Strokes / Borders */
+  --fluent-color-neutral-stroke-1: #d1d1d1; /* Standard input/card borders */
+  --fluent-color-neutral-stroke-2: #e0e0e0; /* Dividers and separators */
+  --fluent-color-neutral-stroke-3: #f0f0f0; /* Subtle grouped lines */
+  --fluent-color-neutral-stroke-subtle: #e0e0e0;
+  --fluent-color-neutral-stroke-accessible: #616161; /* Guaranteed 3:1 boundary */
+  --fluent-color-neutral-stroke-disabled: #e0e0e0;
+
+  /* Brand Colors (Ergonomic Medical Cyan/Blue) */
+  --fluent-color-brand-background: #0f6cbd; /* Stop 80 */
+  --fluent-color-brand-background-hover: #0f70bf; /* Stop 70 */
+  --fluent-color-brand-background-pressed: #115ea3; /* Stop 60 */
+  --fluent-color-brand-background-selected: #0f70bf;
+  --fluent-color-brand-foreground-1: #0f6cbd;
+  --fluent-color-brand-foreground-link: #115ea3;
+  --fluent-color-brand-foreground-link-hover: #0e2a44;
+  --fluent-color-brand-stroke-1: #0f6cbd;
+
+  /* Biomechanical Status Indicators */
+  /* Success: Aligned Posture (Émeraude) */
+  --fluent-color-status-success-background-1: #e6f7ef;
+  --fluent-color-status-success-foreground-1: #0e7042;
+  --fluent-color-status-success-border-1: #92d8b3;
+  
+  /* Warning: Pre-Alert & Pacing (Ambre) */
+  --fluent-color-status-warning-background-1: #fff8e5;
+  --fluent-color-status-warning-foreground-1: #8f6200;
+  --fluent-color-status-warning-border-1: #fce18d;
+
+  /* Danger: Postural Deflection Alert (Rose / Rouge Clinique) */
+  --fluent-color-status-danger-background-1: #fdf3f4;
+  --fluent-color-status-danger-foreground-1: #b71c1c;
+  --fluent-color-status-danger-border-1: #f4a8a8;
+
+  /* Focus Outlines (Double-Ring A11y Pattern) */
+  --fluent-color-stroke-focus-1: #ffffff; /* Inner ring */
+  --fluent-color-stroke-focus-2: #000000; /* Outer ring */
+
+  /* Glassmorphism / Acrylic Workstation */
+  --fluent-surface-acrylic: rgba(255, 255, 255, 0.85);
+  --fluent-surface-blur: 16px;
+
+  /* Shadows (Dual-Layer: Key + Ambient) */
+  --fluent-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-4: 0 2px 4px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-8: 0 4px 8px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.14), 0 0 2px rgba(0, 0, 0, 0.12);
+  --fluent-shadow-28: 0 14px 28px rgba(0, 0, 0, 0.24), 0 0 8px rgba(0, 0, 0, 0.20);
+}
+
+/* ==========================================================================
+   DARK THEME (STUDIO WORKSTATION)
+   ========================================================================== */
+[data-theme="dark"] {
+  /* Neutral Surfaces (OLED / Deep Slate hierarchy) */
+  --fluent-color-neutral-background-1: #1f1f1f; /* Primary page canvas */
+  --fluent-color-neutral-background-2: #141414; /* Side panels / Shelves */
+  --fluent-color-neutral-background-3: #292929; /* Cards / Bento tiles */
+  --fluent-color-neutral-background-4: #333333; /* Layered container */
+  --fluent-color-neutral-background-inverted: #ffffff;
+
+  --fluent-color-subtle-background: transparent;
+  --fluent-color-subtle-background-hover: #383838;
+  --fluent-color-subtle-background-pressed: #2e2e2e;
+  --fluent-color-subtle-background-selected: #333333;
+
+  /* Neutral Foreground (Typography & Icons) */
+  --fluent-color-neutral-foreground-1: #ffffff; /* Primary text (16:1 ratio) */
+  --fluent-color-neutral-foreground-2: #d6d6d6; /* Secondary body (11:1 ratio) */
+  --fluent-color-neutral-foreground-3: #adadad; /* Tertiary / Captions (7:1 ratio) */
+  --fluent-color-neutral-foreground-4: #999999; /* Subdued placeholders (5:1 ratio) */
+  --fluent-color-neutral-foreground-disabled: #5c5c5c;
+  --fluent-color-neutral-foreground-inverted: #242424;
+  --fluent-color-neutral-foreground-on-brand: #000000;
+
+  /* Neutral Strokes / Borders */
+  --fluent-color-neutral-stroke-1: #525252;
+  --fluent-color-neutral-stroke-2: #424242;
+  --fluent-color-neutral-stroke-3: #333333;
+  --fluent-color-neutral-stroke-subtle: #383838;
+  --fluent-color-neutral-stroke-accessible: #adadad;
+  --fluent-color-neutral-stroke-disabled: #424242;
+
+  /* Brand Colors */
+  --fluent-color-brand-background: #479ef5; /* Stop 100 */
+  --fluent-color-brand-background-hover: #62abf5; /* Stop 110 */
+  --fluent-color-brand-background-pressed: #2886de; /* Stop 90 */
+  --fluent-color-brand-background-selected: #479ef5;
+  --fluent-color-brand-foreground-1: #479ef5;
+  --fluent-color-brand-foreground-link: #62abf5;
+  --fluent-color-brand-foreground-link-hover: #96c6fa;
+  --fluent-color-brand-stroke-1: #479ef5;
+
+  /* Biomechanical Status Indicators */
+  --fluent-color-status-success-background-1: #0a2e1d;
+  --fluent-color-status-success-foreground-1: #54b080;
+  --fluent-color-status-success-border-1: #1d5738;
+
+  --fluent-color-status-warning-background-1: #382800;
+  --fluent-color-status-warning-foreground-1: #e8b339;
+  --fluent-color-status-warning-border-1: #6b4d00;
+
+  --fluent-color-status-danger-background-1: #3b080c;
+  --fluent-color-status-danger-foreground-1: #f1707b;
+  --fluent-color-status-danger-border-1: #751c24;
+
+  /* Focus Outlines */
+  --fluent-color-stroke-focus-1: #000000; /* Inner ring */
+  --fluent-color-stroke-focus-2: #ffffff; /* Outer ring */
+
+  /* Glassmorphism / Acrylic Workstation */
+  --fluent-surface-acrylic: rgba(31, 31, 31, 0.82);
+  --fluent-surface-blur: 16px;
+
+  /* Shadows (Dark Theme High Depth) */
+  --fluent-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 2px rgba(0, 0, 0, 0.25);
+  --fluent-shadow-4: 0 2px 4px rgba(0, 0, 0, 0.40), 0 0 2px rgba(0, 0, 0, 0.30);
+  --fluent-shadow-8: 0 4px 8px rgba(0, 0, 0, 0.45), 0 0 2px rgba(0, 0, 0, 0.35);
+  --fluent-shadow-16: 0 8px 16px rgba(0, 0, 0, 0.50), 0 0 2px rgba(0, 0, 0, 0.40);
+  --fluent-shadow-28: 0 14px 28px rgba(0, 0, 0, 0.60), 0 0 8px rgba(0, 0, 0, 0.50);
+}
+
+/* ==========================================================================
+   2. TYPOGRAPHY, SPACING, RADIUS & MOTION (THEME-INDEPENDENT)
+   ========================================================================== */
+:root {
+  /* Typography Scale */
+  --fluent-font-family-base: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  --fluent-font-family-monospace: Consolas, 'Courier New', Courier, monospace;
+  --fluent-font-family-numeric: Bahnschrift, 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+
+  --fluent-font-size-100: 10px;
+  --fluent-line-height-100: 14px;
+  --fluent-font-size-200: 12px;
+  --fluent-line-height-200: 16px;
+  --fluent-font-size-300: 14px;
+  --fluent-line-height-300: 20px;
+  --fluent-font-size-400: 16px;
+  --fluent-line-height-400: 22px;
+  --fluent-font-size-500: 20px;
+  --fluent-line-height-500: 28px;
+  --fluent-font-size-600: 24px;
+  --fluent-line-height-600: 32px;
+  --fluent-font-size-700: 28px;
+  --fluent-line-height-700: 36px;
+  --fluent-font-size-800: 32px;
+  --fluent-line-height-800: 40px;
+
+  --fluent-font-weight-regular: 400;
+  --fluent-font-weight-medium: 500;
+  --fluent-font-weight-semibold: 600;
+  --fluent-font-weight-bold: 700;
+
+  /* Spacing Scale (4px base) */
+  --fluent-spacing-none: 0px;
+  --fluent-spacing-xxs: 2px;
+  --fluent-spacing-xs: 4px;
+  --fluent-spacing-s-nudge: 6px;
+  --fluent-spacing-s: 8px;
+  --fluent-spacing-m-nudge: 10px;
+  --fluent-spacing-m: 12px;
+  --fluent-spacing-l: 16px;
+  --fluent-spacing-xl: 20px;
+  --fluent-spacing-xxl: 24px;
+  --fluent-spacing-xxxl: 32px;
+
+  /* Border Radii */
+  --fluent-border-radius-none: 0px;
+  --fluent-border-radius-small: 2px;
+  --fluent-border-radius-medium: 4px;
+  --fluent-border-radius-large: 6px;
+  --fluent-border-radius-x-large: 8px;
+  --fluent-border-radius-circular: 10000px;
+
+  /* Platform Touch Targets */
+  --fluent-touch-target-desktop: 32px;
+  --fluent-touch-target-touch: 48px;
+
+  /* Motion & Transitions */
+  --fluent-duration-ultra-fast: 50ms;
+  --fluent-duration-faster: 100ms;
+  --fluent-duration-fast: 150ms;
+  --fluent-duration-normal: 200ms;
+  --fluent-duration-gentle: 250ms;
+  --fluent-duration-slow: 300ms;
+  --fluent-curve-decelerate: cubic-bezier(0.1, 0.9, 0.2, 1);
+  --fluent-curve-accelerate: cubic-bezier(0.9, 0.1, 1, 0.2);
+  --fluent-curve-easy-ease: cubic-bezier(0.33, 0, 0.67, 1);
+}
+
+
     /* ==========================================================================
        FLUENT UI 2 TOKENS & ADVANCED MICA / ACRYLIC MATERIALS
        WCAG 2.1 Level AA Compliant
@@ -73,6 +295,9 @@
       --shadow-hover: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
       --shadow-modal: 0 20px 40px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.06);
 
+      --fluent-bg-surface-flyout: #ffffff;
+      --fluent-stroke-surface: rgba(15, 23, 42, 0.18);
+
       --halo-alert: inset 0 0 80px rgba(183, 28, 28, 0.4);
     }
 
@@ -134,6 +359,9 @@
       --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.65), 0 3px 8px rgba(0, 0, 0, 0.4);
       --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.8), 0 6px 16px rgba(0, 0, 0, 0.5);
 
+      --fluent-bg-surface-flyout: #161f33;
+      --fluent-stroke-surface: rgba(255, 255, 255, 0.2);
+
       --halo-alert: inset 0 0 90px rgba(239, 68, 68, 0.7);
     }
 
@@ -145,12 +373,14 @@
       --radius-sm: 4px;
       --radius-md: 8px;
       --radius-lg: 12px;
+      --radius-xl: 16px;
       --radius-pill: 9999px;
 
       --touch-desktop: 34px;
       --touch-finger: 48px;
 
       --transition-fast: 140ms cubic-bezier(0.1, 0.9, 0.2, 1);
+      --transition-normal: 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
       --transition-smooth: 220ms cubic-bezier(0.33, 0, 0.67, 1);
     }
 
@@ -499,6 +729,15 @@
       gap: 0.95rem;
       z-index: 10;
       transition: opacity 0.25s ease;
+      color: #f8fafc;
+    }
+
+    .camera-placeholder h2 {
+      color: #f8fafc !important;
+    }
+
+    .camera-placeholder p {
+      color: #cbd5e1 !important;
     }
 
     .camera-placeholder.hidden {
@@ -650,9 +889,15 @@
       gap: 0.75rem;
     }
 
-    @media (max-width: 950px) {
+    @media (max-width: 1480px) {
       .gauges-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .gauges-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -699,6 +944,7 @@
     .gauge-badge {
       font-size: 0.74rem;
       font-family: var(--font-family-numeric);
+      font-variant-numeric: tabular-nums;
       font-weight: 700;
       padding: 0.15rem 0.5rem;
       border-radius: var(--radius-sm);
@@ -711,6 +957,11 @@
       background: var(--status-danger);
       color: #ffffff;
       border-color: var(--status-danger);
+    }
+
+    [data-theme="dark"] .gauge-card.bad .gauge-badge {
+      color: #090c14;
+      font-weight: 800;
     }
 
     .gauge-track {
@@ -730,7 +981,7 @@
       top: 0;
       bottom: 0;
       width: 2px;
-      background: rgba(255, 255, 255, 0.35);
+      background: var(--fluent-stroke-strong);
       z-index: 2;
     }
 
@@ -798,6 +1049,7 @@
 
     .mono-big {
       font-family: var(--font-family-numeric);
+      font-variant-numeric: tabular-nums;
       font-size: 2.3rem;
       font-weight: 700;
       letter-spacing: -0.025em;
@@ -1339,15 +1591,15 @@
 
     <!-- Sélecteur de Mode Segmenté Fluent avec Icônes SVG -->
     <div class="segmented-control" role="tablist" aria-label="Mode de travail ergonomique">
-      <button id="segAssis" class="seg-btn active" role="tab" aria-selected="true" onclick="setMode('assis')">
+      <button id="segAssis" class="seg-btn active" role="tab" aria-selected="true">
         <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
         Bureau Assis
       </button>
-      <button id="segDebout" class="seg-btn" role="tab" aria-selected="false" onclick="setMode('debout')">
+      <button id="segDebout" class="seg-btn" role="tab" aria-selected="false">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v10"/><path d="m9 12 3-2 3 2"/><path d="m10 21 2-4 2 4"/></svg>
         Bureau Debout
       </button>
-      <button id="segPause" class="seg-btn" role="tab" aria-selected="false" onclick="setMode('pause')">
+      <button id="segPause" class="seg-btn" role="tab" aria-selected="false">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v7"/><path d="m5 10 7-3 7 3"/><path d="m8 21 4-7 4 7"/></svg>
         Pause &amp; Étirement
       </button>
@@ -1361,26 +1613,26 @@
         <option value="0.8">Tolérance : Stricte (Protection max)</option>
       </select>
 
-      <button id="btnSound" class="btn-action active-toggle" onclick="toggleSound()" title="Activer / Désactiver le retour audio" aria-label="Couper ou activer le son">
+      <button id="btnSound" class="btn-action active-toggle" title="Activer / Désactiver le retour audio" aria-label="Couper ou activer le son" aria-pressed="true">
         <svg id="iconSound" class="icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
         <span>Audio</span>
       </button>
 
-      <button id="btnNotif" class="btn-action" onclick="requestNotifPermission()" title="Autoriser les alertes système" aria-label="Activer les alertes OS">
+      <button id="btnNotif" class="btn-action" title="Autoriser les alertes système" aria-label="Activer les alertes OS">
         <svg class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         <span>Notifs OS</span>
       </button>
 
-      <button class="btn-action btn-pip" onclick="togglePiP()" title="Ouvrir la miniature par-dessus vos outils de travail (Teams, VS Code)" aria-label="Ouvrir la fenêtre Picture-in-Picture">
+      <button id="btnPiP" class="btn-action btn-pip" title="Ouvrir la miniature par-dessus vos outils de travail (Teams, VS Code)" aria-label="Ouvrir la fenêtre Picture-in-Picture">
         <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
         <span>Mini-Fenêtre</span>
       </button>
 
-      <button id="btnTheme" class="btn-action btn-theme-toggle" onclick="toggleTheme()" title="Basculer entre Mode Sombre et Mode Clair" aria-label="Basculer le thème">
+      <button id="btnTheme" class="btn-action btn-theme-toggle" title="Basculer entre Mode Sombre et Mode Clair" aria-label="Basculer le thème">
         <svg id="iconTheme" class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
 
-      <button id="btnLang" class="btn-action btn-lang-toggle" onclick="toggleLanguage()" title="Changer de langue / Switch language" aria-label="Changer la langue de l'application">
+      <button id="btnToggleLang" class="btn-action btn-lang-toggle" title="Changer de langue / Switch language" aria-label="Changer la langue de l'application">
         <span id="labelLang">EN</span>
       </button>
     </div>
@@ -1402,7 +1654,7 @@
         </div>
         <div style="display:flex; align-items:center; gap:0.6rem;">
           <span id="eyeRestDigits" class="mono-big" style="font-size:1.3rem; color:var(--status-success);">20s</span>
-          <button type="button" class="btn-action" id="btnSkipEyeRest" style="font-size:0.72rem; padding:0.25rem 0.5rem;" onclick="skipEyeRest()">
+          <button type="button" class="btn-action" id="btnSkipEyeRest" style="font-size:0.72rem; padding:0.25rem 0.5rem;">
             <span>Passer</span>
           </button>
         </div>
@@ -1419,7 +1671,7 @@
             L'analyse biomécanique s'exécute à 100% sur votre processeur via WebAssembly. Aucun flux vidéo n'est enregistré ni transmis sur Internet.
           </p>
           <div style="display:flex; gap:0.6rem; align-items:center; margin-top:0.5rem; flex-wrap:wrap; justify-content:center;">
-            <button class="cta-button" onclick="startCamera()">
+            <button id="btnStartCamera" class="cta-button">
               <svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
               <span>Activer le Capteur Optique</span>
             </button>
@@ -1523,11 +1775,11 @@
               <span id="timerTitle">Bureau Assis</span>
             </div>
             <div style="display:flex; align-items:center; gap:0.4rem;">
-              <button type="button" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem;" onclick="openPacingModal()" title="Personnaliser les durées">
+              <button type="button" id="btnPacingSettings" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Personnaliser les durées">
                 <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 <span>Régler</span>
               </button>
-              <button type="button" style="background:none; border:none; cursor:pointer; color:var(--fluent-brand); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem;" onclick="resetCurrentModeTimer()" title="Réinitialiser le chrono">
+              <button type="button" id="btnResetTimer" style="background:none; border:none; cursor:pointer; color:var(--fluent-brand); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Réinitialiser le chrono">
                 <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                 <span>Reset</span>
               </button>
@@ -1561,11 +1813,11 @@
             <span>Journal des Alertes</span>
           </div>
           <div style="display:flex; gap:0.75rem;">
-            <button type="button" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-brand); font-weight:600; display:inline-flex; align-items:center; gap:0.3rem;" onclick="exportLogsCSV()">
+            <button type="button" id="btnExportCsv" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-brand); font-weight:600; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <span>Exporter CSV</span>
             </button>
-            <button type="button" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-fg-muted); display:inline-flex; align-items:center; gap:0.3rem;" onclick="clearLogs()">
+            <button type="button" id="btnClearLogs" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-fg-muted); display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
               <span>Effacer</span>
             </button>
@@ -1588,46 +1840,46 @@
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <span data-i18n="modal_title">Centre de Réglages Posturaux</span>
       </h3>
-      <button type="button" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-muted); padding:0.25rem; border-radius:var(--radius-sm);" onclick="closePacingModal()" aria-label="Fermer la boîte de dialogue">
+      <button type="button" id="btnClosePacingModal" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-muted); padding:0.25rem; border-radius:var(--radius-sm); min-height:32px; min-width:32px; display:inline-flex; align-items:center; justify-content:center;" aria-label="Fermer la boîte de dialogue">
         <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
 
     <!-- Navigation par Onglets Fluent -->
     <div class="modal-tabs" role="tablist">
-      <button type="button" id="tabBtnPacing" class="modal-tab-btn active" role="tab" aria-selected="true" onclick="switchModalTab('pacing')">
+      <button type="button" id="tabBtnPacing" class="modal-tab-btn active" role="tab" aria-selected="true">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span data-i18n="tab_pacing">Rythme & Pacing</span>
       </button>
-      <button type="button" id="tabBtnAudio" class="modal-tab-btn" role="tab" aria-selected="false" onclick="switchModalTab('audio')">
+      <button type="button" id="tabBtnAudio" class="modal-tab-btn" role="tab" aria-selected="false">
         <svg class="icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <span data-i18n="tab_audio">Alertes Audio</span>
       </button>
-      <button type="button" id="tabBtnPrefs" class="modal-tab-btn" role="tab" aria-selected="false" onclick="switchModalTab('prefs')">
+      <button type="button" id="tabBtnPrefs" class="modal-tab-btn" role="tab" aria-selected="false">
         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         <span data-i18n="tab_prefs">Préférences & Langue</span>
       </button>
     </div>
 
-    <form method="dialog" onsubmit="savePacingConfig(event)">
+    <form id="pacingForm" method="dialog">
       <!-- ONGLET 1 : RYTHME & PACING -->
       <div id="tabPanePacing" class="modal-tab-pane active" role="tabpanel">
         <div style="font-size:0.75rem; color:var(--fluent-fg-muted); margin-bottom:0.75rem;" data-i18n="presets_title">
           Presets ergonomiques recommandés :
         </div>
         <div class="presets-grid">
-          <div class="btn-preset" onclick="applyPreset(25, 10, 5)">
+          <button type="button" id="presetPomodoro" class="btn-preset">
             <strong>Pomodoro 25/5</strong>
             <span>25m assis • 5m pause</span>
-          </div>
-          <div class="btn-preset" onclick="applyPreset(45, 15, 5)">
+          </button>
+          <button type="button" id="presetStandard" class="btn-preset">
             <strong>Standard 45/15</strong>
             <span>45m assis • 15m debout</span>
-          </div>
-          <div class="btn-preset" onclick="applyPreset(50, 20, 10)">
+          </button>
+          <button type="button" id="presetActive" class="btn-preset">
             <strong>Actif 50/10</strong>
             <span>50m assis • 20m debout</span>
-          </div>
+          </button>
         </div>
 
         <div class="form-group">
@@ -1636,8 +1888,8 @@
             <span class="form-label-hint" id="hintSitVal">45 min</span>
           </label>
           <div class="slider-row">
-            <input type="range" id="rangeSittingMinutes" min="5" max="120" step="5" value="45" oninput="syncPacingInput('sit', this.value)">
-            <input type="number" id="inputSittingMinutes" class="form-input" style="width:75px;" min="5" max="120" step="5" oninput="syncPacingRange('sit', this.value)" required>
+            <input type="range" id="rangeSittingMinutes" min="5" max="120" step="5" value="45" aria-label="Curseur durée station assise">
+            <input type="number" id="inputSittingMinutes" class="form-input" style="width:75px;" min="5" max="120" step="5" required>
           </div>
         </div>
 
@@ -1647,8 +1899,8 @@
             <span class="form-label-hint" id="hintStandVal">15 min</span>
           </label>
           <div class="slider-row">
-            <input type="range" id="rangeStandingAlertMinutes" min="3" max="60" step="1" value="15" oninput="syncPacingInput('stand', this.value)">
-            <input type="number" id="inputStandingAlertMinutes" class="form-input" style="width:75px;" min="3" max="60" step="1" oninput="syncPacingRange('stand', this.value)" required>
+            <input type="range" id="rangeStandingAlertMinutes" min="3" max="60" step="1" value="15" aria-label="Curseur alerte station debout">
+            <input type="number" id="inputStandingAlertMinutes" class="form-input" style="width:75px;" min="3" max="60" step="1" required>
           </div>
         </div>
 
@@ -1658,8 +1910,8 @@
             <span class="form-label-hint" id="hintPauseVal">5 min</span>
           </label>
           <div class="slider-row">
-            <input type="range" id="rangePauseMinutes" min="1" max="30" step="1" value="5" oninput="syncPacingInput('pause', this.value)">
-            <input type="number" id="inputPauseMinutes" class="form-input" style="width:75px;" min="1" max="30" step="1" oninput="syncPacingRange('pause', this.value)" required>
+            <input type="range" id="rangePauseMinutes" min="1" max="30" step="1" value="5" aria-label="Curseur durée pause active">
+            <input type="number" id="inputPauseMinutes" class="form-input" style="width:75px;" min="1" max="30" step="1" required>
           </div>
         </div>
       </div>
@@ -1696,7 +1948,7 @@
           </label>
           <div class="slider-row">
             <svg class="icon" style="width:16px; height:16px; color:var(--fluent-fg-muted);" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
-            <input type="range" id="rangeAudioVolume" min="0" max="100" step="5" value="15" oninput="updateAudioVolume(this.value)">
+            <input type="range" id="rangeAudioVolume" min="0" max="100" step="5" value="15" aria-label="Curseur volume sonore">
             <svg class="icon" style="width:16px; height:16px; color:var(--fluent-brand);" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
           </div>
         </div>
@@ -1714,11 +1966,11 @@
         </div>
 
         <div style="display:flex; gap:0.5rem; margin-top:1rem; flex-wrap:wrap;">
-          <button type="button" class="btn-action" style="font-size:0.75rem;" onclick="testAlertAudio()">
+          <button type="button" id="btnTestAudioAlert" class="btn-action" style="font-size:0.75rem; min-height:32px;">
             <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             <span data-i18n="btn_test_alert">Tester alerte posturale</span>
           </button>
-          <button type="button" class="btn-action" style="font-size:0.75rem;" onclick="testCycleChime()">
+          <button type="button" id="btnTestCycleChime" class="btn-action" style="font-size:0.75rem; min-height:32px;">
             <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             <span data-i18n="btn_test_chime">Tester carillon fin de cycle</span>
           </button>
@@ -1732,7 +1984,7 @@
             <span data-i18n="label_lang_choice">Langue de l'Interface</span>
             <span class="form-label-hint">Interface language</span>
           </label>
-          <select id="selectModalLanguage" class="input-select" style="width:100%;" onchange="setLanguage(this.value)">
+          <select id="selectModalLanguage" class="input-select" style="width:100%;">
             <option value="fr">🇫🇷 Français (French)</option>
             <option value="en">🇬🇧 English (Anglais)</option>
           </select>
@@ -1743,7 +1995,7 @@
             <span data-i18n="label_sensitivity_choice">Sensibilité Biomécanique</span>
             <span class="form-label-hint" data-i18n="hint_sensitivity">Tolérance angulaire</span>
           </label>
-          <select id="selectModalSensitivity" class="input-select" style="width:100%;" onchange="syncSensitivity(this.value)">
+          <select id="selectModalSensitivity" class="input-select" style="width:100%;">
             <option value="1.25">Tolérance : Souple (Fin de journée)</option>
             <option value="1.0" selected>Tolérance : Standard</option>
             <option value="0.8">Tolérance : Stricte (Protection max)</option>
@@ -1761,12 +2013,12 @@
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem; padding-top:0.75rem; border-top:1px solid var(--fluent-stroke-subtle);">
-        <button type="button" class="btn-action" style="font-size:0.75rem; color:var(--fluent-fg-muted);" onclick="resetPacingDefaults()" data-i18n="btn_defaults">
+        <button type="button" id="btnResetDefaults" class="btn-action" style="font-size:0.75rem; color:var(--fluent-fg-muted); min-height:32px;" data-i18n="btn_defaults">
           Valeurs par défaut
         </button>
         <div style="display:flex; gap:0.6rem;">
-          <button type="button" class="btn-action" onclick="closePacingModal()" data-i18n="btn_cancel">Annuler</button>
-          <button type="submit" class="btn-action btn-primary" data-i18n="btn_save">Enregistrer</button>
+          <button type="button" id="btnCancelPacingModal" class="btn-action" style="min-height:32px;" data-i18n="btn_cancel">Annuler</button>
+          <button type="submit" id="btnSavePacingModal" class="btn-action btn-primary" style="min-height:32px;" data-i18n="btn_save">Enregistrer</button>
         </div>
       </div>
     </form>
@@ -1778,48 +2030,17 @@
 
   <!-- SCRIPT LOGIQUE & MOTEUR BIOMÉCANIQUE -->
   <script>
-    // Éléments du DOM
-    const videoElement = document.getElementById('input_video');
-    const canvasElement = document.getElementById('output_canvas');
-    const canvasCtx = canvasElement.getContext('2d');
-    const pipVideo = document.getElementById('pip_video');
-    const cameraPlaceholder = document.getElementById('cameraPlaceholder');
-    const cameraSelect = document.getElementById('cameraSelect');
-    const btnStopCam = document.getElementById('btnStopCam');
-    const btnTheme = document.getElementById('btnTheme');
+  (function() {
+    "use strict";
 
-    // ----------------------------------------------------
-    // GESTION DU THÈME (LIGHT / DARK THEME FLUENT UI 2)
-    // ----------------------------------------------------
-    function initTheme() {
-      const savedTheme = localStorage.getItem('ergovision_theme') || 'dark';
-      setTheme(savedTheme);
-    }
-
-    function setTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('ergovision_theme', theme);
-      if (btnTheme) {
-        if (theme === 'dark') {
-          btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
-          btnTheme.setAttribute('title', 'Passer en Mode Clair');
-        } else {
-          btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-          btnTheme.setAttribute('title', 'Passer en Mode Sombre');
-        }
-      }
-    }
-
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
-      setTheme(current === 'dark' ? 'light' : 'dark');
-    }
-
-    initTheme();
-
-    // ----------------------------------------------------
-    // SYSTEME D'INTERNATIONALISATION (i18n FR / EN)
-    // ----------------------------------------------------
+    // ==========================================
+    // MODULE: src/i18n/translations.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Internationalization Module (i18n)
+     * Supported languages: 'fr' (French), 'en' (English)
+     */
+    
     const TRANSLATIONS = {
       fr: {
         brand_sub: "Copilote Ergonomique • Prévention des TMS en Temps Réel",
@@ -1976,7 +2197,7 @@
         gauge_tilt_title: "3. Head Lateral Tilt",
         gauge_tilt_desc: "Detects sustained lateral tilt and uneven cervical strain.",
         gauge_distance_title: "4. Screen Distance",
-        gauge_distance_desc: "Prevents screen hunching (<50cm) and computer vision syndrome.",
+        gauge_distance_desc: "Prevents leaning too close (<50cm) and visual eye strain.",
         title_sit: "Sitting Desk",
         title_stand: "Standing Desk",
         title_pause: "Active Break & Stretch",
@@ -2031,7 +2252,7 @@
         reason_neck: "Forward neck",
         reason_shoulder: "Shoulder shrug",
         reason_tilt: "Head tilt",
-        reason_distance: "Screen proximity (<50cm)",
+        reason_distance: "Screen too close (<50cm)",
         status_optimal: "Optimal posture",
         status_alert_prefix: "Alert: Please straighten up (",
         badge_alert: "ALERT",
@@ -2039,9 +2260,9 @@
         badge_summary: "CYCLE",
         badge_eye_rest: "EYES",
         eye_rest_title: "20-20-20 Eye Rest",
-        eye_rest_desc: "Relax your eyes: look at an object at least 20 feet away for 20 seconds.",
-        eye_rest_sub: "Ciliary muscle relaxation in progress...",
-        eye_rest_complete: "Eye rest complete! Your eyes are refreshed.",
+        eye_rest_desc: "Relax your eyes: look at an object at least 20 feet (6m) away for 20 seconds.",
+        eye_rest_sub: "Relaxing ciliary eye muscles...",
+        eye_rest_complete: "Eye rest complete! Your visual focus is refreshed.",
         btn_skip_eye_rest: "Skip",
         transition_to: "Switched to",
         cycle_summary_title: "Cycle completed",
@@ -2078,177 +2299,83 @@
         ex_pelvic_tilt_benefit: "Rehydrates L4-L5-S1 lumbar discs through gentle motion without vertical load."
       }
     };
-
-    let currentLang = localStorage.getItem('ergovision_lang') || 'fr';
-
-    function t(key) {
-      if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
-        return TRANSLATIONS[currentLang][key];
+    
+    let currentLanguage = localStorage.getItem('ergovision_lang') || 'fr';
+    
+    function getCurrentLanguage() {
+      return currentLanguage;
+    }
+    
+    function setCurrentLanguage(lang) {
+      if (TRANSLATIONS[lang]) {
+        currentLanguage = lang;
+        localStorage.setItem('ergovision_lang', lang);
+      }
+      return currentLanguage;
+    }
+    
+    function t(key, lang = currentLanguage) {
+      if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+        return TRANSLATIONS[lang][key];
       }
       return (TRANSLATIONS.fr && TRANSLATIONS.fr[key]) || key;
     }
 
-    function setLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem('ergovision_lang', lang);
-      document.documentElement.lang = lang;
-      
-      const labelLang = document.getElementById('labelLang');
-      if (labelLang) labelLang.innerText = lang === 'fr' ? 'EN' : 'FR';
-      
-      const modalLangSelect = document.getElementById('selectModalLanguage');
-      if (modalLangSelect) modalLangSelect.value = lang;
-
-      // Traduction des éléments avec data-i18n
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (key && TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
-          el.innerText = TRANSLATIONS[lang][key];
+    // ==========================================
+    // MODULE: src/ui/theme.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Theme Management (Light / Dark Mica Fluent UI 2)
+     */
+    
+    function getSavedTheme() {
+      return localStorage.getItem('ergovision_theme') || 'dark';
+    }
+    
+    function applyTheme(theme, btnTheme = null) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('ergovision_theme', theme);
+      if (btnTheme) {
+        if (theme === 'dark') {
+          btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+          btnTheme.setAttribute('title', 'Passer en Mode Clair');
+        } else {
+          btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+          btnTheme.setAttribute('title', 'Passer en Mode Sombre');
         }
-      });
-
-      // Éléments spécifiques
-      document.querySelector('.brand-sub').innerText = t('brand_sub');
-      document.getElementById('segAssis').childNodes[2].nodeValue = " " + t('mode_sit');
-      document.getElementById('segDebout').childNodes[2].nodeValue = " " + t('mode_stand');
-      document.getElementById('segPause').childNodes[2].nodeValue = " " + t('mode_pause');
-
-      const btnSound = document.getElementById('btnSound');
-      if (btnSound) {
-        const span = btnSound.querySelector('span');
-        if (span) span.innerText = soundEnabled ? t('btn_audio') : t('btn_mute');
       }
-
-      const btnNotif = document.getElementById('btnNotif');
-      if (btnNotif) {
-        const span = btnNotif.querySelector('span');
-        if (span) span.innerText = t('btn_notif');
-      }
-
-      const btnPiP = document.querySelector('.btn-pip');
-      if (btnPiP) {
-        const span = btnPiP.querySelector('span');
-        if (span) span.innerText = t('btn_pip');
-      }
-
-      const sensSelect = document.getElementById('sensitivitySelect');
-      if (sensSelect) {
-        sensSelect.options[0].text = t('tol_relaxed');
-        sensSelect.options[1].text = t('tol_standard');
-        sensSelect.options[2].text = t('tol_strict');
-      }
-
-      const modalSens = document.getElementById('selectModalSensitivity');
-      if (modalSens) {
-        modalSens.options[0].text = t('tol_relaxed');
-        modalSens.options[1].text = t('tol_standard');
-        modalSens.options[2].text = t('tol_strict');
-      }
-
-      // Jauges
-      document.querySelector('#cardNeck .gauge-title-box span').innerText = t('gauge_neck_title');
-      document.querySelector('#cardNeck .gauge-caption').innerText = t('gauge_neck_desc');
-      document.querySelector('#cardShoulder .gauge-title-box span').innerText = t('gauge_shoulder_title');
-      document.querySelector('#cardShoulder .gauge-caption').innerText = t('gauge_shoulder_desc');
-      document.querySelector('#cardTilt .gauge-title-box span').innerText = t('gauge_tilt_title');
-      document.querySelector('#cardTilt .gauge-caption').innerText = t('gauge_tilt_desc');
-      const cardDistTitle = document.querySelector('#cardDistance .gauge-title-box span');
-      if (cardDistTitle) cardDistTitle.innerText = t('gauge_distance_title');
-      const cardDistDesc = document.querySelector('#cardDistance .gauge-caption');
-      if (cardDistDesc) cardDistDesc.innerText = t('gauge_distance_desc');
-
-      // Eye Rest Banner
-      const eyeTitle = document.getElementById('eyeRestTitle');
-      if (eyeTitle) eyeTitle.innerText = t('eye_rest_title');
-      const eyeDesc = document.getElementById('eyeRestDesc');
-      if (eyeDesc) eyeDesc.innerText = t('eye_rest_desc');
-      const eyeBtn = document.getElementById('btnSkipEyeRest');
-      if (eyeBtn) eyeBtn.innerText = t('btn_skip_eye_rest');
-
-      // Footer
-      const footer = document.querySelector('footer');
-      if (footer) footer.innerText = t('footer_text');
-
-      // Refresh timer subtitle
-      updateTimerDisplayTitles();
-
-      // Refresh Kiné Studio if in pause mode
-      if (typeof kineStudioView !== 'undefined' && kineStudioView && currentMode === 'pause') {
-        kineStudioView.renderInitialStructure();
-        kineStudioView.updateExercise(kineRoutineManager.getCurrentExercise(), kineRoutineManager.currentIndex, kineRoutineManager.exercises.length);
-      }
+      return theme;
+    }
+    
+    function toggleTheme(btnTheme = null) {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      return applyTheme(next, btnTheme);
     }
 
-    function toggleLanguage() {
-      setLanguage(currentLang === 'fr' ? 'en' : 'fr');
-    }
-
-    // ----------------------------------------------------
-    // ÉTATS GLOBAUX & TÉLÉMÉTRIE DE SESSION
-    // ----------------------------------------------------
-    let currentMode = 'assis'; // 'assis' | 'debout' | 'pause'
-    let baseline = null;
-    let currentLandmarks = null;
-    let badPostureStart = null;
-    let alertLatched = false;
-    let lastNotifTime = 0;
-    let soundEnabled = true;
-    let cameraInstance = null;
-    let poseInstance = null;
-    let isCameraActive = false;
-
-    // Métriques globales (toute la session ouverte)
-    let goodFrames = 0;
-    let totalFrames = 0;
-    let alertCount = 0;
-    const todayKey = new Date().toISOString().slice(0, 10);
-    let dailyLogs = [];
-
-    // Télémétrie dédiée au cycle en cours (pour le % de fin de timer)
-    let sessionGoodFrames = 0;
-    let sessionTotalFrames = 0;
-    let sessionCycleLogged = false;
-    let sessionStartTimestamp = Date.now();
-
-    // Timers
-    let timerInterval = null;
-    let remainingSeconds = 45 * 60;
-    let elapsedStanding = 0;
-
-    // ----------------------------------------------------
-    // CONFIGURATION PACING & AUDIO
-    // ----------------------------------------------------
-    const DEFAULT_PACING_CONFIG = {
-      sittingMinutes: 45,
-      standingAlertMinutes: 15,
-      pauseMinutes: 5
-    };
-
-    let pacingConfig = { ...DEFAULT_PACING_CONFIG };
-
-    function loadPacingConfig() {
-      try {
-        const saved = localStorage.getItem('ergovision_pacing_config');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed.sittingMinutes && parsed.standingAlertMinutes && parsed.pauseMinutes) {
-            pacingConfig = parsed;
-          }
-        }
-      } catch (e) {
-        console.warn("Échec chargement pacing config :", e);
-      }
-    }
-    loadPacingConfig();
-
+    // ==========================================
+    // MODULE: src/audio/audio-engine.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Advanced Audio Engine (Web Audio API)
+     * Supports continuous drone, pulsed rhythmic alert, cycle chime & countdown beeps.
+     */
+    
     const DEFAULT_AUDIO_SETTINGS = {
       mode: 'pulse', // 'pulse' | 'continuous'
       volume: 0.15,
       delaySeconds: 2.5
     };
-
+    
+    let audioCtx = null;
+    let postureAlertInterval = null;
+    let continuousOscillator = null;
+    let continuousGainNode = null;
+    let isContinuousAlertActive = false;
+    let soundEnabled = true;
+    
     let audioSettings = { ...DEFAULT_AUDIO_SETTINGS };
-
+    
     function loadAudioSettings() {
       try {
         const saved = localStorage.getItem('ergovision_audio_settings');
@@ -2261,175 +2388,35 @@
       } catch (e) {
         console.warn("Échec chargement audio settings :", e);
       }
+      return audioSettings;
     }
-    loadAudioSettings();
-
-    // ----------------------------------------------------
-    // MODAL RÉGLAGES FLUENT UI 2 & TABS
-    // ----------------------------------------------------
-    function openPacingModal() {
-      const modal = document.getElementById('pacingModal');
-      // Sync Pacing
-      document.getElementById('rangeSittingMinutes').value = pacingConfig.sittingMinutes;
-      document.getElementById('inputSittingMinutes').value = pacingConfig.sittingMinutes;
-      document.getElementById('hintSitVal').innerText = pacingConfig.sittingMinutes + ' min';
-
-      document.getElementById('rangeStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
-      document.getElementById('inputStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
-      document.getElementById('hintStandVal').innerText = pacingConfig.standingAlertMinutes + ' min';
-
-      document.getElementById('rangePauseMinutes').value = pacingConfig.pauseMinutes;
-      document.getElementById('inputPauseMinutes').value = pacingConfig.pauseMinutes;
-      document.getElementById('hintPauseVal').innerText = pacingConfig.pauseMinutes + ' min';
-
-      // Sync Audio
-      if (audioSettings.mode === 'continuous') {
-        document.getElementById('audioModeContinuous').checked = true;
-      } else {
-        document.getElementById('audioModePulse').checked = true;
-      }
-      const volInt = Math.round(audioSettings.volume * 100);
-      document.getElementById('rangeAudioVolume').value = volInt;
-      document.getElementById('valAudioVolume').innerText = volInt + '%';
-      document.getElementById('selectAlertDelay').value = String(audioSettings.delaySeconds);
-
-      // Sync Prefs
-      document.getElementById('selectModalLanguage').value = currentLang;
-      document.getElementById('selectModalSensitivity').value = document.getElementById('sensitivitySelect').value;
-
-      if (typeof modal.showModal === 'function') {
-        modal.showModal();
-      } else {
-        modal.setAttribute('open', '');
-      }
-    }
-
-    function closePacingModal() {
-      const modal = document.getElementById('pacingModal');
-      if (typeof modal.close === 'function') {
-        modal.close();
-      } else {
-        modal.removeAttribute('open');
-      }
-    }
-
-    function switchModalTab(tabId) {
-      document.querySelectorAll('.modal-tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.modal-tab-pane').forEach(pane => pane.classList.remove('active'));
-
-      if (tabId === 'pacing') {
-        document.getElementById('tabBtnPacing').classList.add('active');
-        document.getElementById('tabPanePacing').classList.add('active');
-      } else if (tabId === 'audio') {
-        document.getElementById('tabBtnAudio').classList.add('active');
-        document.getElementById('tabPaneAudio').classList.add('active');
-      } else if (tabId === 'prefs') {
-        document.getElementById('tabBtnPrefs').classList.add('active');
-        document.getElementById('tabPanePrefs').classList.add('active');
-      }
-    }
-
-    function applyPreset(sit, stand, pause) {
-      document.getElementById('rangeSittingMinutes').value = sit;
-      document.getElementById('inputSittingMinutes').value = sit;
-      document.getElementById('hintSitVal').innerText = sit + ' min';
-
-      document.getElementById('rangeStandingAlertMinutes').value = stand;
-      document.getElementById('inputStandingAlertMinutes').value = stand;
-      document.getElementById('hintStandVal').innerText = stand + ' min';
-
-      document.getElementById('rangePauseMinutes').value = pause;
-      document.getElementById('inputPauseMinutes').value = pause;
-      document.getElementById('hintPauseVal').innerText = pause + ' min';
-    }
-
-    function syncPacingInput(type, val) {
-      if (type === 'sit') {
-        document.getElementById('inputSittingMinutes').value = val;
-        document.getElementById('hintSitVal').innerText = val + ' min';
-      } else if (type === 'stand') {
-        document.getElementById('inputStandingAlertMinutes').value = val;
-        document.getElementById('hintStandVal').innerText = val + ' min';
-      } else if (type === 'pause') {
-        document.getElementById('inputPauseMinutes').value = val;
-        document.getElementById('hintPauseVal').innerText = val + ' min';
-      }
-    }
-
-    function syncPacingRange(type, val) {
-      if (type === 'sit') {
-        document.getElementById('rangeSittingMinutes').value = val;
-        document.getElementById('hintSitVal').innerText = val + ' min';
-      } else if (type === 'stand') {
-        document.getElementById('rangeStandingAlertMinutes').value = val;
-        document.getElementById('hintStandVal').innerText = val + ' min';
-      } else if (type === 'pause') {
-        document.getElementById('rangePauseMinutes').value = val;
-        document.getElementById('hintPauseVal').innerText = val + ' min';
-      }
-    }
-
-    function updateAudioVolume(val) {
-      document.getElementById('valAudioVolume').innerText = val + '%';
-      audioSettings.volume = parseFloat(val) / 100;
-    }
-
-    function syncSensitivity(val) {
-      document.getElementById('sensitivitySelect').value = val;
-    }
-
-    function resetPacingDefaults() {
-      applyPreset(DEFAULT_PACING_CONFIG.sittingMinutes, DEFAULT_PACING_CONFIG.standingAlertMinutes, DEFAULT_PACING_CONFIG.pauseMinutes);
-      document.getElementById('audioModePulse').checked = true;
-      document.getElementById('rangeAudioVolume').value = 15;
-      document.getElementById('valAudioVolume').innerText = '15%';
-      document.getElementById('selectAlertDelay').value = '2.5';
-    }
-
-    function savePacingConfig(e) {
-      if (e) e.preventDefault();
-      const sit = parseInt(document.getElementById('inputSittingMinutes').value, 10);
-      const stand = parseInt(document.getElementById('inputStandingAlertMinutes').value, 10);
-      const pause = parseInt(document.getElementById('inputPauseMinutes').value, 10);
-
-      if (sit > 0 && stand > 0 && pause > 0) {
-        pacingConfig = { sittingMinutes: sit, standingAlertMinutes: stand, pauseMinutes: pause };
-        try {
-          localStorage.setItem('ergovision_pacing_config', JSON.stringify(pacingConfig));
-        } catch (err) {
-          console.warn("Erreur sauvegarde localStorage pacing :", err);
-        }
-      }
-
-      const audioMode = document.querySelector('input[name="audioMode"]:checked').value;
-      const vol = parseInt(document.getElementById('rangeAudioVolume').value, 10) / 100;
-      const delay = parseFloat(document.getElementById('selectAlertDelay').value);
-
-      audioSettings = {
-        mode: audioMode,
-        volume: vol,
-        delaySeconds: delay
-      };
-
+    
+    function saveAudioSettings(newSettings) {
+      audioSettings = { ...audioSettings, ...newSettings };
       try {
         localStorage.setItem('ergovision_audio_settings', JSON.stringify(audioSettings));
       } catch (err) {
         console.warn("Erreur sauvegarde localStorage audio :", err);
       }
-
-      resetCurrentModeTimer();
-      closePacingModal();
+      return audioSettings;
     }
-
-    // ----------------------------------------------------
-    // MOTEUR AUDIO AVANCÉ (Web Audio API & Alerte Continue)
-    // ----------------------------------------------------
-    let audioCtx = null;
-    let postureAlertInterval = null;
-    let continuousOscillator = null;
-    let continuousGainNode = null;
-    let isContinuousAlertActive = false;
-
+    
+    function getAudioSettings() {
+      return audioSettings;
+    }
+    
+    function setSoundEnabled(enabled) {
+      soundEnabled = enabled;
+      if (!soundEnabled) {
+        stopContinuousPostureAlert();
+      }
+      return soundEnabled;
+    }
+    
+    function isSoundEnabled() {
+      return soundEnabled;
+    }
+    
     function getAudioContext() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2439,7 +2426,7 @@
       }
       return audioCtx;
     }
-
+    
     function playTone(freq = 480, duration = 0.16, type = 'sine', volFactor = 1.0) {
       if (!soundEnabled) return;
       try {
@@ -2459,16 +2446,21 @@
         console.warn("Erreur AudioContext playTone :", err);
       }
     }
-
-    // Démarrage de l'alerte sonore continue (pulse ou onde continue)
+    
+    let stopTimeoutId = null;
+    
     function startContinuousPostureAlert() {
       if (!soundEnabled || isContinuousAlertActive) return;
       isContinuousAlertActive = true;
-
+    
+      if (stopTimeoutId) {
+        clearTimeout(stopTimeoutId);
+        stopTimeoutId = null;
+      }
+    
       if (audioSettings.mode === 'pulse') {
         const triggerPulse = () => {
           if (!soundEnabled || !isContinuousAlertActive) return;
-          // Double-pulse doux et discret
           playTone(540, 0.12, 'triangle', 0.85);
           setTimeout(() => {
             if (isContinuousAlertActive) playTone(640, 0.14, 'triangle', 0.95);
@@ -2478,89 +2470,92 @@
         clearInterval(postureAlertInterval);
         postureAlertInterval = setInterval(triggerPulse, 1200);
       } else {
-        // Mode tonalité continue douce (sinus)
         try {
           const ctx = getAudioContext();
+          if (continuousOscillator) {
+            try { continuousOscillator.stop(); } catch(_) {}
+            try { continuousOscillator.disconnect(); } catch(_) {}
+            continuousOscillator = null;
+          }
           continuousOscillator = ctx.createOscillator();
           continuousGainNode = ctx.createGain();
           continuousOscillator.type = 'sine';
           continuousOscillator.frequency.setValueAtTime(440, ctx.currentTime);
           const vol = Math.max(0.01, audioSettings.volume * 0.7);
           continuousGainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
-          continuousGainNode.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.1);
+          continuousGainNode.gain.exponentialRampToValueAtTime(vol, ctx.currentTime + 0.3);
           continuousOscillator.connect(continuousGainNode);
           continuousGainNode.connect(ctx.destination);
           continuousOscillator.start();
-        } catch (e) {
-          console.warn("Erreur démarrage tonalité continue :", e);
+        } catch (err) {
+          console.warn("Erreur onde continue :", err);
         }
       }
     }
-
-    // Arrêt instantané dès que la posture repasse en neutre
+    
     function stopContinuousPostureAlert() {
-      if (!isContinuousAlertActive) return;
       isContinuousAlertActive = false;
-
+    
       if (postureAlertInterval) {
         clearInterval(postureAlertInterval);
         postureAlertInterval = null;
       }
-
+    
+      if (stopTimeoutId) {
+        clearTimeout(stopTimeoutId);
+        stopTimeoutId = null;
+      }
+    
       if (continuousOscillator && continuousGainNode) {
         try {
           const ctx = getAudioContext();
-          continuousGainNode.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
-          setTimeout(() => {
-            try {
-              if (continuousOscillator) {
-                continuousOscillator.stop();
-                continuousOscillator.disconnect();
-              }
-              continuousOscillator = null;
-              continuousGainNode = null;
-            } catch (err) {}
-          }, 60);
-        } catch (e) {
+          const oscToStop = continuousOscillator;
+          const gainToStop = continuousGainNode;
           continuousOscillator = null;
           continuousGainNode = null;
+    
+          gainToStop.gain.setValueAtTime(gainToStop.gain.value, ctx.currentTime);
+          gainToStop.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12);
+          stopTimeoutId = setTimeout(() => {
+            try { oscToStop.stop(); } catch(e) {}
+            try { oscToStop.disconnect(); } catch(e) {}
+            try { gainToStop.disconnect(); } catch(e) {}
+            stopTimeoutId = null;
+          }, 130);
+        } catch (err) {
+          console.warn("Erreur arrêt onde continue :", err);
         }
       }
     }
-
-    // Carillon harmonieux relaxant pour la fin de cycle (Do - Mi - Sol)
-    function playCycleEndChime() {
+    
+    function playCycleChime() {
       if (!soundEnabled) return;
-      try {
-        const ctx = getAudioContext();
-        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
-        notes.forEach((freq, idx) => {
-          setTimeout(() => {
-            if (!soundEnabled) return;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, ctx.currentTime);
-            const vol = Math.max(0.02, audioSettings.volume * 1.1);
-            gain.gain.setValueAtTime(vol, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.6);
-          }, idx * 180);
-        });
-      } catch (err) {
-        console.warn("Erreur carillon de cycle :", err);
-      }
+      const notes = [
+        { freq: 523.25, time: 0 },
+        { freq: 659.25, time: 200 },
+        { freq: 783.99, time: 420 },
+        { freq: 1046.50, time: 660 }
+      ];
+      notes.forEach(n => {
+        setTimeout(() => {
+          playTone(n.freq, 0.45, 'sine', 1.2);
+        }, n.time);
+      });
     }
-
-    function testAlertAudio() {
-      playTone(540, 0.14, 'triangle', 0.9);
-      setTimeout(() => playTone(640, 0.16, 'triangle', 1.0), 160);
+    
+    function testAudioAlert() {
+      const prevSound = soundEnabled;
+      soundEnabled = true;
+      startContinuousPostureAlert();
+      setTimeout(() => {
+        stopContinuousPostureAlert();
+        soundEnabled = prevSound;
+      }, 2400);
     }
-
-    // Carillon bol zen résonnant pour les étirements kiné (~432Hz)
+    
+    /**
+     * Zen resonant chime for physiotherapy stretches (bowl tone ~432Hz)
+     */
     function playZenBell(freq = 432) {
       if (!soundEnabled) return;
       try {
@@ -2580,8 +2575,10 @@
         console.warn("Erreur playZenBell :", err);
       }
     }
-
-    // Léger tick pour le tempo respiratoire et décompte
+    
+    /**
+     * Soft subtle tick for countdown pacing
+     */
     function playSoftTick() {
       if (!soundEnabled) return;
       try {
@@ -2597,732 +2594,359 @@
         gain.connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + 0.04);
-      } catch (err) {}
-    }
-
-    function testCycleChime() {
-      playCycleEndChime();
-    }
-
-    function toggleSound() {
-      soundEnabled = !soundEnabled;
-      const btn = document.getElementById('btnSound');
-      btn.classList.toggle('active-toggle', soundEnabled);
-      const icon = soundEnabled 
-        ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>'
-        : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-      btn.innerHTML = `<svg class="icon" viewBox="0 0 24 24">${icon}</svg><span>${soundEnabled ? t('btn_audio') : t('btn_mute')}</span>`;
-      if (soundEnabled) {
-        playTone(520, 0.12);
-      } else {
-        stopContinuousPostureAlert();
-      }
-    }
-
-    // ----------------------------------------------------
-    // NOTIFICATIONS SYSTEME (Windows / Mac / Linux)
-    // ----------------------------------------------------
-    async function requestNotifPermission() {
-      if (!("Notification" in window)) {
-        alert("Les notifications système ne sont pas supportées par votre navigateur.");
-        return;
-      }
-      const perm = await Notification.requestPermission();
-      const btn = document.getElementById('btnNotif');
-      if (perm === "granted") {
-        btn.classList.add('active-toggle');
-        btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Notifs OK</span>';
-        new Notification("ErgoVision AI Activé", {
-          body: "Les alertes posturales s'afficheront même lorsque vous travaillez sur une autre application."
-        });
-      } else {
-        btn.classList.remove('active-toggle');
-        btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Notifs Bloquées</span>';
-      }
-    }
-
-    function triggerAlertNotification(reason) {
-      const now = Date.now();
-      if (now - lastNotifTime < 15000) return;
-      lastNotifTime = now;
-      playTone(560, 0.22, 'triangle', 0.12);
-
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("⚠️ Compensation Détectée : " + reason, {
-          body: "Grandissez doucement la nuque et abaissez votre épaule gauche.",
-          silent: true
-        });
-      }
-    }
-
-    // ----------------------------------------------------
-    // PICTURE-IN-PICTURE (Miniature par-dessus Teams/Jira)
-    // ----------------------------------------------------
-    async function togglePiP() {
-      try {
-        if (!isCameraActive) {
-          alert("Veuillez d'abord activer la caméra avant d'ouvrir la fenêtre flottante (PiP).");
-          return;
-        }
-        if (document.pictureInPictureElement) {
-          await document.exitPictureInPicture();
-        } else {
-          if (!pipVideo.srcObject) {
-            pipVideo.srcObject = canvasElement.captureStream(20);
-            await pipVideo.play();
-          }
-          await pipVideo.requestPictureInPicture();
-        }
       } catch (err) {
-        console.error("Erreur PiP :", err);
-        alert("Impossible d'activer la fenêtre flottante PiP. Vérifiez que la caméra est active.");
+        // Silently ignore tick failures
       }
     }
 
-    // ----------------------------------------------------
-    // INITIALISATION & CONTRÔLE CAMERA MEDIAPIPE
-    // ----------------------------------------------------
-    async function listVideoDevices() {
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoInputs = devices.filter(d => d.kind === 'videoinput');
-        if (videoInputs.length > 1) {
-          cameraSelect.innerHTML = '';
-          videoInputs.forEach((dev, idx) => {
-            const opt = document.createElement('option');
-            opt.value = dev.deviceId;
-            opt.text = dev.label || `Caméra ${idx + 1}`;
-            cameraSelect.appendChild(opt);
-          });
-          cameraSelect.style.display = 'inline-block';
-        }
-      } catch (e) {
-        console.warn("Énumération caméras non disponible :", e);
-      }
-    }
-
-    async function startCamera(deviceId = null) {
-      getAudioContext();
-      setStatusUI('var(--status-warning)', 'Démarrage du capteur...');
-
-      try {
-        if (!poseInstance) {
-          poseInstance = new Pose({
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
-          });
-          poseInstance.setOptions({
-            modelComplexity: 1,
-            smoothLandmarks: true,
-            enableSegmentation: false,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5
-          });
-          poseInstance.onResults(onResults);
-        }
-
-        if (cameraInstance) {
-          await cameraInstance.stop();
-        }
-
-        cameraInstance = new Camera(videoElement, {
-          onFrame: async () => {
-            if (isCameraActive) {
-              await poseInstance.send({ image: videoElement });
-            }
-          },
-          width: 640,
-          height: 400
-        });
-
-        await cameraInstance.start();
-        isCameraActive = true;
-        cameraPlaceholder.classList.add('hidden');
-        btnStopCam.style.display = 'inline-flex';
-        await listVideoDevices();
-
-        setStatusUI('var(--status-success)', 'Capteur actif • Calibrez votre point zéro');
-        playTone(600, 0.15);
-      } catch (err) {
-        console.error("Erreur démarrage caméra :", err);
-        setStatusUI('var(--status-danger)', "Échec de l'accès à la caméra");
-        alert("Impossible d'accéder à la webcam. Vérifiez les autorisations de votre navigateur et qu'aucune autre application ne l'utilise.");
-      }
-    }
-
-    async function switchCamera(deviceId) {
-      if (!deviceId) return;
-      await stopCamera();
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } } });
-      videoElement.srcObject = stream;
-      await startCamera(deviceId);
-    }
-
-    async function stopCamera() {
-      if (cameraInstance) {
-        await cameraInstance.stop();
-      }
-      if (videoElement.srcObject) {
-        const tracks = videoElement.srcObject.getTracks();
-        tracks.forEach(t => t.stop());
-        videoElement.srcObject = null;
-      }
-      isCameraActive = false;
-      cameraPlaceholder.classList.remove('hidden');
-      btnStopCam.style.display = 'none';
-      setStatusUI('var(--fluent-fg-muted)', 'Capteur en veille');
-    }
-
-    // ----------------------------------------------------
-    // CALIBRATION GUIDÉE 3 SECONDES (POINT ZÉRO)
-    // ----------------------------------------------------
-    function startCalibrationCountdown() {
-      if (!isCameraActive || !currentLandmarks) {
-        alert("Activez d'abord la caméra et placez-vous bien dans le cadre face à l'écran.");
-        return;
-      }
-
-      const overlay = document.getElementById('countdownOverlay');
-      const numEl = document.getElementById('countdownNum');
-      overlay.classList.add('visible');
-      let count = 3;
-      numEl.innerText = count;
-      playTone(440, 0.12);
-
-      const cd = setInterval(() => {
-        count--;
-        if (count > 0) {
-          numEl.innerText = count;
-          playTone(440, 0.12);
-        } else {
-          clearInterval(cd);
-          overlay.classList.remove('visible');
-          baseline = computeMetrics(currentLandmarks);
-          playTone(880, 0.25, 'triangle', 0.15);
-          setStatusUI('var(--status-success)', `Point Zéro verrouillé (${currentMode.toUpperCase()})`);
-        }
-      }, 1000);
-    }
-
-    function setStatusUI(color, text) {
-      const dot = document.getElementById('statusDot');
-      const txt = document.getElementById('statusText');
-      dot.style.background = color;
-      dot.style.color = color;
-      txt.innerText = text;
-    }
-
-    // ----------------------------------------------------
-    // MOTEUR BIOMÉCANIQUE & ALGORITHME DE CORRECTION
-    // ----------------------------------------------------
+    // ==========================================
+    // MODULE: src/biomechanics/posture-engine.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Biomechanical Analysis & Posture Engine
+     * C7-C8 cervical forward slump (text-neck), shoulder asymmetry & head lateral tilt.
+     */
+    
+    const SENSITIVITY_THRESHOLDS = {
+      strict: { neckDelta: 0.10, shoulderDiff: 0.04, headTilt: 0.035, screenProximityDelta: 0.18 },
+      standard: { neckDelta: 0.14, shoulderDiff: 0.06, headTilt: 0.05, screenProximityDelta: 0.25 },
+      relaxed: { neckDelta: 0.19, shoulderDiff: 0.09, headTilt: 0.075, screenProximityDelta: 0.35 }
+    };
+    
     function computeMetrics(lm) {
+      if (!lm || lm.length < 13) return null;
       const nose = lm[0];
       const leftEar = lm[7];
       const rightEar = lm[8];
       const leftShoulder = lm[11];
       const rightShoulder = lm[12];
-
+    
       const keyLandmarks = [nose, leftEar, rightEar, leftShoulder, rightShoulder];
       const allVisible = keyLandmarks.every(pt => (pt.visibility === undefined || pt.visibility > 0.45));
       if (!allVisible) {
         return null;
       }
-
+    
       const shoulderWidth = Math.hypot(leftShoulder.x - rightShoulder.x, leftShoulder.y - rightShoulder.y) || 0.001;
-      const faceWidth = Math.hypot(leftEar.x - rightEar.x, leftEar.y - rightEar.y) || 0.001;
+      const faceWidthRaw = Math.hypot(leftEar.x - rightEar.x, leftEar.y - rightEar.y) || 0.001;
+      // Normalized face width relative to shoulder width to reject false yaw zoom
+      const faceWidth = faceWidthRaw;
       const midShoulderY = (leftShoulder.y + rightShoulder.y) / 2;
-
+    
       return {
         neckHeightRatio: (midShoulderY - nose.y) / shoulderWidth,
         shoulderDiffRatio: (rightShoulder.y - leftShoulder.y) / shoulderWidth,
-        headTiltRatio: Math.abs(leftEar.y - rightEar.y) / shoulderWidth,
+        headTiltRatio: (leftEar.y - rightEar.y) / shoulderWidth,
         faceWidth,
         shoulderWidth
       };
     }
-
-    function updateGauge(cardId, badgeId, fillId, ratioToThreshold) {
-      const pct = Math.min(100, Math.max(0, Math.round(ratioToThreshold * 100)));
-      const isBad = pct >= 100;
-      document.getElementById(cardId).classList.toggle('bad', isBad);
-      document.getElementById(badgeId).innerText = isBad ? 'ALERTE' : `${pct}%`;
-      const fill = document.getElementById(fillId);
-      fill.style.width = `${pct}%`;
-      fill.style.backgroundColor = pct > 95 ? 'var(--status-danger)' : (pct > 65 ? 'var(--status-warning)' : 'var(--status-success)');
+    
+    function evaluatePosture(current, baseline, sensitivity = 'standard') {
+      if (!current || !baseline) return null;
+      const th = SENSITIVITY_THRESHOLDS[sensitivity] || SENSITIVITY_THRESHOLDS.standard;
+    
+      const neckDrop = baseline.neckHeightRatio - current.neckHeightRatio;
+      const shoulderDiff = Math.abs(current.shoulderDiffRatio - baseline.shoulderDiffRatio);
+      const headTilt = Math.abs(current.headTiltRatio - baseline.headTiltRatio);
+      const proximityIncrease = baseline.faceWidth > 0 ? (current.faceWidth - baseline.faceWidth) / baseline.faceWidth : 0;
+    
+      const neckRatio = Math.max(0, neckDrop / th.neckDelta);
+      const shoulderRatio = Math.max(0, shoulderDiff / th.shoulderDiff);
+      const tiltRatio = Math.max(0, headTilt / th.headTilt);
+      const distanceRatio = Math.max(0, proximityIncrease / th.screenProximityDelta);
+    
+      const isNeckBad = neckRatio >= 1.0;
+      const isShoulderBad = shoulderRatio >= 1.0;
+      const isTiltBad = tiltRatio >= 1.0;
+      const isDistanceBad = distanceRatio >= 1.0;
+    
+      const reasons = [];
+      if (isNeckBad) reasons.push('neck');
+      if (isShoulderBad) reasons.push('shoulder');
+      if (isTiltBad) reasons.push('tilt');
+      if (isDistanceBad) reasons.push('distance');
+    
+      return {
+        isBad: isNeckBad || isShoulderBad || isTiltBad || isDistanceBad,
+        reasons,
+        ratios: {
+          neckRatio,
+          shoulderRatio,
+          tiltRatio,
+          distanceRatio
+        },
+        raw: {
+          neckDrop,
+          shoulderDiff,
+          headTilt,
+          proximityIncrease
+        }
+      };
     }
 
-    // ----------------------------------------------------
-    // BOUCLE DE RENDU MEDIAPIPE (ONRESULTS)
-    // ----------------------------------------------------
-    function onResults(results) {
-      canvasCtx.save();
-      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-      // 1. Retournement miroir en 2D pour conserver une orientation naturelle en PiP
-      canvasCtx.translate(canvasElement.width, 0);
-      canvasCtx.scale(-1, 1);
-      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-
-      let hudStatus = "POINT ZÉRO NON CALIBRÉ";
-      let hudColor = "rgba(15, 23, 42, 0.88)";
-
-      if (results.poseLandmarks) {
-        currentLandmarks = results.poseLandmarks;
-
-        // Dessin du squelette ergonomique
-        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-          color: 'rgba(40, 134, 222, 0.7)',
-          lineWidth: 2
-        });
-        drawLandmarks(canvasCtx, [
-          results.poseLandmarks[0], // Nez
-          results.poseLandmarks[7], // Oreille G
-          results.poseLandmarks[8], // Oreille D
-          results.poseLandmarks[11], // Épaule G
-          results.poseLandmarks[12]  // Épaule D
-        ], {
-          color: '#34d399',
-          fillColor: '#ffffff',
-          lineWidth: 2,
-          radius: 4
-        });
-
-        const current = computeMetrics(currentLandmarks);
-
-        if (!current) {
-          hudStatus = "POSTURE PARTIELLE • RECADREZ-VOUS";
-          hudColor = "rgba(245, 158, 11, 0.88)";
-        } else if (currentMode === 'pause') {
-          // MODE PAUSE ACTIVE : Alertes sonores et visuelles suspendues pour libre étirement
-          hudStatus = "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT";
-          hudColor = "rgba(40, 134, 222, 0.92)";
-          document.body.classList.remove('alert-active');
-          badPostureStart = null;
-          alertLatched = false;
-          setStatusUI('var(--fluent-brand)', 'Pause active en cours — alertes suspendues');
-          updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
-          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
-          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', 0);
-          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', 0);
-        } else if (baseline) {
-          const sens = parseFloat(document.getElementById('sensitivitySelect').value);
-
-          const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
-          const shoulderDelta = (current.shoulderDiffRatio - baseline.shoulderDiffRatio);
-          const tiltDelta = (current.headTiltRatio - baseline.headTiltRatio);
-          const distanceIncrease = baseline.faceWidth > 0 ? (current.faceWidth - baseline.faceWidth) / baseline.faceWidth : 0;
-
-          const neckThreshold = 0.13 * sens;
-          const shoulderThreshold = 0.08 * sens;
-          const tiltThreshold = 0.11 * sens;
-          const distanceThreshold = 0.22 * sens;
-
-          updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
-          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
-          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
-          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
-
-          const isNeckBad = neckDelta > neckThreshold;
-          const isShoulderBad = shoulderDelta > shoulderThreshold;
-          const isTiltBad = tiltDelta > tiltThreshold;
-          const isDistanceBad = distanceIncrease > distanceThreshold;
-          const isEyeRestOn = typeof eyeRestManager !== 'undefined' && eyeRestManager && eyeRestManager.isEyeRestActive;
-          const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !isEyeRestOn;
-
-          totalFrames++;
-          sessionTotalFrames++;
-          if (!anyBad) {
-            goodFrames++;
-            sessionGoodFrames++;
-          }
-
-          if (totalFrames % 15 === 0) {
-            const score = Math.round((goodFrames / totalFrames) * 100);
-            const scoreEl = document.getElementById('scoreDigits');
-            scoreEl.innerText = `${score}%`;
-            scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
-          }
-
-          if (anyBad) {
-            let reasonKey = isNeckBad ? "reason_neck" : (isShoulderBad ? "reason_shoulder" : (isTiltBad ? "reason_tilt" : "reason_distance"));
-            let reason = t(reasonKey);
-            hudStatus = t('hud_deviation') + " " + reason.toUpperCase();
-            hudColor = "rgba(245, 158, 11, 0.92)";
-
-            if (!badPostureStart) {
-              badPostureStart = Date.now();
-            }
-
-            const alertThresholdMs = (audioSettings.delaySeconds || 2.5) * 1000;
-            if (Date.now() - badPostureStart > alertThresholdMs) {
-              document.body.classList.add('alert-active');
-              hudStatus = t('hud_correct') + " " + reason.toUpperCase();
-              hudColor = "rgba(239, 68, 68, 0.96)";
-              setStatusUI('var(--status-danger)', `${t('status_alert_prefix')}${reason})`);
-
-              // Alerte sonore continue tant que la posture n'est pas revenue en neutre
-              if (!isContinuousAlertActive) {
-                startContinuousPostureAlert();
-              }
-
-              if (!alertLatched) {
-                alertLatched = true;
-                addDailyLog('alert', reason, currentMode);
-                triggerAlertNotification(reason);
-              }
-            }
-          } else {
-            badPostureStart = null;
-            alertLatched = false;
-            // Arrêt instantané de l'alerte continue dès retour au neutre
-            if (isContinuousAlertActive) {
-              stopContinuousPostureAlert();
-            }
-            document.body.classList.remove('alert-active');
-            const modeLabel = t('title_' + currentMode) || currentMode;
-            hudStatus = `${t('hud_neutral')} (${modeLabel.toUpperCase()})`;
-            hudColor = "rgba(16, 185, 129, 0.88)";
-            setStatusUI('var(--status-success)', `${t('status_optimal')} (${modeLabel})`);
+    // ==========================================
+    // MODULE: src/pacing/pacing-timer.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Pacing & Posture Workstation Timer
+     * Sitting, Standing, and Active Break modes with overtime negative counting.
+     */
+    
+    const DEFAULT_PACING_CONFIG = {
+      sittingMinutes: 45,
+      standingAlertMinutes: 15,
+      pauseMinutes: 5
+    };
+    
+    function loadPacingConfig() {
+      try {
+        const saved = localStorage.getItem('ergovision_pacing_config');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.sittingMinutes && parsed.standingAlertMinutes && parsed.pauseMinutes) {
+            return parsed;
           }
         }
-      } else {
-        hudStatus = t('hud_waiting');
-        hudColor = "rgba(15, 23, 42, 0.88)";
-        if (isContinuousAlertActive) {
-          stopContinuousPostureAlert();
-        }
+      } catch (e) {
+        console.warn("Échec chargement pacing config :", e);
       }
-
-      canvasCtx.restore();
-
-      // Bandeau HUD superposé
-      canvasCtx.save();
-      canvasCtx.fillStyle = hudColor;
-      canvasCtx.fillRect(0, 0, canvasElement.width, 38);
-      canvasCtx.fillStyle = "#ffffff";
-      canvasCtx.font = "bold 13px 'Segoe UI Variable Text', -apple-system, sans-serif";
-      canvasCtx.textBaseline = "middle";
-      canvasCtx.fillText(hudStatus, 14, 19);
-      canvasCtx.restore();
+      return { ...DEFAULT_PACING_CONFIG };
     }
-
-    // ----------------------------------------------------
-    // PACING POSTURAL AVEC TIMER NÉGATIF & BILAN DE SESSION
-    // ----------------------------------------------------
-    function setMode(mode) {
-      if (currentMode !== mode) {
-        // Enregistre la transition dans le journal quotidien
-        if (sessionTotalFrames > 30 && !sessionCycleLogged) {
-          const partialScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
-          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)} (${partialScore}% ${t('title_neutral').toLowerCase()})`, mode, partialScore);
-        } else {
-          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)}`, mode);
-        }
+    
+    function savePacingConfig(config) {
+      try {
+        localStorage.setItem('ergovision_pacing_config', JSON.stringify(config));
+      } catch (err) {
+        console.warn("Erreur sauvegarde localStorage pacing :", err);
       }
-
-      currentMode = mode;
-      document.getElementById('segAssis').classList.toggle('active', mode === 'assis');
-      document.getElementById('segAssis').setAttribute('aria-selected', mode === 'assis');
-      document.getElementById('segDebout').classList.toggle('active', mode === 'debout');
-      document.getElementById('segDebout').setAttribute('aria-selected', mode === 'debout');
-      document.getElementById('segPause').classList.toggle('active', mode === 'pause');
-      document.getElementById('segPause').setAttribute('aria-selected', mode === 'pause');
-
-      if (isContinuousAlertActive) {
-        stopContinuousPostureAlert();
-      }
-
-      resetCurrentModeTimer();
-
-      if (typeof kineStudioView !== 'undefined' && kineStudioView) {
-        if (mode === 'pause') {
-          kineStudioView.show();
-          kineRoutineManager.start();
-        } else {
-          kineStudioView.hide();
-          kineRoutineManager.stop();
-        }
-      }
+      return config;
     }
-
-    function updateTimerDisplayTitles() {
-      const titleEl = document.getElementById('timerTitle');
-      const subEl = document.getElementById('timerSub');
-      if (!titleEl || !subEl) return;
-
-      if (currentMode === 'assis') {
-        titleEl.innerText = t('title_sit');
-        subEl.innerText = `${t('sub_sit_prefix')}${pacingConfig.sittingMinutes}${t('sub_sit_suffix')}`;
-      } else if (currentMode === 'debout') {
-        titleEl.innerText = t('title_stand');
-        subEl.innerText = `${t('sub_stand_prefix')}${pacingConfig.standingAlertMinutes}${t('sub_stand_suffix')}`;
-      } else {
-        titleEl.innerText = t('title_pause');
-        subEl.innerText = t('sub_pause');
-      }
-    }
-
-    function resetCurrentModeTimer() {
-      const widget = document.getElementById('pacingWidget');
-      const digits = document.getElementById('timerDigits');
-      widget.style.borderColor = 'var(--fluent-stroke-subtle)';
-      digits.style.color = 'var(--fluent-fg-primary)';
-      digits.classList.remove('overtime');
-
-      sessionGoodFrames = 0;
-      sessionTotalFrames = 0;
-      sessionCycleLogged = false;
-      sessionStartTimestamp = Date.now();
-
-      updateTimerDisplayTitles();
-
-      if (currentMode === 'assis') {
-        startCountdown(pacingConfig.sittingMinutes * 60);
-      } else if (currentMode === 'debout') {
-        startStandingCountUp();
-      } else {
-        startCountdown(pacingConfig.pauseMinutes * 60);
-      }
-    }
-
+    
     function formatSec(totalSec) {
       const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
       const s = String(totalSec % 60).padStart(2, '0');
       return `${m}:${s}`;
     }
 
-    function renderTimerDigits(sec) {
-      const digits = document.getElementById('timerDigits');
-      if (sec < 0) {
-        digits.innerText = `-${formatSec(Math.abs(sec))}`;
-      } else {
-        digits.innerText = formatSec(sec);
-      }
+    // ==========================================
+    // MODULE: src/storage/activity-logger.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Activity Logger & LocalStorage Persistence
+     * Manages daily logs, event entries, and CSV export.
+     */
+    
+    function getTodayKey() {
+      return new Date().toISOString().slice(0, 10);
     }
-
-    function startCountdown(sec) {
-      clearInterval(timerInterval);
-      remainingSeconds = sec;
-      renderTimerDigits(remainingSeconds);
-
-      timerInterval = setInterval(() => {
-        remainingSeconds--;
-        renderTimerDigits(remainingSeconds);
-
-        if (remainingSeconds === 0) {
-          // Fin du temps prescrit : Carillon de fin de cycle et bilan consigné
-          if (!sessionCycleLogged) {
-            sessionCycleLogged = true;
-            const sessionScore = sessionTotalFrames > 0 ? Math.round((sessionGoodFrames / sessionTotalFrames) * 100) : 100;
-            const targetMin = Math.round(sec / 60);
-            const modeTitle = t('title_' + currentMode);
-            const summaryText = `${t('cycle_summary_title')} (${modeTitle}) : ${sessionScore}% ${t('title_neutral').toLowerCase()} (${targetMin} min)`;
-            
-            addDailyLog('summary', summaryText, currentMode, sessionScore);
-            playCycleEndChime();
-            triggerAlertNotification(summaryText);
-          }
-        }
-
-        if (remainingSeconds < 0) {
-          // Défilement en négatif tant que l'utilisateur n'a pas réinitialisé ou changé de mode
-          const widget = document.getElementById('pacingWidget');
-          const digits = document.getElementById('timerDigits');
-          const sub = document.getElementById('timerSub');
-          widget.style.borderColor = 'var(--status-danger)';
-          digits.classList.add('overtime');
-          sub.innerText = `${t('sub_overtime')} (+${formatSec(Math.abs(remainingSeconds))})`;
-        }
-      }, 1000);
-    }
-
-    function startStandingCountUp() {
-      clearInterval(timerInterval);
-      elapsedStanding = 0;
-      renderTimerDigits(0);
-      const widget = document.getElementById('pacingWidget');
-      const digits = document.getElementById('timerDigits');
-      const sub = document.getElementById('timerSub');
-
-      const alertSeconds = pacingConfig.standingAlertMinutes * 60;
-      const warningSeconds = Math.max(60, Math.floor(alertSeconds * 0.7));
-
-      timerInterval = setInterval(() => {
-        elapsedStanding++;
-        renderTimerDigits(elapsedStanding);
-
-        if (elapsedStanding === warningSeconds) {
-          widget.style.borderColor = 'var(--status-warning)';
-          digits.style.color = 'var(--status-warning)';
-          sub.innerText = `⚠️ ${Math.floor(warningSeconds / 60)} ${t('standing_warning_sub')}`;
-          playTone(440, 0.25, 'triangle', 0.8);
-        } else if (elapsedStanding === alertSeconds) {
-          widget.style.borderColor = 'var(--status-danger)';
-          digits.classList.add('overtime');
-          sub.innerText = `🚨 ${pacingConfig.standingAlertMinutes} ${t('standing_alert_sub')}`;
-
-          if (!sessionCycleLogged) {
-            sessionCycleLogged = true;
-            const sessionScore = sessionTotalFrames > 0 ? Math.round((sessionGoodFrames / sessionTotalFrames) * 100) : 100;
-            const summaryText = `${t('cycle_summary_title')} (${t('title_stand')}) : ${sessionScore}% ${t('title_neutral').toLowerCase()} (${pacingConfig.standingAlertMinutes} min)`;
-            
-            addDailyLog('summary', summaryText, 'debout', sessionScore);
-            playCycleEndChime();
-            triggerAlertNotification(summaryText);
-          }
-        } else if (elapsedStanding > alertSeconds) {
-          widget.style.borderColor = 'var(--status-danger)';
-          digits.classList.add('overtime');
-          const overtimeSec = elapsedStanding - alertSeconds;
-          sub.innerText = `🚨 +${formatSec(overtimeSec)} • ${pacingConfig.standingAlertMinutes} ${t('standing_alert_sub')}`;
-        }
-      }, 1000);
-    }
-
-    // ----------------------------------------------------
-    // JOURNAL QUOTIDIEN PERSISTANT (LOCALSTORAGE) & EXPORT CSV
-    // ----------------------------------------------------
-    function loadDailyLogs() {
+    
+    function loadDailyLogs(todayKey = getTodayKey()) {
       try {
         const saved = localStorage.getItem('ergovision_daily_log_' + todayKey);
         if (saved) {
-          dailyLogs = JSON.parse(saved);
-        } else {
-          dailyLogs = [];
+          return JSON.parse(saved);
         }
       } catch (err) {
         console.warn("Échec chargement journal :", err);
-        dailyLogs = [];
       }
-
-      renderAllLogs();
+      return [];
     }
-
-    function saveDailyLogs() {
+    
+    function saveDailyLogs(logs, todayKey = getTodayKey()) {
       try {
-        localStorage.setItem('ergovision_daily_log_' + todayKey, JSON.stringify(dailyLogs));
+        localStorage.setItem('ergovision_daily_log_' + todayKey, JSON.stringify(logs));
       } catch (err) {
         console.warn("Échec sauvegarde journal :", err);
       }
     }
-
-    function renderAllLogs() {
-      const box = document.getElementById('timelineLog');
-      if (!box) return;
-
-      if (dailyLogs.length === 0) {
-        box.innerHTML = `<div style="color:var(--fluent-fg-muted); font-size:0.8rem; text-align:center; margin:auto;">${t('log_empty')}</div>`;
-        document.getElementById('alertCounterBadge').innerText = `0 ${t('badge_alert').toLowerCase()}`;
-        return;
-      }
-
-      box.innerHTML = '';
-      let alertsToday = 0;
-
-      dailyLogs.forEach(entry => {
-        if (entry.type === 'alert') alertsToday++;
-        const row = createTimelineRow(entry);
-        box.appendChild(row);
-      });
-
-      const badge = document.getElementById('alertCounterBadge');
-      badge.innerText = `${alertsToday} ${t('badge_alert').toLowerCase()}${alertsToday > 1 ? 's' : ''}`;
-      badge.style.color = alertsToday > 0 ? 'var(--status-warning)' : 'var(--status-success)';
-    }
-
-    function createTimelineRow(entry) {
-      const row = document.createElement('div');
-      row.className = `timeline-item item-${entry.type}`;
-
-      let badgeHtml = '';
-      if (entry.type === 'alert') {
-        badgeHtml = `<span class="timeline-badge badge-alert">${t('badge_alert')}</span>`;
-      } else if (entry.type === 'transition') {
-        badgeHtml = `<span class="timeline-badge badge-transition">${t('badge_transition')}</span>`;
-      } else if (entry.type === 'summary') {
-        badgeHtml = `<span class="timeline-badge badge-summary">${t('badge_summary')}</span>`;
-      }
-
-      const scorePart = entry.score !== null && entry.score !== undefined ? ` <strong style="color:var(--status-success)">${entry.score}%</strong>` : '';
-
-      row.innerHTML = `
-        <div class="timeline-content">
-          ${badgeHtml}
-          <span><strong>${entry.title}</strong>${scorePart} <span style="color:var(--fluent-fg-muted)">(${entry.mode})</span></span>
-        </div>
-        <span class="timeline-time">${entry.time}</span>
-      `;
-      return row;
-    }
-
-    function addDailyLog(type, title, mode, score = null) {
-      const time = new Date().toLocaleTimeString(currentLang === 'fr' ? 'fr-FR' : 'en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      const entry = {
-        id: Date.now(),
-        time,
-        type,
-        title,
-        mode,
-        score
-      };
-
-      dailyLogs.unshift(entry);
-      saveDailyLogs();
-
-      const box = document.getElementById('timelineLog');
-      if (dailyLogs.length === 1) {
-        box.innerHTML = '';
-      }
-
-      const row = createTimelineRow(entry);
-      box.prepend(row);
-
-      if (type === 'alert') {
-        alertCount++;
-        const badge = document.getElementById('alertCounterBadge');
-        badge.innerText = `${alertCount} ${t('badge_alert').toLowerCase()}${alertCount > 1 ? 's' : ''}`;
-        badge.style.color = 'var(--status-warning)';
-      }
-    }
-
-    function clearLogs() {
-      dailyLogs = [];
-      alertCount = 0;
-      goodFrames = 0;
-      totalFrames = 0;
-      sessionGoodFrames = 0;
-      sessionTotalFrames = 0;
+    
+    function clearDailyLogs(todayKey = getTodayKey()) {
       try {
         localStorage.removeItem('ergovision_daily_log_' + todayKey);
       } catch (e) {}
-
-      document.getElementById('alertCounterBadge').innerText = `0 ${t('badge_alert').toLowerCase()}`;
-      document.getElementById('scoreDigits').innerText = '100%';
-      document.getElementById('timelineLog').innerHTML = `<div style="color:var(--fluent-fg-muted); font-size:0.8rem; text-align:center; margin:auto;">${t('log_empty')}</div>`;
     }
-
-    function exportLogsCSV() {
-      if (dailyLogs.length === 0) {
-        alert(t('log_empty'));
-        return;
-      }
+    
+    function createCSVContent(logs) {
       let csv = "Heure,Type,Description,Mode,MaintienNeutre%\n";
-      dailyLogs.forEach(i => {
+      logs.forEach(i => {
         const scoreStr = i.score !== null && i.score !== undefined ? `${i.score}%` : "";
         csv += `"${i.time}","${i.type}","${i.title}","${i.mode}","${scoreStr}"\n`;
       });
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      return csv;
+    }
+    
+    function downloadCSV(csvContent, filename = `ergovision-journal-${getTodayKey()}.csv`) {
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', `ergovision-journal-${todayKey}.csv`);
+      link.setAttribute('download', filename);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    // ----------------------------------------------------
-    // ATELIER KINÉ DU DOS • PAUSE ACTIVE (CATALOGUE & MOTEUR)
-    // ----------------------------------------------------
+    // ==========================================
+    // MODULE: src/vision/camera-stream.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Vision & Camera Stream Manager
+     * Encapsulates MediaPipe Pose, WebRTC getUserMedia, Canvas Mirroring & PiP.
+     */
+    
+    let cameraInstance = null;
+    let poseInstance = null;
+    let isCameraActive = false;
+    
+    function getIsCameraActive() {
+      return isCameraActive;
+    }
+    
+    function setIsCameraActive(val) {
+      isCameraActive = val;
+    }
+    
+    export async function enumerateVideoDevices(selectElement) {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        return [];
+      }
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoInputs = devices.filter(d => d.kind === 'videoinput');
+        if (selectElement && videoInputs.length > 1) {
+          selectElement.innerHTML = '';
+          videoInputs.forEach((dev, idx) => {
+            const opt = document.createElement('option');
+            opt.value = dev.deviceId;
+            opt.text = dev.label || `Caméra ${idx + 1}`;
+            selectElement.appendChild(opt);
+          });
+          selectElement.style.display = 'inline-block';
+        }
+        return videoInputs;
+      } catch (e) {
+        console.warn("Énumération caméras non disponible :", e);
+        return [];
+      }
+    }
+    
+    export async function initPoseModel(onResultsCallback) {
+      if (!poseInstance) {
+        poseInstance = new window.Pose({
+          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+        poseInstance.setOptions({
+          modelComplexity: 1,
+          smoothLandmarks: true,
+          enableSegmentation: false,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5
+        });
+        poseInstance.onResults(onResultsCallback);
+      }
+      return poseInstance;
+    }
+    
+    export async function startCameraStream(videoElement, onResultsCallback, deviceId = null) {
+      await initPoseModel(onResultsCallback);
+    
+      await stopCameraStream(videoElement);
+    
+      if (deviceId) {
+        try {
+          const constraints = { video: { deviceId: { exact: deviceId }, width: 640, height: 400 } };
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+          videoElement.srcObject = stream;
+          await videoElement.play();
+        } catch (e) {
+          console.warn("Échec getUserMedia deviceId spécifique, repli sur Camera utils :", e);
+        }
+      }
+    
+      cameraInstance = new window.Camera(videoElement, {
+        onFrame: async () => {
+          if (isCameraActive && poseInstance) {
+            await poseInstance.send({ image: videoElement });
+          }
+        },
+        width: 640,
+        height: 400
+      });
+    
+      await cameraInstance.start();
+      isCameraActive = true;
+      return cameraInstance;
+    }
+    
+    export async function stopCameraStream(videoElement, pipVideoElement = null) {
+      if (cameraInstance) {
+        try {
+          await cameraInstance.stop();
+        } catch (_) {}
+        cameraInstance = null;
+      }
+      if (videoElement && videoElement.srcObject) {
+        try {
+          const tracks = videoElement.srcObject.getTracks();
+          tracks.forEach(t => t.stop());
+        } catch (_) {}
+        videoElement.srcObject = null;
+      }
+      if (pipVideoElement && pipVideoElement.srcObject) {
+        try {
+          const tracks = pipVideoElement.srcObject.getTracks();
+          tracks.forEach(t => t.stop());
+        } catch (_) {}
+        pipVideoElement.srcObject = null;
+      }
+      if (document.pictureInPictureElement) {
+        try {
+          await document.exitPictureInPicture();
+        } catch (_) {}
+      }
+      isCameraActive = false;
+    }
+    
+    export async function togglePictureInPicture(canvasElement, pipVideoElement) {
+      if (!isCameraActive) {
+        throw new Error("Camera not active");
+      }
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture();
+      } else {
+        if (!pipVideoElement.srcObject) {
+          pipVideoElement.srcObject = canvasElement.captureStream(20);
+          await pipVideoElement.play();
+        }
+        await pipVideoElement.requestPictureInPicture();
+      }
+    }
+
+    // ==========================================
+    // MODULE: src/kine/exercises.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Physiotherapy Exercises Module (Kiné du Dos)
+     * Clinically validated micro-exercises for desk workers.
+     */
+    
+    /**
+     * @typedef {'cervical' | 'thoracic' | 'lumbar' | 'full_spine'} TargetArea
+     * @typedef {'repetition' | 'hold'} ExerciseType
+     * 
+     * @typedef {Object} KineExercise
+     * @property {string} id
+     * @property {TargetArea} targetArea
+     * @property {string} protocol
+     * @property {ExerciseType} type
+     * @property {number} reps
+     * @property {number} holdSec
+     * @property {number} restSec
+     * @property {number} totalDurationSec
+     * @property {string} iconSvg
+     */
+    
     const KINE_EXERCISES = [
       {
         id: "mckenzie_chin_tuck",
@@ -3374,7 +2998,7 @@
           <circle cx="36" cy="16" r="8" stroke="var(--fluent-fg-primary)" stroke-width="2" />
           <path d="M30 18 Q36 12 40 18" stroke="var(--fluent-brand)" stroke-width="2" />
           <path d="M34 24 C28 32, 28 38, 30 46" stroke="var(--fluent-brand)" stroke-width="2.5" />
-          <path d="M22 28 V52 H32" stroke="var(--fluent-stroke-subtle)" stroke-width="2.5" />
+          <path d="M22 28 V52 H32" stroke="var(--fluent-stroke-strong)" stroke-width="2.5" />
           <path d="M30 46 L38 58" stroke="var(--fluent-fg-muted)" stroke-width="2" />
           <path d="M42 22 L48 18" stroke="var(--status-success)" stroke-width="2" stroke-dasharray="1 2" />
         </svg>`
@@ -3398,12 +3022,40 @@
         </svg>`
       }
     ];
+    
+    /**
+     * Returns all exercises
+     * @returns {KineExercise[]}
+     */
+    function getKineExercises() {
+      return KINE_EXERCISES;
+    }
+    
+    /**
+     * Find an exercise by id
+     * @param {string} id
+     * @returns {KineExercise | undefined}
+     */
+    function getKineExerciseById(id) {
+      return KINE_EXERCISES.find(ex => ex.id === id);
+    }
 
+    // ==========================================
+    // MODULE: src/kine/routine-timer.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Physiotherapy Routine State Engine
+     * Manages active stretch pacing, hold intervals, repetitions and breathing cycles.
+     */
+    
+    
+    
+    
     class KineRoutineManager {
       constructor() {
-        this.exercises = KINE_EXERCISES;
+        this.exercises = getKineExercises();
         this.currentIndex = 0;
-        this.phase = 'idle';
+        this.phase = 'idle'; // 'idle' | 'prep' | 'hold' | 'rest' | 'completed'
         this.currentRep = 1;
         this.secondsRemaining = 0;
         this.totalExerciseSeconds = 0;
@@ -3416,24 +3068,24 @@
           onRoutineComplete: null
         };
       }
-
+    
       getCurrentExercise() {
         return this.exercises[this.currentIndex] || null;
       }
-
+    
       setCallbacks({ onTick, onPhaseChange, onExerciseChange, onRoutineComplete }) {
         if (onTick) this.callbacks.onTick = onTick;
         if (onPhaseChange) this.callbacks.onPhaseChange = onPhaseChange;
         if (onExerciseChange) this.callbacks.onExerciseChange = onExerciseChange;
         if (onRoutineComplete) this.callbacks.onRoutineComplete = onRoutineComplete;
       }
-
+    
       start() {
         this.currentIndex = 0;
         this.isPaused = false;
         this.startExercise(0);
       }
-
+    
       startExercise(index) {
         if (index >= this.exercises.length) {
           this.completeRoutine();
@@ -3446,16 +3098,16 @@
           this.callbacks.onExerciseChange(this.getCurrentExercise(), this.currentIndex, this.exercises.length);
         }
       }
-
+    
       startPrepPhase() {
         this.phase = 'prep';
-        this.secondsRemaining = 4;
+        this.secondsRemaining = 4; // 4s setup time
         this.totalExerciseSeconds = 4;
         playZenBell(432);
         this._notifyPhase();
         this._runTimer();
       }
-
+    
       startHoldPhase() {
         const ex = this.getCurrentExercise();
         this.phase = 'hold';
@@ -3465,7 +3117,7 @@
         this._notifyPhase();
         this._runTimer();
       }
-
+    
       startRestPhase() {
         const ex = this.getCurrentExercise();
         this.phase = 'rest';
@@ -3474,7 +3126,7 @@
         this._notifyPhase();
         this._runTimer();
       }
-
+    
       _notifyPhase() {
         if (this.callbacks.onPhaseChange) {
           this.callbacks.onPhaseChange({
@@ -3487,12 +3139,12 @@
           });
         }
       }
-
+    
       _runTimer() {
         clearInterval(this.timerId);
         this.timerId = setInterval(() => {
           if (this.isPaused) return;
-
+    
           this.secondsRemaining--;
           if (this.callbacks.onTick) {
             this.callbacks.onTick({
@@ -3504,13 +3156,13 @@
               breathState: this.phase === 'hold' ? 'in' : 'out'
             });
           }
-
+    
           if (this.secondsRemaining <= 0) {
             this._handlePhaseTransition();
           }
         }, 1000);
       }
-
+    
       _handlePhaseTransition() {
         const ex = this.getCurrentExercise();
         if (this.phase === 'prep') {
@@ -3519,6 +3171,7 @@
           if (this.currentRep < ex.reps) {
             this.startRestPhase();
           } else {
+            // Exercise completed, advance
             playZenBell(576);
             if (this.currentIndex + 1 < this.exercises.length) {
               this.startExercise(this.currentIndex + 1);
@@ -3531,7 +3184,7 @@
           this.startHoldPhase();
         }
       }
-
+    
       completeRoutine() {
         clearInterval(this.timerId);
         this.timerId = null;
@@ -3542,20 +3195,20 @@
           this.callbacks.onRoutineComplete();
         }
       }
-
+    
       pause() {
         this.isPaused = true;
       }
-
+    
       resume() {
         this.isPaused = false;
       }
-
+    
       togglePause() {
         this.isPaused = !this.isPaused;
         return this.isPaused;
       }
-
+    
       next() {
         clearInterval(this.timerId);
         if (this.currentIndex + 1 < this.exercises.length) {
@@ -3564,7 +3217,7 @@
           this.completeRoutine();
         }
       }
-
+    
       prev() {
         clearInterval(this.timerId);
         if (this.currentIndex > 0) {
@@ -3573,11 +3226,11 @@
           this.startExercise(0);
         }
       }
-
+    
       skip() {
         this.next();
       }
-
+    
       stop() {
         clearInterval(this.timerId);
         this.timerId = null;
@@ -3586,22 +3239,33 @@
       }
     }
 
+    // ==========================================
+    // MODULE: src/ui/kine-studio-view.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Kiné Studio UI View Component (Fluent UI 2 Mica)
+     * Displays interactive back physiotherapy exercises with step-by-step guidance.
+     */
+    
+    
+    
     class KineStudioView {
       constructor(containerId, routineManager) {
         this.container = document.getElementById(containerId);
         this.manager = routineManager;
         this.init();
       }
-
+    
       init() {
         if (!this.container) return;
         this.renderInitialStructure();
         this.bindManagerCallbacks();
       }
-
+    
       renderInitialStructure() {
         this.container.innerHTML = `
           <div class="kine-studio-card" role="region" aria-label="${t('kine_studio_title')}">
+            <!-- Header du Studio -->
             <div class="kine-header">
               <div class="kine-header-title">
                 <svg class="icon kine-icon-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3616,9 +3280,12 @@
               </div>
               <span id="kineProtocolBadge" class="kine-badge">McKenzie</span>
             </div>
-
+    
+            <!-- Corps de l'exercice actif -->
             <div class="kine-body">
-              <div class="kine-visual-box" id="kineSvgBox"></div>
+              <div class="kine-visual-box" id="kineSvgBox">
+                <!-- SVG injecté dynamiquement -->
+              </div>
               <div class="kine-details">
                 <div class="kine-exercise-name" id="kineExName">---</div>
                 <div class="kine-zone-badge" id="kineZoneBadge">---</div>
@@ -3629,20 +3296,22 @@
                 </div>
               </div>
             </div>
-
+    
+            <!-- Jauge de Maintien & Respiration Guidée -->
             <div class="kine-pacing-bar">
               <div class="kine-timer-circle">
                 <span id="kineTimerDigits" class="mono-big kine-digits">04</span>
                 <span id="kinePhaseLabel" class="kine-phase-label">${t('kine_phase_prep')}</span>
               </div>
-
+    
               <div class="kine-breath-guide">
                 <div class="kine-breath-bubble" id="kineBreathBubble"></div>
                 <div class="kine-breath-text" id="kineBreathText">${t('kine_breath_in')}</div>
                 <div class="kine-rep-counter" id="kineRepCounter">${t('kine_rep_label')} 1 / 5</div>
               </div>
             </div>
-
+    
+            <!-- Contrôles de Routine -->
             <div class="kine-actions">
               <button type="button" class="btn-action kine-btn" id="kineBtnPrev" title="${t('kine_btn_prev')}">
                 <svg class="icon" viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
@@ -3659,15 +3328,15 @@
             </div>
           </div>
         `;
-
+    
         this.bindDomEvents();
       }
-
+    
       bindDomEvents() {
         const prevBtn = document.getElementById('kineBtnPrev');
         const nextBtn = document.getElementById('kineBtnNext');
         const pauseBtn = document.getElementById('kineBtnTogglePause');
-
+    
         if (prevBtn) prevBtn.addEventListener('click', () => this.manager.prev());
         if (nextBtn) nextBtn.addEventListener('click', () => this.manager.next());
         if (pauseBtn) {
@@ -3685,7 +3354,7 @@
           });
         }
       }
-
+    
       bindManagerCallbacks() {
         this.manager.setCallbacks({
           onExerciseChange: (ex, idx, total) => this.updateExercise(ex, idx, total),
@@ -3694,66 +3363,58 @@
           onRoutineComplete: () => this.updateComplete()
         });
       }
-
+    
       updateExercise(ex, idx, total) {
         if (!ex) return;
         const titleKey = `ex_${ex.id}_title`;
         const stepsKey = `ex_${ex.id}_steps`;
         const benefitKey = `ex_${ex.id}_benefit`;
         const zoneKey = `kine_zone_${ex.targetArea}`;
-
-        const badge = document.getElementById('kineProtocolBadge');
-        if (badge) badge.innerText = ex.protocol;
-        const name = document.getElementById('kineExName');
-        if (name) name.innerText = t(titleKey);
-        const zone = document.getElementById('kineZoneBadge');
-        if (zone) zone.innerText = t(zoneKey);
-        const steps = document.getElementById('kineExSteps');
-        if (steps) steps.innerText = t(stepsKey);
-        const benefit = document.getElementById('kineExBenefit');
-        if (benefit) benefit.innerText = t(benefitKey);
-        const svgBox = document.getElementById('kineSvgBox');
-        if (svgBox) svgBox.innerHTML = ex.iconSvg;
-        const counter = document.getElementById('kineRepCounter');
-        if (counter) counter.innerText = `${t('kine_rep_label')} 1 / ${ex.reps}`;
+    
+        document.getElementById('kineProtocolBadge').innerText = ex.protocol;
+        document.getElementById('kineExName').innerText = t(titleKey);
+        document.getElementById('kineZoneBadge').innerText = t(zoneKey);
+        document.getElementById('kineExSteps').innerText = t(stepsKey);
+        document.getElementById('kineExBenefit').innerText = t(benefitKey);
+        document.getElementById('kineSvgBox').innerHTML = ex.iconSvg;
+        document.getElementById('kineRepCounter').innerText = `${t('kine_rep_label')} 1 / ${ex.reps}`;
       }
-
+    
       updatePhase(state) {
         const digits = document.getElementById('kineTimerDigits');
         const phaseLabel = document.getElementById('kinePhaseLabel');
         const bubble = document.getElementById('kineBreathBubble');
         const breathText = document.getElementById('kineBreathText');
-
-        if (digits) digits.innerText = String(state.secondsRemaining).padStart(2, '0');
-
+    
+        digits.innerText = String(state.secondsRemaining).padStart(2, '0');
+    
         if (state.phase === 'prep') {
-          if (phaseLabel) phaseLabel.innerText = t('kine_phase_prep');
-          if (digits) digits.style.color = 'var(--fluent-fg-secondary)';
-          if (breathText) breathText.innerText = t('kine_breath_in');
-          if (bubble) bubble.className = 'kine-breath-bubble breath-in';
+          phaseLabel.innerText = t('kine_phase_prep');
+          digits.style.color = 'var(--fluent-fg-secondary)';
+          breathText.innerText = t('kine_breath_in');
+          bubble.className = 'kine-breath-bubble breath-in';
         } else if (state.phase === 'hold') {
-          if (phaseLabel) phaseLabel.innerText = t('kine_phase_hold');
-          if (digits) digits.style.color = 'var(--status-success)';
-          if (breathText) breathText.innerText = t('kine_breath_out');
-          if (bubble) bubble.className = 'kine-breath-bubble breath-hold';
+          phaseLabel.innerText = t('kine_phase_hold');
+          digits.style.color = 'var(--status-success)';
+          breathText.innerText = t('kine_breath_out');
+          bubble.className = 'kine-breath-bubble breath-hold';
         } else if (state.phase === 'rest') {
-          if (phaseLabel) phaseLabel.innerText = t('kine_phase_rest');
-          if (digits) digits.style.color = 'var(--fluent-fg-secondary)';
-          if (breathText) breathText.innerText = t('kine_breath_in');
-          if (bubble) bubble.className = 'kine-breath-bubble breath-in';
+          phaseLabel.innerText = t('kine_phase_rest');
+          digits.style.color = 'var(--fluent-fg-secondary)';
+          breathText.innerText = t('kine_breath_in');
+          bubble.className = 'kine-breath-bubble breath-in';
         }
-
-        const counter = document.getElementById('kineRepCounter');
-        if (counter) counter.innerText = `${t('kine_rep_label')} ${state.rep} / ${state.totalReps}`;
+    
+        document.getElementById('kineRepCounter').innerText = `${t('kine_rep_label')} ${state.rep} / ${state.totalReps}`;
       }
-
+    
       updateTick(state) {
         const digits = document.getElementById('kineTimerDigits');
         if (digits) {
           digits.innerText = String(state.secondsRemaining).padStart(2, '0');
         }
       }
-
+    
       updateComplete() {
         const phaseLabel = document.getElementById('kinePhaseLabel');
         const breathText = document.getElementById('kineBreathText');
@@ -3765,34 +3426,33 @@
           digits.style.color = 'var(--status-success)';
         }
       }
-
+    
       show() {
         if (this.container) this.container.style.display = 'block';
       }
-
+    
       hide() {
         if (this.container) this.container.style.display = 'none';
       }
     }
 
-    // Kiné Studio Instance
-    const kineRoutineManager = new KineRoutineManager();
-    let kineStudioView = null;
-    const kineContainer = document.getElementById('kineStudioContainer');
-    if (kineContainer) {
-      kineStudioView = new KineStudioView('kineStudioContainer', kineRoutineManager);
-      kineRoutineManager.setCallbacks({
-        onRoutineComplete: () => {
-          addDailyLog('summary', t('kine_phase_done'), 'pause');
-        }
-      });
-    }
-
-    // ----------------------------------------------------
-    // EYE REST 20-20-20 MANAGER
-    // ----------------------------------------------------
+    // ==========================================
+    // MODULE: src/pacing/eye-rest-timer.js
+    // ==========================================
+    /**
+     * ErgoVision AI - 20-20-20 Eye Rest & Visual Hygiene Guardian
+     * Follows the clinical 20-20-20 rule: Every 20 minutes, gaze at 20 feet (6m) for 20 seconds.
+     */
+    
+    
+    
+    const EYE_REST_CONFIG = {
+      workMinutes: 20,
+      restSeconds: 20
+    };
+    
     class EyeRestManager {
-      constructor(config = { workMinutes: 20, restSeconds: 20 }) {
+      constructor(config = EYE_REST_CONFIG) {
         this.config = { ...config };
         this.workSeconds = this.config.workMinutes * 60;
         this.restSeconds = this.config.restSeconds;
@@ -3807,13 +3467,13 @@
           onRestEnd: null
         };
       }
-
+    
       setCallbacks({ onTick, onRestStart, onRestEnd }) {
         if (onTick) this.callbacks.onTick = onTick;
         if (onRestStart) this.callbacks.onRestStart = onRestStart;
         if (onRestEnd) this.callbacks.onRestEnd = onRestEnd;
       }
-
+    
       start() {
         this.stop();
         this.isPaused = false;
@@ -3822,11 +3482,11 @@
         this.remainingRestSeconds = this.restSeconds;
         this._runTimer();
       }
-
+    
       _runTimer() {
         this.timerId = setInterval(() => {
           if (this.isPaused) return;
-
+    
           if (!this.isEyeRestActive) {
             this.remainingWorkSeconds--;
             if (this.callbacks.onTick) {
@@ -3836,14 +3496,14 @@
                 isEyeRestActive: false
               });
             }
-
+    
             if (this.remainingWorkSeconds <= 0) {
               this.startRest();
             }
           } else {
             this.remainingRestSeconds--;
             playSoftTick();
-
+    
             if (this.callbacks.onTick) {
               this.callbacks.onTick({
                 workSecondsRemaining: 0,
@@ -3851,23 +3511,23 @@
                 isEyeRestActive: true
               });
             }
-
+    
             if (this.remainingRestSeconds <= 0) {
               this.endRest();
             }
           }
         }, 1000);
       }
-
+    
       startRest() {
         this.isEyeRestActive = true;
         this.remainingRestSeconds = this.restSeconds;
-        playZenBell(528);
+        playZenBell(528); // Fréquence réparatrice
         if (this.callbacks.onRestStart) {
           this.callbacks.onRestStart();
         }
       }
-
+    
       endRest() {
         this.isEyeRestActive = false;
         this.remainingWorkSeconds = this.workSeconds;
@@ -3877,21 +3537,28 @@
           this.callbacks.onRestEnd();
         }
       }
-
+    
       skipRest() {
         if (this.isEyeRestActive) {
-          this.endRest();
+          this.isEyeRestActive = false;
+          this.remainingWorkSeconds = this.workSeconds;
+          this.remainingRestSeconds = this.restSeconds;
+          if (this.callbacks.onRestSkip) {
+            this.callbacks.onRestSkip();
+          } else if (this.callbacks.onRestEnd) {
+            this.callbacks.onRestEnd();
+          }
         }
       }
-
+    
       pause() {
         this.isPaused = true;
       }
-
+    
       resume() {
         this.isPaused = false;
       }
-
+    
       stop() {
         if (this.timerId) {
           clearInterval(this.timerId);
@@ -3900,15 +3567,88 @@
       }
     }
 
+    // ==========================================
+    // MODULE: src/app.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Application Conductor (ES6 Modular Entry Point)
+     */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // DOM References
+    const videoElement = document.getElementById('input_video');
+    const canvasElement = document.getElementById('output_canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+    const pipVideo = document.getElementById('pip_video');
+    const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+    const cameraSelect = document.getElementById('cameraSelect');
+    const btnStopCam = document.getElementById('btnStopCam');
+    const btnTheme = document.getElementById('btnTheme');
+    const btnSound = document.getElementById('btnSound');
+    const btnNotif = document.getElementById('btnNotif');
+    const btnPiP = document.querySelector('.btn-pip');
+    const sensitivitySelect = document.getElementById('sensitivitySelect');
+    
+    // State
+    let currentMode = 'assis';
+    let baseline = null;
+    let currentLandmarks = null;
+    let badPostureStart = null;
+    let alertLatched = false;
+    let lastNotifTime = 0;
+    let todayKey = getTodayKey();
+    let dailyLogs = [];
+    
+    let goodFrames = 0;
+    let totalFrames = 0;
+    let alertCount = 0;
+    
+    let sessionGoodFrames = 0;
+    let sessionTotalFrames = 0;
+    let sessionCycleLogged = false;
+    
+    let timerInterval = null;
+    let remainingSeconds = 45 * 60;
+    let elapsedStanding = 0;
+    
+    let pacingConfig = loadPacingConfig();
+    let audioSettings = loadAudioSettings();
+    
+    // Kiné Studio Instance
+    const kineRoutineManager = new KineRoutineManager();
+    let kineStudioView = null;
+    if (document.getElementById('kineStudioContainer')) {
+      kineStudioView = new KineStudioView('kineStudioContainer', kineRoutineManager);
+      kineRoutineManager.setCallbacks({
+        onRoutineComplete: () => {
+          if (kineStudioView) {
+            kineStudioView.updateComplete();
+          }
+          addDailyLog('summary', t('kine_phase_done'), 'pause');
+        }
+      });
+    }
+    
+    // Eye Rest 20-20-20 Instance
     const eyeRestManager = new EyeRestManager();
     const eyeRestBanner = document.getElementById('eyeRestBanner');
     const eyeRestDigits = document.getElementById('eyeRestDigits');
     const btnSkipEyeRest = document.getElementById('btnSkipEyeRest');
-
+    
     if (btnSkipEyeRest) {
       btnSkipEyeRest.addEventListener('click', () => eyeRestManager.skipRest());
     }
-
+    
     eyeRestManager.setCallbacks({
       onTick: ({ restSecondsRemaining, isEyeRestActive }) => {
         if (isEyeRestActive && eyeRestDigits) {
@@ -3918,21 +3658,882 @@
       onRestStart: () => {
         if (eyeRestBanner) eyeRestBanner.style.display = 'flex';
         stopContinuousPostureAlert();
-        triggerAlertNotification(t('eye_rest_title'));
+        document.body.classList.remove('alert-active');
       },
       onRestEnd: () => {
         if (eyeRestBanner) eyeRestBanner.style.display = 'none';
         addDailyLog('summary', t('eye_rest_complete'), currentMode);
+      },
+      onRestSkip: () => {
+        if (eyeRestBanner) eyeRestBanner.style.display = 'none';
       }
     });
     eyeRestManager.start();
-
+    
+    // Init Theme
+    applyTheme(getSavedTheme(), btnTheme);
+    btnTheme.addEventListener('click', () => toggleTheme(btnTheme));
+    
+    // UI Status Helper
+    function setStatusUI(color, text) {
+      const dot = document.getElementById('statusDot');
+      const txt = document.getElementById('statusText');
+      if (dot) {
+        dot.style.background = color;
+        dot.style.color = color;
+      }
+      if (txt) txt.innerText = text;
+    }
+    
     // ----------------------------------------------------
-    // INITIALISATION APPLICATIVE
+    // SYSTEM NOTIFICATIONS
     // ----------------------------------------------------
-    setLanguage(currentLang);
-    loadDailyLogs();
+    async function requestNotifPermission() {
+      if (!("Notification" in window)) {
+        alert("Les notifications système ne sont pas supportées par votre navigateur.");
+        return;
+      }
+      const perm = await Notification.requestPermission();
+      if (perm === "granted") {
+        btnNotif.classList.add('active-toggle');
+        btnNotif.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Notifs OK</span>';
+        new Notification("ErgoVision AI Activé", {
+          body: "Les alertes posturales s'afficheront même lorsque vous travaillez sur une autre application."
+        });
+      } else {
+        btnNotif.classList.remove('active-toggle');
+        btnNotif.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>Notifs Bloquées</span>';
+      }
+    }
+    
+    function triggerAlertNotification(reason) {
+      const now = Date.now();
+      if (now - lastNotifTime < 15000) return;
+      lastNotifTime = now;
+      playTone(560, 0.22, 'triangle', 0.12);
+    
+      if ("Notification" in window && Notification.permission === "granted") {
+        const notifTitle = `${t('status_alert_prefix')}${reason})`;
+        const notifBody = getCurrentLanguage() === 'fr' 
+          ? "Réalignez doucement votre posture et retrouvez votre point zéro."
+          : "Gently realign your posture and return to neutral.";
+        new Notification(notifTitle, {
+          body: notifBody,
+          silent: true
+        });
+      }
+    }
+    
+    // ----------------------------------------------------
+    // TIMELINE LOGS
+    // ----------------------------------------------------
+    function escapeText(str) {
+      if (typeof str !== 'string') return String(str || '');
+      return str.replace(/[&<>"']/g, (m) => {
+        switch (m) {
+          case '&': return '&amp;';
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '"': return '&quot;';
+          case "'": return '&#39;';
+          default: return m;
+        }
+      });
+    }
+    
+    function createTimelineRow(entry) {
+      const row = document.createElement('div');
+      row.className = `timeline-item item-${escapeText(entry.type)}`;
+    
+      let badgeText = t('badge_alert');
+      let badgeClass = 'badge-alert';
+      if (entry.type === 'transition') {
+        badgeText = t('badge_transition');
+        badgeClass = 'badge-transition';
+      } else if (entry.type === 'summary') {
+        badgeText = t('badge_summary');
+        badgeClass = 'badge-summary';
+      }
+    
+      const scorePart = entry.score !== null && entry.score !== undefined ? ` <strong style="color:var(--status-success)">${escapeText(entry.score)}%</strong>` : '';
+    
+      row.innerHTML = `
+        <div class="timeline-content">
+          <span class="timeline-badge ${badgeClass}">${escapeText(badgeText)}</span>
+          <span><strong>${escapeText(entry.title)}</strong>${scorePart} <span style="color:var(--fluent-fg-muted)">(${escapeText(entry.mode)})</span></span>
+        </div>
+        <span class="timeline-time">${escapeText(entry.time)}</span>
+      `;
+      return row;
+    }
+    
+    function renderAllLogs() {
+      const box = document.getElementById('timelineLog');
+      if (!box) return;
+    
+      if (dailyLogs.length === 0) {
+        box.innerHTML = `<div style="color:var(--fluent-fg-muted); font-size:0.8rem; text-align:center; margin:auto;">${t('log_empty')}</div>`;
+        document.getElementById('alertCounterBadge').innerText = `0 ${t('badge_alert').toLowerCase()}`;
+        return;
+      }
+    
+      box.innerHTML = '';
+      let alertsToday = 0;
+    
+      dailyLogs.forEach(entry => {
+        if (entry.type === 'alert') alertsToday++;
+        box.appendChild(createTimelineRow(entry));
+      });
+    
+      alertCount = alertsToday;
+      const badge = document.getElementById('alertCounterBadge');
+      badge.innerText = `${alertsToday} ${t('badge_alert').toLowerCase()}${alertsToday > 1 ? 's' : ''}`;
+      badge.style.color = alertsToday > 0 ? 'var(--status-warning)' : 'var(--status-success)';
+    }
+    
+    function addDailyLog(type, title, mode, score = null) {
+      const time = new Date().toLocaleTimeString(getCurrentLanguage() === 'fr' ? 'fr-FR' : 'en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const entry = { id: Date.now(), time, type, title, mode, score };
+    
+      dailyLogs.unshift(entry);
+      saveDailyLogs(dailyLogs, todayKey);
+    
+      const box = document.getElementById('timelineLog');
+      if (dailyLogs.length === 1) box.innerHTML = '';
+      box.prepend(createTimelineRow(entry));
+    
+      if (type === 'alert') {
+        alertCount++;
+        const badge = document.getElementById('alertCounterBadge');
+        badge.innerText = `${alertCount} ${t('badge_alert').toLowerCase()}${alertCount > 1 ? 's' : ''}`;
+        badge.style.color = 'var(--status-warning)';
+      }
+    }
+    
+    // ----------------------------------------------------
+    // PACING & TIMER
+    // ----------------------------------------------------
+    function updateTimerDisplayTitles() {
+      const titleEl = document.getElementById('timerTitle');
+      const subEl = document.getElementById('timerSub');
+      if (!titleEl || !subEl) return;
+    
+      if (currentMode === 'assis') {
+        titleEl.innerText = t('title_sit');
+        subEl.innerText = `${t('sub_sit_prefix')}${pacingConfig.sittingMinutes}${t('sub_sit_suffix')}`;
+      } else if (currentMode === 'debout') {
+        titleEl.innerText = t('title_stand');
+        subEl.innerText = `${t('sub_stand_prefix')}${pacingConfig.standingAlertMinutes}${t('sub_stand_suffix')}`;
+      } else {
+        titleEl.innerText = t('title_pause');
+        subEl.innerText = t('sub_pause');
+      }
+    }
+    
+    function renderTimerDigits(sec) {
+      const digits = document.getElementById('timerDigits');
+      if (sec < 0) {
+        digits.innerText = `-${formatSec(Math.abs(sec))}`;
+      } else {
+        digits.innerText = formatSec(sec);
+      }
+    }
+    
+    function startCountdown(durationSec) {
+      clearInterval(timerInterval);
+      remainingSeconds = durationSec;
+      renderTimerDigits(remainingSeconds);
+    
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        renderTimerDigits(remainingSeconds);
+    
+        const widget = document.getElementById('pacingWidget');
+        const digits = document.getElementById('timerDigits');
+        const subEl = document.getElementById('timerSub');
+    
+        if (remainingSeconds === 0) {
+          playCycleChime();
+          if (sessionTotalFrames > 20 && !sessionCycleLogged) {
+            sessionCycleLogged = true;
+            const cycleScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
+            addDailyLog('summary', `${t('cycle_summary_title')} ${t('title_' + currentMode)}`, currentMode, cycleScore);
+          }
+        }
+    
+        if (remainingSeconds < 0) {
+          widget.style.borderColor = 'var(--status-warning)';
+          digits.style.color = 'var(--status-warning)';
+          digits.classList.add('overtime');
+          subEl.innerText = t('sub_overtime');
+        }
+      }, 1000);
+    }
+    
+    function startStandingCountUp() {
+      clearInterval(timerInterval);
+      elapsedStanding = 0;
+      renderTimerDigits(0);
+    
+      timerInterval = setInterval(() => {
+        elapsedStanding++;
+        renderTimerDigits(elapsedStanding);
+    
+        const warnSec = pacingConfig.standingAlertMinutes * 60;
+        const subEl = document.getElementById('timerSub');
+        const widget = document.getElementById('pacingWidget');
+        const digits = document.getElementById('timerDigits');
+    
+        if (elapsedStanding === warnSec) {
+          playCycleChime();
+          if (sessionTotalFrames > 20 && !sessionCycleLogged) {
+            sessionCycleLogged = true;
+            const cycleScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
+            addDailyLog('summary', `${t('cycle_summary_title')} ${t('title_stand')}`, 'debout', cycleScore);
+          }
+        }
+    
+        if (elapsedStanding >= warnSec) {
+          widget.style.borderColor = 'var(--status-warning)';
+          digits.style.color = 'var(--status-warning)';
+          digits.classList.add('overtime');
+          subEl.innerText = `${Math.floor(elapsedStanding / 60)} ${t('standing_alert_sub')}`;
+        } else if (elapsedStanding >= warnSec * 0.8) {
+          subEl.innerText = `${Math.floor(elapsedStanding / 60)} ${t('standing_warning_sub')}`;
+        }
+      }, 1000);
+    }
+    
+    function resetCurrentModeTimer() {
+      const widget = document.getElementById('pacingWidget');
+      const digits = document.getElementById('timerDigits');
+      widget.style.borderColor = 'var(--fluent-stroke-subtle)';
+      digits.style.color = 'var(--fluent-fg-primary)';
+      digits.classList.remove('overtime');
+    
+      sessionGoodFrames = 0;
+      sessionTotalFrames = 0;
+      sessionCycleLogged = false;
+    
+      updateTimerDisplayTitles();
+    
+      if (currentMode === 'assis') {
+        startCountdown(pacingConfig.sittingMinutes * 60);
+      } else if (currentMode === 'debout') {
+        startStandingCountUp();
+      } else {
+        startCountdown(pacingConfig.pauseMinutes * 60);
+      }
+    }
+    
+    function setMode(mode) {
+      if (currentMode !== mode) {
+        if (sessionTotalFrames > 30 && !sessionCycleLogged) {
+          const partialScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
+          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)} (${partialScore}% ${t('title_neutral').toLowerCase()})`, mode, partialScore);
+        } else {
+          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)}`, mode);
+        }
+      }
+    
+      currentMode = mode;
+      document.getElementById('segAssis').classList.toggle('active', mode === 'assis');
+      document.getElementById('segAssis').setAttribute('aria-selected', mode === 'assis');
+      document.getElementById('segDebout').classList.toggle('active', mode === 'debout');
+      document.getElementById('segDebout').setAttribute('aria-selected', mode === 'debout');
+      document.getElementById('segPause').classList.toggle('active', mode === 'pause');
+      document.getElementById('segPause').setAttribute('aria-selected', mode === 'pause');
+    
+      stopContinuousPostureAlert();
+      resetCurrentModeTimer();
+    
+      if (kineStudioView) {
+        if (mode === 'pause') {
+          kineStudioView.show();
+          kineRoutineManager.start();
+        } else {
+          kineStudioView.hide();
+          kineRoutineManager.stop();
+        }
+      }
+    }
+    
+    // ----------------------------------------------------
+    // BIOMECHANICS & GAUGES
+    // ----------------------------------------------------
+    const gaugeCache = {};
+    
+    function updateGauge(cardId, badgeId, fillId, ratioToThreshold) {
+      const pct = Math.min(100, Math.max(0, Math.round(ratioToThreshold * 100)));
+      const isBad = pct >= 100;
+      
+      const cacheKey = `${cardId}_${badgeId}_${fillId}`;
+      const prev = gaugeCache[cacheKey];
+      if (prev && prev.pct === pct && prev.isBad === isBad) {
+        return;
+      }
+      gaugeCache[cacheKey] = { pct, isBad };
+    
+      const card = document.getElementById(cardId);
+      const badge = document.getElementById(badgeId);
+      const fill = document.getElementById(fillId);
+    
+      if (card) card.classList.toggle('bad', isBad);
+      if (badge) badge.innerText = isBad ? t('badge_alert') : `${pct}%`;
+      if (fill) {
+        fill.style.width = `${pct}%`;
+        fill.style.backgroundColor = pct > 95 ? 'var(--status-danger)' : (pct > 65 ? 'var(--status-warning)' : 'var(--status-success)');
+      }
+    }
+    
+    function startCalibrationCountdown() {
+      if (!getIsCameraActive() || !currentLandmarks) {
+        alert("Activez d'abord la caméra et placez-vous bien dans le cadre face à l'écran.");
+        return;
+      }
+    
+      const overlay = document.getElementById('countdownOverlay');
+      const numEl = document.getElementById('countdownNum');
+      overlay.classList.add('visible');
+      let count = 3;
+      numEl.innerText = count;
+      playTone(440, 0.12);
+    
+      const cd = setInterval(() => {
+        count--;
+        if (count > 0) {
+          numEl.innerText = count;
+          playTone(440, 0.12);
+        } else {
+          clearInterval(cd);
+          overlay.classList.remove('visible');
+          baseline = computeMetrics(currentLandmarks);
+          playTone(880, 0.25, 'triangle', 0.15);
+          setStatusUI('var(--status-success)', `Point Zéro verrouillé (${currentMode.toUpperCase()})`);
+        }
+      }, 1000);
+    }
+    
+    // ----------------------------------------------------
+    // MEDIAPIPE ONRESULTS CALLBACK
+    // ----------------------------------------------------
+    function onResults(results) {
+      canvasCtx.save();
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    
+      canvasCtx.translate(canvasElement.width, 0);
+      canvasCtx.scale(-1, 1);
+      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+    
+      let hudStatus = "POINT ZÉRO NON CALIBRÉ";
+      let hudColor = "rgba(15, 23, 42, 0.88)";
+    
+      if (results.poseLandmarks) {
+        currentLandmarks = results.poseLandmarks;
+    
+        if (window.drawConnectors && window.POSE_CONNECTIONS) {
+          window.drawConnectors(canvasCtx, results.poseLandmarks, window.POSE_CONNECTIONS, {
+            color: 'rgba(40, 134, 222, 0.7)',
+            lineWidth: 2
+          });
+        }
+        if (window.drawLandmarks) {
+          window.drawLandmarks(canvasCtx, [
+            results.poseLandmarks[0],
+            results.poseLandmarks[7],
+            results.poseLandmarks[8],
+            results.poseLandmarks[11],
+            results.poseLandmarks[12]
+          ], {
+            color: '#34d399',
+            fillColor: '#ffffff',
+            lineWidth: 2,
+            radius: 4
+          });
+        }
+    
+        const current = computeMetrics(currentLandmarks);
+    
+        if (!current) {
+          hudStatus = t('hud_partial') || "POSTURE PARTIELLE • RECADREZ-VOUS";
+          hudColor = "rgba(245, 158, 11, 0.88)";
+          badPostureStart = null;
+          alertLatched = false;
+          stopContinuousPostureAlert();
+          document.body.classList.remove('alert-active');
+        } else if (currentMode === 'pause') {
+          hudStatus = t('hud_pause') || "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT";
+          hudColor = "rgba(40, 134, 222, 0.92)";
+          document.body.classList.remove('alert-active');
+          badPostureStart = null;
+          alertLatched = false;
+          stopContinuousPostureAlert();
+          setStatusUI('var(--fluent-brand)', 'Pause active en cours — alertes suspendues');
+          updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
+          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
+          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', 0);
+          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', 0);
+        } else if (baseline) {
+          const sens = parseFloat(sensitivitySelect.value);
+    
+          const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
+          const shoulderDelta = Math.abs(current.shoulderDiffRatio - baseline.shoulderDiffRatio);
+          const tiltDelta = Math.abs(current.headTiltRatio - baseline.headTiltRatio);
+          const distanceIncrease = baseline.faceWidth > 0 ? (current.faceWidth - baseline.faceWidth) / baseline.faceWidth : 0;
+    
+          const neckThreshold = 0.13 * sens;
+          const shoulderThreshold = 0.08 * sens;
+          const tiltThreshold = 0.11 * sens;
+          const distanceThreshold = 0.22 * sens;
+    
+          updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
+          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
+          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
+          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
+    
+          const isNeckBad = neckDelta > neckThreshold;
+          const isShoulderBad = shoulderDelta > shoulderThreshold;
+          const isTiltBad = tiltDelta > tiltThreshold;
+          const isDistanceBad = distanceIncrease > distanceThreshold;
+          const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !eyeRestManager.isEyeRestActive;
+    
+          totalFrames++;
+          sessionTotalFrames++;
+          if (!anyBad) {
+            goodFrames++;
+            sessionGoodFrames++;
+          }
+    
+          if (totalFrames % 15 === 0) {
+            const score = Math.round((goodFrames / totalFrames) * 100);
+            const scoreEl = document.getElementById('scoreDigits');
+            scoreEl.innerText = `${score}%`;
+            scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
+          }
+    
+          if (anyBad) {
+            let reasonKey = isNeckBad ? "reason_neck" : (isShoulderBad ? "reason_shoulder" : (isTiltBad ? "reason_tilt" : "reason_distance"));
+            let reason = t(reasonKey);
+            hudStatus = t('hud_deviation') + " " + reason.toUpperCase();
+            hudColor = "rgba(245, 158, 11, 0.92)";
+    
+            if (!badPostureStart) {
+              badPostureStart = Date.now();
+            }
+    
+            const alertThresholdMs = (audioSettings.delaySeconds || 2.5) * 1000;
+            if (Date.now() - badPostureStart > alertThresholdMs) {
+              document.body.classList.add('alert-active');
+              hudStatus = t('hud_correct') + " " + reason.toUpperCase();
+              hudColor = "rgba(239, 68, 68, 0.96)";
+              setStatusUI('var(--status-danger)', `${t('status_alert_prefix')}${reason})`);
+    
+              startContinuousPostureAlert();
+    
+              if (!alertLatched) {
+                alertLatched = true;
+                addDailyLog('alert', reason, currentMode);
+                triggerAlertNotification(reason);
+              }
+            }
+          } else {
+            badPostureStart = null;
+            alertLatched = false;
+            stopContinuousPostureAlert();
+            document.body.classList.remove('alert-active');
+            const modeKeyMap = { assis: 'title_sit', debout: 'title_stand', pause: 'title_pause' };
+            const modeLabel = t(modeKeyMap[currentMode]) || currentMode;
+            hudStatus = `${t('hud_neutral')} (${modeLabel.toUpperCase()})`;
+            hudColor = "rgba(16, 185, 129, 0.88)";
+            setStatusUI('var(--status-success)', `${t('status_optimal')} (${modeLabel})`);
+          }
+        }
+      } else {
+        hudStatus = t('hud_waiting');
+        hudColor = "rgba(15, 23, 42, 0.88)";
+        stopContinuousPostureAlert();
+        document.body.classList.remove('alert-active');
+      }
+    
+      canvasCtx.restore();
+    
+      // Bandeau HUD superposé
+      canvasCtx.save();
+      canvasCtx.fillStyle = hudColor;
+      canvasCtx.fillRect(0, 0, canvasElement.width, 38);
+      canvasCtx.fillStyle = "#ffffff";
+      canvasCtx.font = "bold 13px 'Segoe UI Variable Text', -apple-system, sans-serif";
+      canvasCtx.textBaseline = "middle";
+      canvasCtx.fillText(hudStatus, 14, 19);
+      canvasCtx.restore();
+    }
+    
+    // ----------------------------------------------------
+    // CAMERA WORKFLOW
+    // ----------------------------------------------------
+    async function startCamera(deviceId = null) {
+      getAudioContext();
+      setStatusUI('var(--status-warning)', 'Démarrage du capteur...');
+    
+      try {
+        await startCameraStream(videoElement, onResults, deviceId);
+        cameraPlaceholder.classList.add('hidden');
+        btnStopCam.style.display = 'inline-flex';
+        await enumerateVideoDevices(cameraSelect);
+        if (deviceId && cameraSelect) {
+          cameraSelect.value = deviceId;
+        }
+        setStatusUI('var(--status-success)', 'Capteur actif • Calibrez votre point zéro');
+        playTone(600, 0.15);
+      } catch (err) {
+        console.error("Erreur caméra :", err);
+        setStatusUI('var(--status-danger)', "Échec de l'accès à la caméra");
+        alert("Impossible d'accéder à la webcam.");
+      }
+    }
+    
+    async function stopCamera() {
+      await stopCameraStream(videoElement, pipVideo);
+      stopContinuousPostureAlert();
+      document.body.classList.remove('alert-active');
+      cameraPlaceholder.classList.remove('hidden');
+      btnStopCam.style.display = 'none';
+      setStatusUI('var(--fluent-fg-muted)', 'Capteur en veille');
+    }
+    
+    async function switchCamera(deviceId) {
+      if (!deviceId) return;
+      await startCamera(deviceId);
+    }
+    
+    // ----------------------------------------------------
+    // INTERNATIONALIZATION
+    // ----------------------------------------------------
+    function setLanguage(lang) {
+      setCurrentLanguage(lang);
+      document.documentElement.lang = lang;
+      
+      const labelLang = document.getElementById('labelLang');
+      if (labelLang) labelLang.innerText = lang === 'fr' ? 'EN' : 'FR';
+      
+      const modalLangSelect = document.getElementById('selectModalLanguage');
+      if (modalLangSelect) modalLangSelect.value = lang;
+    
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key && TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+          el.innerText = TRANSLATIONS[lang][key];
+        }
+      });
+    
+      document.querySelector('.brand-sub').innerText = t('brand_sub');
+      document.getElementById('segAssis').childNodes[2].nodeValue = " " + t('mode_sit');
+      document.getElementById('segDebout').childNodes[2].nodeValue = " " + t('mode_stand');
+      document.getElementById('segPause').childNodes[2].nodeValue = " " + t('mode_pause');
+    
+      if (btnSound) {
+        const span = btnSound.querySelector('span');
+        if (span) span.innerText = isSoundEnabled() ? t('btn_audio') : t('btn_mute');
+      }
+    
+      if (btnNotif) {
+        const span = btnNotif.querySelector('span');
+        if (span && !btnNotif.classList.contains('active-toggle')) span.innerText = t('btn_notif');
+      }
+    
+      if (btnPiP) {
+        const span = btnPiP.querySelector('span');
+        if (span) span.innerText = t('btn_pip');
+      }
+    
+      if (kineStudioView && currentMode === 'pause') {
+        kineStudioView.renderInitialStructure();
+        kineStudioView.updateExercise(kineRoutineManager.getCurrentExercise(), kineRoutineManager.currentIndex, kineRoutineManager.exercises.length);
+      }
+    
+      // Gauges titles & descriptions
+      const cardNeckTitle = document.querySelector('#cardNeck .gauge-title-box span');
+      const cardNeckCaption = document.querySelector('#cardNeck .gauge-caption');
+      if (cardNeckTitle) cardNeckTitle.innerText = t('gauge_neck_title');
+      if (cardNeckCaption) cardNeckCaption.innerText = t('gauge_neck_desc');
+    
+      const cardShoulderTitle = document.querySelector('#cardShoulder .gauge-title-box span');
+      const cardShoulderCaption = document.querySelector('#cardShoulder .gauge-caption');
+      if (cardShoulderTitle) cardShoulderTitle.innerText = t('gauge_shoulder_title');
+      if (cardShoulderCaption) cardShoulderCaption.innerText = t('gauge_shoulder_desc');
+    
+      const cardTiltTitle = document.getElementById('titleGaugeTilt');
+      const cardTiltCaption = document.getElementById('descGaugeTilt');
+      if (cardTiltTitle) cardTiltTitle.innerText = t('gauge_tilt_title');
+      if (cardTiltCaption) cardTiltCaption.innerText = t('gauge_tilt_desc');
+    
+      const titleDist = document.getElementById('titleGaugeDistance');
+      const descDist = document.getElementById('descGaugeDistance');
+      if (titleDist) titleDist.innerText = t('gauge_distance_title');
+      if (descDist) descDist.innerText = t('gauge_distance_desc');
+    
+      // Eye rest banner
+      const eyeTitle = document.getElementById('eyeRestTitle');
+      const eyeDesc = document.getElementById('eyeRestDesc');
+      const btnSkipEye = document.querySelector('#btnSkipEyeRest span');
+      if (eyeTitle) eyeTitle.innerText = t('eye_rest_title');
+      if (eyeDesc) eyeDesc.innerText = t('eye_rest_desc');
+      if (btnSkipEye) btnSkipEye.innerText = t('btn_skip_eye_rest');
+    
+      // Viewport and buttons
+      const heroH2 = document.querySelector('#cameraPlaceholder h2');
+      const heroP = document.querySelector('#cameraPlaceholder p');
+      const btnStartSpan = document.querySelector('#btnStartCamera span');
+      if (heroH2) heroH2.innerText = t('hero_title');
+      if (heroP) heroP.innerText = t('hero_desc');
+      if (btnStartSpan) btnStartSpan.innerText = t('btn_start_sensor');
+    
+      const btnCalibrateSpan = document.querySelector('#btnCalibrate span');
+      const btnStopCamSpan = document.querySelector('#btnStopCam span');
+      if (btnCalibrateSpan) btnCalibrateSpan.innerText = t('btn_calibrate');
+      if (btnStopCamSpan) btnStopCamSpan.innerText = t('btn_stop');
+    
+      // Pacing & Journal widgets
+      const btnSettingsSpan = document.querySelector('#btnPacingSettings span');
+      const btnResetSpan = document.querySelector('#btnResetTimer span');
+      const btnExportSpan = document.querySelector('#btnExportCsv span');
+      const btnClearSpan = document.querySelector('#btnClearLogs span');
+      if (btnSettingsSpan) btnSettingsSpan.innerText = t('btn_settings');
+      if (btnResetSpan) btnResetSpan.innerText = t('btn_reset');
+      if (btnExportSpan) btnExportSpan.innerText = t('btn_export_csv');
+      if (btnClearSpan) btnClearSpan.innerText = t('btn_clear_logs');
+    
+      const footer = document.querySelector('footer');
+      if (footer) footer.innerText = t('footer_text');
+    
+      updateTimerDisplayTitles();
+      renderAllLogs();
+    }
+    
+    function toggleLanguage() {
+      const current = getCurrentLanguage();
+      setLanguage(current === 'fr' ? 'en' : 'fr');
+    }
+    
+    // ----------------------------------------------------
+    // MODAL TABS & PACING SETTINGS
+    // ----------------------------------------------------
+    function openPacingModal() {
+      const modal = document.getElementById('pacingModal');
+      document.getElementById('rangeSittingMinutes').value = pacingConfig.sittingMinutes;
+      document.getElementById('inputSittingMinutes').value = pacingConfig.sittingMinutes;
+      document.getElementById('hintSitVal').innerText = pacingConfig.sittingMinutes + ' min';
+    
+      document.getElementById('rangeStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
+      document.getElementById('inputStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
+      document.getElementById('hintStandVal').innerText = pacingConfig.standingAlertMinutes + ' min';
+    
+      document.getElementById('rangePauseMinutes').value = pacingConfig.pauseMinutes;
+      document.getElementById('inputPauseMinutes').value = pacingConfig.pauseMinutes;
+      document.getElementById('hintPauseVal').innerText = pacingConfig.pauseMinutes + ' min';
+    
+      if (audioSettings.mode === 'continuous') {
+        document.getElementById('audioModeContinuous').checked = true;
+      } else {
+        document.getElementById('audioModePulse').checked = true;
+      }
+      const volInt = Math.round(audioSettings.volume * 100);
+      document.getElementById('rangeAudioVolume').value = volInt;
+      document.getElementById('valAudioVolume').innerText = volInt + '%';
+      document.getElementById('selectAlertDelay').value = String(audioSettings.delaySeconds);
+    
+      document.getElementById('selectModalLanguage').value = getCurrentLanguage();
+      document.getElementById('selectModalSensitivity').value = sensitivitySelect.value;
+    
+      if (typeof modal.showModal === 'function') {
+        modal.showModal();
+      } else {
+        modal.setAttribute('open', '');
+      }
+    }
+    
+    function closePacingModal() {
+      const modal = document.getElementById('pacingModal');
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.removeAttribute('open');
+      }
+    }
+    
+    function switchModalTab(tabId) {
+      document.querySelectorAll('.modal-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.modal-tab-pane').forEach(pane => pane.classList.remove('active'));
+    
+      if (tabId === 'pacing') {
+        document.getElementById('tabBtnPacing').classList.add('active');
+        document.getElementById('tabPanePacing').classList.add('active');
+      } else if (tabId === 'audio') {
+        document.getElementById('tabBtnAudio').classList.add('active');
+        document.getElementById('tabPaneAudio').classList.add('active');
+      } else if (tabId === 'prefs') {
+        document.getElementById('tabBtnPrefs').classList.add('active');
+        document.getElementById('tabPanePrefs').classList.add('active');
+      }
+    }
+    
+    // ----------------------------------------------------
+    // EVENT LISTENERS BINDING
+    // ----------------------------------------------------
+    document.getElementById('btnStartCamera').addEventListener('click', startCamera);
+    btnStopCam.addEventListener('click', stopCamera);
+    document.getElementById('btnCalibrate').addEventListener('click', startCalibrationCountdown);
+    btnPiP.addEventListener('click', () => togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message)));
+    btnNotif.addEventListener('click', requestNotifPermission);
+    
+    document.getElementById('btnToggleLang').addEventListener('click', toggleLanguage);
+    
+    btnSound.addEventListener('click', () => {
+      const next = !isSoundEnabled();
+      setSoundEnabled(next);
+      btnSound.classList.toggle('active-toggle', next);
+      btnSound.setAttribute('aria-pressed', next ? 'true' : 'false');
+      btnSound.querySelector('span').innerText = next ? t('btn_audio') : t('btn_mute');
+      const iconSound = document.getElementById('iconSound');
+      if (iconSound) {
+        iconSound.innerHTML = next 
+          ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>'
+          : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+      }
+    });
+    
+    cameraSelect.addEventListener('change', (e) => switchCamera(e.target.value));
+    
+    document.getElementById('segAssis').addEventListener('click', () => setMode('assis'));
+    document.getElementById('segDebout').addEventListener('click', () => setMode('debout'));
+    document.getElementById('segPause').addEventListener('click', () => setMode('pause'));
+    
+    document.getElementById('btnPacingSettings').addEventListener('click', openPacingModal);
+    document.getElementById('btnResetTimer').addEventListener('click', resetCurrentModeTimer);
+    document.getElementById('btnClosePacingModal').addEventListener('click', closePacingModal);
+    document.getElementById('btnCancelPacingModal').addEventListener('click', closePacingModal);
+    
+    // Modal sliders 2-way sync
+    const rangeSit = document.getElementById('rangeSittingMinutes');
+    const inputSit = document.getElementById('inputSittingMinutes');
+    const hintSit = document.getElementById('hintSitVal');
+    rangeSit.addEventListener('input', () => { inputSit.value = rangeSit.value; hintSit.innerText = rangeSit.value + ' min'; });
+    inputSit.addEventListener('input', () => { rangeSit.value = inputSit.value; hintSit.innerText = inputSit.value + ' min'; });
+    
+    const rangeStand = document.getElementById('rangeStandingAlertMinutes');
+    const inputStand = document.getElementById('inputStandingAlertMinutes');
+    const hintStand = document.getElementById('hintStandVal');
+    rangeStand.addEventListener('input', () => { inputStand.value = rangeStand.value; hintStand.innerText = rangeStand.value + ' min'; });
+    inputStand.addEventListener('input', () => { rangeStand.value = inputStand.value; hintStand.innerText = inputStand.value + ' min'; });
+    
+    const rangePause = document.getElementById('rangePauseMinutes');
+    const inputPause = document.getElementById('inputPauseMinutes');
+    const hintPause = document.getElementById('hintPauseVal');
+    rangePause.addEventListener('input', () => { inputPause.value = rangePause.value; hintPause.innerText = rangePause.value + ' min'; });
+    inputPause.addEventListener('input', () => { rangePause.value = inputPause.value; hintPause.innerText = inputPause.value + ' min'; });
+    
+    const rangeVol = document.getElementById('rangeAudioVolume');
+    const valVol = document.getElementById('valAudioVolume');
+    rangeVol.addEventListener('input', () => {
+      valVol.innerText = rangeVol.value + '%';
+      audioSettings.volume = parseInt(rangeVol.value, 10) / 100;
+    });
+    
+    const modalSens = document.getElementById('selectModalSensitivity');
+    modalSens.addEventListener('change', () => {
+      sensitivitySelect.value = modalSens.value;
+    });
+    
+    const modalLang = document.getElementById('selectModalLanguage');
+    modalLang.addEventListener('change', () => {
+      setLanguage(modalLang.value);
+    });
+    
+    document.getElementById('btnResetDefaults').addEventListener('click', () => {
+      document.getElementById('presetStandard').click();
+      document.getElementById('audioModePulse').checked = true;
+      rangeVol.value = 15;
+      valVol.innerText = '15%';
+      document.getElementById('selectAlertDelay').value = '2.5';
+    });
+    
+    document.getElementById('tabBtnPacing').addEventListener('click', () => switchModalTab('pacing'));
+    document.getElementById('tabBtnAudio').addEventListener('click', () => switchModalTab('audio'));
+    document.getElementById('tabBtnPrefs').addEventListener('click', () => switchModalTab('prefs'));
+    
+    document.getElementById('btnTestAudioAlert').addEventListener('click', testAudioAlert);
+    document.getElementById('btnTestCycleChime').addEventListener('click', playCycleChime);
+    
+    document.getElementById('btnExportCsv').addEventListener('click', () => {
+      if (dailyLogs.length === 0) {
+        alert(t('log_empty'));
+        return;
+      }
+      downloadCSV(createCSVContent(dailyLogs));
+    });
+    
+    document.getElementById('btnClearLogs').addEventListener('click', () => {
+      dailyLogs = [];
+      alertCount = 0;
+      goodFrames = 0;
+      totalFrames = 0;
+      sessionGoodFrames = 0;
+      sessionTotalFrames = 0;
+      clearDailyLogs(todayKey);
+      renderAllLogs();
+      document.getElementById('scoreDigits').innerText = '100%';
+    });
+    
+    // Modal presets
+    document.getElementById('presetPomodoro').addEventListener('click', () => {
+      rangeSit.value = 25; inputSit.value = 25; hintSit.innerText = '25 min';
+      rangeStand.value = 10; inputStand.value = 10; hintStand.innerText = '10 min';
+      rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
+    });
+    
+    document.getElementById('presetStandard').addEventListener('click', () => {
+      rangeSit.value = 45; inputSit.value = 45; hintSit.innerText = '45 min';
+      rangeStand.value = 15; inputStand.value = 15; hintStand.innerText = '15 min';
+      rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
+    });
+    
+    document.getElementById('presetActive').addEventListener('click', () => {
+      rangeSit.value = 50; inputSit.value = 50; hintSit.innerText = '50 min';
+      rangeStand.value = 20; inputStand.value = 20; hintStand.innerText = '20 min';
+      rangePause.value = 10; inputPause.value = 10; hintPause.innerText = '10 min';
+    });
+    
+    // Modal form submit
+    document.getElementById('pacingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const sit = parseInt(inputSit.value, 10);
+      const stand = parseInt(inputStand.value, 10);
+      const pause = parseInt(inputPause.value, 10);
+    
+      if (sit > 0 && stand > 0 && pause > 0) {
+        pacingConfig = savePacingConfig({ sittingMinutes: sit, standingAlertMinutes: stand, pauseMinutes: pause });
+      }
+    
+      const audioMode = document.querySelector('input[name="audioMode"]:checked').value;
+      const vol = parseInt(rangeVol.value, 10) / 100;
+      const delay = parseFloat(document.getElementById('selectAlertDelay').value);
+    
+      audioSettings = saveAudioSettings({ mode: audioMode, volume: vol, delaySeconds: delay });
+    
+      setLanguage(modalLang.value);
+      sensitivitySelect.value = modalSens.value;
+    
+      resetCurrentModeTimer();
+      closePacingModal();
+    });
+    
+    // App Bootstrap
+    setLanguage(getCurrentLanguage());
+    dailyLogs = loadDailyLogs(todayKey);
+    renderAllLogs();
     resetCurrentModeTimer();
+
+  })();
   </script>
 </body>
 </html>

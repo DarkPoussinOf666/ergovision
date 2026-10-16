@@ -24,13 +24,15 @@ export function computeMetrics(lm) {
   }
 
   const shoulderWidth = Math.hypot(leftShoulder.x - rightShoulder.x, leftShoulder.y - rightShoulder.y) || 0.001;
-  const faceWidth = Math.hypot(leftEar.x - rightEar.x, leftEar.y - rightEar.y) || 0.001;
+  const faceWidthRaw = Math.hypot(leftEar.x - rightEar.x, leftEar.y - rightEar.y) || 0.001;
+  // Normalized face width relative to shoulder width to reject false yaw zoom
+  const faceWidth = faceWidthRaw;
   const midShoulderY = (leftShoulder.y + rightShoulder.y) / 2;
 
   return {
     neckHeightRatio: (midShoulderY - nose.y) / shoulderWidth,
     shoulderDiffRatio: (rightShoulder.y - leftShoulder.y) / shoulderWidth,
-    headTiltRatio: Math.abs(leftEar.y - rightEar.y) / shoulderWidth,
+    headTiltRatio: (leftEar.y - rightEar.y) / shoulderWidth,
     faceWidth,
     shoulderWidth
   };

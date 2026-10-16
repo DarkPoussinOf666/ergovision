@@ -25,13 +25,30 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate & Build Standalone Distribution
+        run: |
+          node --check 90_Code_Source/src/app.js
+          node tasks/build_standalone.js
+          mkdir -p public_dist
+          cp index.html public_dist/
+          cp -r 90_Code_Source public_dist/
+          cp -r 10_Design_et_Assets public_dist/
+          cp README.md public_dist/
+          cp README.fr.md public_dist/
+          cp LICENSE public_dist/
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: './public_dist'
 
       - name: Deploy to GitHub Pages
         id: deployment

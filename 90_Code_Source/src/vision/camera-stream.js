@@ -56,11 +56,20 @@ export async function initPoseModel(onResultsCallback) {
   return poseInstance;
 }
 
-export async function startCameraStream(videoElement, onResultsCallback) {
+export async function startCameraStream(videoElement, onResultsCallback, deviceId = null) {
   await initPoseModel(onResultsCallback);
 
-  if (cameraInstance) {
-    await cameraInstance.stop();
+  await stopCameraStream(videoElement);
+
+  if (deviceId) {
+    try {
+      const constraints = { video: { deviceId: { exact: deviceId }, width: 640, height: 400 } };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      videoElement.srcObject = stream;
+      await videoElement.play();
+    } catch (e) {
+      console.warn("Échec getUserMedia deviceId spécifique, repli sur Camera utils :", e);
+    }
   }
 
   cameraInstance = new window.Camera(videoElement, {
@@ -78,14 +87,31 @@ export async function startCameraStream(videoElement, onResultsCallback) {
   return cameraInstance;
 }
 
-export async function stopCameraStream(videoElement) {
+export async function stopCameraStream(videoElement, pipVideoElement = null) {
   if (cameraInstance) {
-    await cameraInstance.stop();
+    try {
+      await cameraInstance.stop();
+    } catch (_) {}
+    cameraInstance = null;
   }
   if (videoElement && videoElement.srcObject) {
-    const tracks = videoElement.srcObject.getTracks();
-    tracks.forEach(t => t.stop());
+    try {
+      const tracks = videoElement.srcObject.getTracks();
+      tracks.forEach(t => t.stop());
+    } catch (_) {}
     videoElement.srcObject = null;
+  }
+  if (pipVideoElement && pipVideoElement.srcObject) {
+    try {
+      const tracks = pipVideoElement.srcObject.getTracks();
+      tracks.forEach(t => t.stop());
+    } catch (_) {}
+    pipVideoElement.srcObject = null;
+  }
+  if (document.pictureInPictureElement) {
+    try {
+      await document.exitPictureInPicture();
+    } catch (_) {}
   }
   isCameraActive = false;
 }

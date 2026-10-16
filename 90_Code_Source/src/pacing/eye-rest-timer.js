@@ -99,7 +99,14 @@ export class EyeRestManager {
 
   skipRest() {
     if (this.isEyeRestActive) {
-      this.endRest();
+      this.isEyeRestActive = false;
+      this.remainingWorkSeconds = this.workSeconds;
+      this.remainingRestSeconds = this.restSeconds;
+      if (this.callbacks.onRestSkip) {
+        this.callbacks.onRestSkip();
+      } else if (this.callbacks.onRestEnd) {
+        this.callbacks.onRestEnd();
+      }
     }
   }
 
