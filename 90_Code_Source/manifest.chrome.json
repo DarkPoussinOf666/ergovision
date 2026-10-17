@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ErgoVision AI — Posture & Back Physio Guardian",
+  "name": "__MSG_extension_name__",
   "version": "3.0.0",
-  "description": "Copilote biomécanique temps réel 100% local prévenant les TMS, l'affaissement cervical et guidant les étirements kiné au poste de travail.",
+  "description": "__MSG_extension_description__",
   "default_locale": "fr",
   "icons": {
     "16": "assets/icons/icon-16.png",

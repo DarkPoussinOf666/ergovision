@@ -1,0 +1,10 @@
+{
+  "extension_name": {
+    "message": "ErgoVision AI — Posture & Back Physio Guardian",
+    "description": "Extension name shown in Web Stores and browser toolbars"
+  },
+  "extension_description": {
+    "message": "Real-time 100% client-side biomechanical posture copilot preventing RSI, Text-Neck slump and guiding desk physiotherapy stretches.",
+    "description": "Official extension description"
+  }
+}

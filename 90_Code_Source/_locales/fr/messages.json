@@ -1,0 +1,10 @@
+{
+  "extension_name": {
+    "message": "ErgoVision AI — Studio Postural & Prévention TMS",
+    "description": "Nom de l'extension affiché sur les Stores et dans le navigateur"
+  },
+  "extension_description": {
+    "message": "Copilote biomécanique temps réel 100% local prévenant les TMS, l'affaissement cervical et guidant les étirements kiné au poste de travail.",
+    "description": "Description officielle de l'extension"
+  }
+}
