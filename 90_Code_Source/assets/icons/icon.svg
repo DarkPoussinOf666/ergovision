@@ -1,12 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f6cbd"/>
-      <stop offset="100%" stop-color="#107c41"/>
+    <linearGradient id="ergoIconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0060ab"/>
+      <stop offset="45%" stop-color="#0f6cbd"/>
+      <stop offset="85%" stop-color="#107c41"/>
+      <stop offset="100%" stop-color="#2d9d5f"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="28" fill="#090d16"/>
-  <path d="M64 16 L104 32 V68 C104 92 64 112 64 112 C64 112 24 92 24 68 V32 Z" fill="url(#grad)" stroke="#ffffff" stroke-width="3" stroke-opacity="0.3"/>
-  <circle cx="64" cy="52" r="12" fill="#ffffff"/>
-  <path d="M64 68 V92 M46 80 L64 72 L82 80" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Fond Squircle -->
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#ergoIconGrad)"/>
+
+  <!-- Iris Optique & Axe -->
+  <circle cx="64" cy="64" r="34" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.35"/>
+  <line x1="64" y1="22" x2="64" y2="106" stroke="#ffffff" stroke-width="1.8" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+
+  <!-- Tête / Atlas C1 -->
+  <circle cx="64" cy="35" r="7" fill="#ffffff"/>
+  <circle cx="64" cy="35" r="3" fill="#0f6cbd"/>
+
+  <!-- Vertèbres Cervicale & Dorsale -->
+  <path d="M 53 49 Q 64 45 75 49 Q 71 54 64 54 Q 57 54 53 49 Z" fill="#ffffff"/>
+  <path d="M 47 62 Q 64 57 81 62 Q 77 68 64 68 Q 51 68 47 62 Z" fill="#ffffff"/>
+  <circle cx="41" cy="63.5" r="2.5" fill="#ffffff" fill-opacity="0.85"/>
+  <circle cx="87" cy="63.5" r="2.5" fill="#ffffff" fill-opacity="0.85"/>
+
+  <path d="M 50 76 Q 64 72 78 76 Q 74 82 64 82 Q 54 82 50 76 Z" fill="#ffffff"/>
+  <path d="M 54 90 Q 64 86 74 90 Q 71 95 64 95 Q 57 95 54 90 Z" fill="#ffffff"/>
+
+  <!-- Brackets Optiques -->
+  <path d="M 32 44 L 32 35 L 41 35" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+  <path d="M 96 44 L 96 35 L 87 35" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+  <path d="M 32 84 L 32 93 L 41 93" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+  <path d="M 96 84 L 96 93 L 87 93" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
 </svg>

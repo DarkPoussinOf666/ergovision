@@ -585,6 +585,8 @@ async function startCamera(deviceId = null) {
     await startCameraStream(videoElement, onResults, deviceId);
     cameraPlaceholder.classList.add('hidden');
     btnStopCam.style.display = 'inline-flex';
+    const telemetryBadge = document.getElementById('videoTelemetryBadge');
+    if (telemetryBadge) telemetryBadge.style.display = 'flex';
     await enumerateVideoDevices(cameraSelect);
     if (deviceId && cameraSelect) {
       cameraSelect.value = deviceId;
@@ -604,6 +606,8 @@ async function stopCamera() {
   document.body.classList.remove('alert-active');
   cameraPlaceholder.classList.remove('hidden');
   btnStopCam.style.display = 'none';
+  const telemetryBadge = document.getElementById('videoTelemetryBadge');
+  if (telemetryBadge) telemetryBadge.style.display = 'none';
   setStatusUI('var(--fluent-fg-muted)', 'Capteur en veille');
 }
 

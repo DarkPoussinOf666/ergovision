@@ -19,12 +19,35 @@
   <!-- BARRE DE NAVIGATION SUPERIEURE (TOPBAR EPUREE) -->
   <header class="topbar" role="banner">
     <div class="brand">
-      <div class="brand-icon-box" aria-hidden="true">
-        <!-- SVG Bouclier Clinique -->
-        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="brand-logo-container" aria-hidden="true">
+        <svg class="brand-logo-icon" viewBox="0 0 128 128" width="34" height="34">
+          <defs>
+            <linearGradient id="brandLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0060ab"/>
+              <stop offset="45%" stop-color="#0f6cbd"/>
+              <stop offset="85%" stop-color="#107c41"/>
+              <stop offset="100%" stop-color="#2d9d5f"/>
+            </linearGradient>
+          </defs>
+          <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#brandLogoGrad)"/>
+          <circle cx="64" cy="64" r="34" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.35"/>
+          <line x1="64" y1="22" x2="64" y2="106" stroke="#ffffff" stroke-width="1.8" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+          <circle cx="64" cy="35" r="7" fill="#ffffff"/>
+          <circle cx="64" cy="35" r="3" fill="#0f6cbd"/>
+          <path d="M 53 49 Q 64 45 75 49 Q 71 54 64 54 Q 57 54 53 49 Z" fill="#ffffff"/>
+          <path d="M 47 62 Q 64 57 81 62 Q 77 68 64 68 Q 51 68 47 62 Z" fill="#ffffff"/>
+          <circle cx="41" cy="63.5" r="2.5" fill="#ffffff" fill-opacity="0.85"/>
+          <circle cx="87" cy="63.5" r="2.5" fill="#ffffff" fill-opacity="0.85"/>
+          <path d="M 50 76 Q 64 72 78 76 Q 74 82 64 82 Q 54 82 50 76 Z" fill="#ffffff"/>
+          <path d="M 54 90 Q 64 86 74 90 Q 71 95 64 95 Q 57 95 54 90 Z" fill="#ffffff"/>
+          <path d="M 32 44 L 32 35 L 41 35" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+          <path d="M 96 44 L 96 35 L 87 35" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+          <path d="M 32 84 L 32 93 L 41 93" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+          <path d="M 96 84 L 96 93 L 87 93" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+        </svg>
       </div>
       <div>
-        <div class="brand-title">ErgoVision AI</div>
+        <div class="brand-title">ErgoVision <span class="brand-ai-chip">AI</span></div>
         <div class="brand-sub" data-i18n="brand_sub">Rééducation Posturale • Sessions Ciblées</div>
       </div>
     </div>
@@ -112,8 +135,32 @@
       <div class="viewport" aria-label="Moniteur vidéo de posture">
         <!-- Écran d'accueil de la caméra -->
         <div id="cameraPlaceholder" class="camera-placeholder">
-          <div class="camera-hero-icon" aria-hidden="true">
-            <svg class="icon icon-lg" style="width:28px; height:28px;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="camera-hero-logo" aria-hidden="true">
+            <svg viewBox="0 0 128 128" width="56" height="56">
+              <defs>
+                <linearGradient id="heroLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0060ab"/>
+                  <stop offset="45%" stop-color="#0f6cbd"/>
+                  <stop offset="85%" stop-color="#107c41"/>
+                  <stop offset="100%" stop-color="#2d9d5f"/>
+                </linearGradient>
+              </defs>
+              <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#heroLogoGrad)"/>
+              <circle cx="64" cy="64" r="34" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-opacity="0.35"/>
+              <line x1="64" y1="22" x2="64" y2="106" stroke="#ffffff" stroke-width="1.8" stroke-opacity="0.35" stroke-dasharray="3 3"/>
+              <circle cx="64" cy="35" r="7" fill="#ffffff"/>
+              <circle cx="64" cy="35" r="3" fill="#0f6cbd"/>
+              <path d="M 53 49 Q 64 45 75 49 Q 71 54 64 54 Q 57 54 53 49 Z" fill="#ffffff"/>
+              <path d="M 47 62 Q 64 57 81 62 Q 77 68 64 68 Q 51 68 47 62 Z" fill="#ffffff"/>
+              <circle cx="41" cy="63.5" r="2.5" fill="#ffffff" fill-opacity="0.85"/>
+              <circle cx="87" cy="63.5" r="2.5" fill="#ffffff" fill-opacity="0.85"/>
+              <path d="M 50 76 Q 64 72 78 76 Q 74 82 64 82 Q 54 82 50 76 Z" fill="#ffffff"/>
+              <path d="M 54 90 Q 64 86 74 90 Q 71 95 64 95 Q 57 95 54 90 Z" fill="#ffffff"/>
+              <path d="M 32 44 L 32 35 L 41 35" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+              <path d="M 96 44 L 96 35 L 87 35" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+              <path d="M 32 84 L 32 93 L 41 93" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+              <path d="M 96 84 L 96 93 L 87 93" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.85"/>
+            </svg>
           </div>
           <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--fluent-fg-primary);">Protection Posturale Locale &amp; Confidentielle</h2>
           <p style="font-size: 0.85rem; color: var(--fluent-fg-secondary); max-width: 440px; line-height: 1.5;">
@@ -140,6 +187,12 @@
             <svg class="icon" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
             <span id="labelReclaimPopout">↩️ Rapatrier dans ce panneau</span>
           </button>
+        </div>
+
+        <!-- Badge Télémétrie Live -->
+        <div id="videoTelemetryBadge" class="video-telemetry-badge" style="display:none;" aria-hidden="true">
+          <span class="telemetry-dot"></span>
+          <span>LIVE • 30 FPS • MediaPipe Wasm</span>
         </div>
 
         <!-- Décompte de calibration 3-2-1 -->
