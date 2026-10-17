@@ -3183,17 +3183,86 @@
     
     export async function togglePictureInPicture(canvasElement, pipVideoElement) {
       if (!isCameraActive) {
-        throw new Error("Camera not active");
+        throw new Error("Activez d'abord la caméra avant d'ouvrir la miniature.");
       }
+    
+      // 1. Si déjà en PiP standard, on le ferme
       if (document.pictureInPictureElement) {
         await document.exitPictureInPicture();
-      } else {
-        if (!pipVideoElement.srcObject) {
-          pipVideoElement.srcObject = canvasElement.captureStream(20);
-          await pipVideoElement.play();
-        }
-        await pipVideoElement.requestPictureInPicture();
+        return;
       }
+    
+      // 2. Tentative avec l'API W3C Picture-in-Picture standard
+      try {
+        if (pipVideoElement && pipVideoElement.requestPictureInPicture) {
+          if (!pipVideoElement.srcObject) {
+            pipVideoElement.srcObject = canvasElement.captureStream ? canvasElement.captureStream(25) : null;
+          }
+          if (pipVideoElement.srcObject) {
+            // Démarre la lecture si nécessaire
+            await pipVideoElement.play().catch(() => {});
+            await pipVideoElement.requestPictureInPicture();
+            return;
+          }
+        }
+      } catch (pipErr) {
+        console.warn("Échec Picture-in-Picture natif, passage en mode Pop-out flottant :", pipErr);
+      }
+    
+      // 3. Repli Pop-out détaché (Idéal pour Firefox Sidebar ou quand requestPictureInPicture est restreint)
+      openFloatingPopout(canvasElement);
+    }
+    
+    let popoutWindow = null;
+    function openFloatingPopout(canvasElement) {
+      if (popoutWindow && !popoutWindow.closed) {
+        popoutWindow.focus();
+        return;
+      }
+    
+      const w = 480;
+      const h = 320;
+      const left = window.screen.width - w - 20;
+      const top = 40;
+    
+      popoutWindow = window.open(
+        '',
+        'ErgoVision_MiniPiP',
+        `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=no,status=no`
+      );
+    
+      if (!popoutWindow) {
+        throw new Error("Impossible d'ouvrir la miniature. Veuillez autoriser les fenêtres pop-up.");
+      }
+    
+      popoutWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>ErgoVision AI — Miniature</title>
+          <style>
+            body { margin: 0; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
+            canvas { width: 100%; height: 100%; object-fit: contain; }
+          </style>
+        </head>
+        <body>
+          <canvas id="popCanvas" width="${canvasElement.width}" height="${canvasElement.height}"></canvas>
+        </body>
+        </html>
+      `);
+      popoutWindow.document.close();
+    
+      const popCanvas = popoutWindow.document.getElementById('popCanvas');
+      const popCtx = popCanvas ? popCanvas.getContext('2d') : null;
+    
+      function renderPopout() {
+        if (!popoutWindow || popoutWindow.closed || !isCameraActive) return;
+        if (popCtx) {
+          popCtx.drawImage(canvasElement, 0, 0);
+        }
+        requestAnimationFrame(renderPopout);
+      }
+      requestAnimationFrame(renderPopout);
     }
 
     // ==========================================
