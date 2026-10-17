@@ -275,11 +275,16 @@ function updateSessionBadge(text, color = 'var(--fluent-fg-muted)') {
 
 function renderTimerDigits(sec) {
   const digits = document.getElementById('timerDigits');
-  if (!digits) return;
-  if (sec < 0) {
-    digits.innerText = `00:00`;
-  } else {
-    digits.innerText = formatSec(sec);
+  const ring = document.getElementById('sessionRingFill');
+  const clampedSec = Math.max(0, sec);
+  if (digits) {
+    digits.innerText = formatSec(clampedSec);
+  }
+  if (ring) {
+    const total = (sessionDurationMinutes || 30) * 60;
+    const circumference = 113.1;
+    const progress = total > 0 ? Math.min(1, Math.max(0, (total - clampedSec) / total)) : 0;
+    ring.style.strokeDashoffset = (circumference * (1 - progress)).toFixed(1);
   }
 }
 
@@ -372,11 +377,11 @@ function openKineRoutineFromUI() {
 // ----------------------------------------------------
 const gaugeCache = {};
 
-function updateGauge(cardId, badgeId, fillId, ratioToThreshold) {
+function updateGauge(cardId, badgeId, fillId, ratioToThreshold, pillId) {
   const pct = Math.min(100, Math.max(0, Math.round(ratioToThreshold * 100)));
   const isBad = pct >= 100;
   
-  const cacheKey = `${cardId}_${badgeId}_${fillId}`;
+  const cacheKey = `${cardId}_${badgeId}_${fillId}_${pillId || ''}`;
   const prev = gaugeCache[cacheKey];
   if (prev && prev.pct === pct && prev.isBad === isBad) {
     return;
@@ -386,12 +391,25 @@ function updateGauge(cardId, badgeId, fillId, ratioToThreshold) {
   const card = document.getElementById(cardId);
   const badge = document.getElementById(badgeId);
   const fill = document.getElementById(fillId);
+  const pill = pillId ? document.getElementById(pillId) : null;
 
   if (card) card.classList.toggle('bad', isBad);
   if (badge) badge.innerText = isBad ? t('badge_alert') : `${pct}%`;
   if (fill) {
     fill.style.width = `${pct}%`;
     fill.style.backgroundColor = pct > 95 ? 'var(--status-danger)' : (pct > 65 ? 'var(--status-warning)' : 'var(--status-success)');
+  }
+  if (pill) {
+    if (pct < 70) {
+      pill.textContent = 'OK';
+      pill.className = 'gauge-deviation-pill pill-ok';
+    } else if (pct < 100) {
+      pill.textContent = 'ATTN';
+      pill.className = 'gauge-deviation-pill pill-warn';
+    } else {
+      pill.textContent = 'DÉRIVE';
+      pill.className = 'gauge-deviation-pill pill-danger';
+    }
   }
 }
 
@@ -486,15 +504,15 @@ function onResults(results) {
 
       const flags = getFeatureFlags();
 
-      updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold);
+      updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold, 'pillNeck');
       if (flags.gaugeShoulderSym) {
-        updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold);
+        updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold, 'pillShoulder');
       }
       if (flags.gaugeHeadTilt) {
-        updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold);
+        updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold, 'pillTilt');
       }
       if (flags.gaugeScreenDist) {
-        updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold));
+        updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold), 'pillDistance');
       }
 
       const isNeckBad = neckDelta > neckThreshold;
@@ -513,9 +531,15 @@ function onResults(results) {
       if (totalFrames % 15 === 0) {
         const score = Math.round((goodFrames / totalFrames) * 100);
         const scoreEl = document.getElementById('scoreDigits');
+        const scoreFillEl = document.getElementById('scoreMiniFill');
+        const scoreColor = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
         if (scoreEl) {
           scoreEl.innerText = `${score}%`;
-          scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
+          scoreEl.style.color = scoreColor;
+        }
+        if (scoreFillEl) {
+          scoreFillEl.style.width = `${score}%`;
+          scoreFillEl.style.backgroundColor = scoreColor;
         }
       }
 

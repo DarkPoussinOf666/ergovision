@@ -845,8 +845,13 @@
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
-      box-shadow: var(--shadow-rest);
-      transition: border-color var(--transition-fast), background-color var(--transition-fast);
+      box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.04), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color var(--transition-fast), background-color var(--transition-fast);
+    }
+
+    .gauge-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
     }
 
     .gauge-card.bad {
@@ -868,6 +873,40 @@
       display: flex;
       align-items: center;
       gap: 0.45rem;
+    }
+
+    .gauge-metrics-box {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .gauge-deviation-pill {
+      font-size: 0.65rem;
+      font-family: var(--font-family-numeric);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      padding: 0.1rem 0.45rem;
+      border-radius: var(--radius-pill);
+      transition: all var(--transition-fast);
+    }
+
+    .gauge-deviation-pill.pill-ok {
+      background: var(--status-success-bg);
+      color: var(--status-success);
+      border: 1px solid var(--status-success-border);
+    }
+
+    .gauge-deviation-pill.pill-warn {
+      background: var(--status-warning-bg);
+      color: var(--status-warning);
+      border: 1px solid var(--status-warning-border);
+    }
+
+    .gauge-deviation-pill.pill-danger {
+      background: var(--status-danger-bg);
+      color: var(--status-danger);
+      border: 1px solid var(--status-danger-border);
     }
 
     .gauge-badge {
@@ -896,7 +935,7 @@
     .gauge-track {
       position: relative;
       width: 100%;
-      height: 8px;
+      height: 7px;
       background: var(--fluent-stroke-subtle);
       border-radius: var(--radius-pill);
       overflow: hidden;
@@ -972,14 +1011,69 @@
       display: flex;
       flex-direction: column;
       gap: 0.45rem;
-      box-shadow: var(--shadow-rest);
-      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.04), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color var(--transition-fast);
+    }
+
+    .widget-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+    }
+
+    .session-timer-display {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin: 0.35rem 0;
+    }
+
+    .session-ring-box {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .session-ring {
+      width: 48px;
+      height: 48px;
+      transform: rotate(-90deg);
+    }
+
+    .session-ring-bg {
+      fill: none;
+      stroke: var(--fluent-stroke-subtle);
+      stroke-width: 3.5;
+    }
+
+    .session-ring-fill {
+      fill: none;
+      stroke: var(--fluent-brand);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-dasharray: 113.1;
+      stroke-dashoffset: 113.1;
+      transition: stroke-dashoffset 0.4s ease, stroke 0.3s ease;
+    }
+
+    .session-ring-icon {
+      position: absolute;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .session-digits-box {
+      display: flex;
+      flex-direction: column;
     }
 
     .mono-big {
       font-family: var(--font-family-numeric);
       font-variant-numeric: tabular-nums;
-      font-size: 2.3rem;
+      font-size: 2.2rem;
       font-weight: 700;
       letter-spacing: -0.025em;
       line-height: 1.1;
@@ -987,8 +1081,24 @@
     }
 
     .widget-sub {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--fluent-fg-muted);
+    }
+
+    .score-mini-track {
+      width: 100%;
+      height: 5px;
+      background: var(--fluent-stroke-subtle);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin-top: 0.45rem;
+    }
+
+    .score-mini-fill {
+      height: 100%;
+      background: var(--status-success);
+      border-radius: var(--radius-pill);
+      transition: width 0.3s ease, background-color 0.3s ease;
     }
 
     /* ==========================================================================

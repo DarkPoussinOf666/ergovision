@@ -303,6 +303,24 @@
 
 ---
 
+## 🎨 Phase 17 : Identité Visuelle Officielle, Améliorations UI Stitch & Actifs Stores
+
+- [x] **Phase 17.1 : Création du Logo Officiel & Actifs Multi-Résolutions**
+  - [x] 17.1.1 Conception du logo master vectoriel SVG (`90_Code_Source/assets/icons/logo.svg`) : fusion de l'alignement rachidien (5 vertèbres biomécaniques C1-L5) et de l'ouverture optique/iris protectrice.
+  - [x] 17.1.2 Génération de l'icône carrée vectorielle (`90_Code_Source/assets/icons/icon.svg`) et des rendus 3D glassmorphism haute résolution (`10_Design_et_Assets/`).
+  - [x] 17.1.3 Génération des icônes PNG nettes (16, 32, 48, 128 px) pour Chrome Web Store et Firefox AMO.
+- [x] **Phase 17.2 : Améliorations UI/UX issues de Google Stitch (`projects/6043396530362013034`)**
+  - [x] 17.2.1 Intégration du logo officiel dans le header de l'application, l'écran d'accueil du capteur et la mini-fenêtre popout.
+  - [x] 17.2.2 Badge de télémétrie live `🟢 LIVE • 30 FPS • MediaPipe Wasm` dans le viewport vidéo.
+  - [x] 17.2.3 Jauges biomécaniques avec pilules d'état cliniques (`OK`, `ATTN`, `DÉRIVE`), élévation au survol (soft lift -2px) et ombres douces à deux biseaux.
+  - [x] 17.2.4 Anneau circulaire SVG de progression temporelle sur la session de rééducation (30 min) et jauge de maintien neutre en temps réel.
+- [x] **Phase 17.3 : Compilation, Synchronisation & Validation Multi-Plateformes**
+  - [x] 17.3.1 Compilation standalone (`index.html` root, 229 Ko) sans erreur de syntaxe.
+  - [x] 17.3.2 Compilation des archives Store (`dist/ergovision-chrome-mv3.zip` et `dist/ergovision-firefox-mv3.zip`).
+  - [x] 17.3.3 Rapport de synthèse et présentation visuelle à l'utilisateur.
+
+---
+
 ## Logique et Apprentissage
 
 ### Phases 11 & 12 : V2.0 et V2.1 — Kiné du Dos & Hygiène Visuelle Oculaire
