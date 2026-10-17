@@ -251,11 +251,11 @@ export function printKineClinicalReport(logs, userName = "Patient Télétravaill
     <span>Traitement local WebAssembly • Aucune image vidéo stockée</span>
   </div>
 
-  <script>
+  <scr` + `ipt>
     window.addEventListener('load', () => {
       setTimeout(() => { window.print(); }, 400);
     });
-  </script>
+  </scr` + `ipt>
 </body>
 </html>
   `;

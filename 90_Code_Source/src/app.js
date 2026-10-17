@@ -13,7 +13,8 @@ import { computeMetrics, evaluatePosture } from './biomechanics/posture-engine.j
 import { DEFAULT_PACING_CONFIG, loadPacingConfig, savePacingConfig, formatSec } from './pacing/pacing-timer.js';
 import { getTodayKey, loadDailyLogs, saveDailyLogs, clearDailyLogs, createCSVContent, downloadCSV } from './storage/activity-logger.js';
 import { 
-  getIsCameraActive, setIsCameraActive, enumerateVideoDevices, startCameraStream, stopCameraStream, togglePictureInPicture 
+  getIsCameraActive, setIsCameraActive, enumerateVideoDevices, startCameraStream, stopCameraStream, 
+  togglePictureInPicture, isPopoutMode, openPopoutWindow 
 } from './vision/camera-stream.js';
 import { KineRoutineManager } from './kine/routine-timer.js';
 import { KineStudioView } from './ui/kine-studio-view.js';
@@ -32,13 +33,24 @@ const cameraPlaceholder = document.getElementById('cameraPlaceholder');
 const cameraSelect = document.getElementById('cameraSelect');
 const btnStopCam = document.getElementById('btnStopCam');
 const btnTheme = document.getElementById('btnTheme');
-const btnSound = document.getElementById('btnSound');
-const btnNotif = document.getElementById('btnNotif');
-const btnPiP = document.querySelector('.btn-pip');
-const sensitivitySelect = document.getElementById('sensitivitySelect');
+const btnNotifMenu = document.getElementById('btnNotifMenu');
+const notifsDropdown = document.getElementById('notifsDropdown');
+const chkAudioToggle = document.getElementById('chkAudioToggle');
+const rangeDropdownVol = document.getElementById('rangeDropdownVol');
+const labelDropdownVol = document.getElementById('labelDropdownVol');
+const chkNotifToggle = document.getElementById('chkNotifToggle');
+const btnPiP = document.getElementById('btnPiP') || document.querySelector('.btn-pip');
+const popoutActiveCard = document.getElementById('popoutActiveCard');
+const btnReclaimPopout = document.getElementById('btnReclaimPopout');
+const btnExpandPopout = document.getElementById('btnExpandPopout');
+
+// Canal de synchronisation inter-fenêtres (BroadcastChannel)
+const syncChannel = (typeof window !== 'undefined' && typeof window.BroadcastChannel !== 'undefined')
+  ? new window.BroadcastChannel('ergovision_sync')
+  : { postMessage: () => {}, addEventListener: () => {} };
 
 // State
-let currentMode = 'assis';
+let currentMode = 'session';
 let baseline = null;
 let currentLandmarks = null;
 let badPostureStart = null;
@@ -56,11 +68,13 @@ let sessionTotalFrames = 0;
 let sessionCycleLogged = false;
 
 let timerInterval = null;
-let remainingSeconds = 45 * 60;
-let elapsedStanding = 0;
-
 let pacingConfig = loadPacingConfig();
-let audioSettings = loadAudioSettings();
+let sessionDurationMinutes = pacingConfig.sessionMinutes || 30;
+let remainingSeconds = sessionDurationMinutes * 60;
+let isSessionRunning = false;
+let sensitivity = 1.0;
+
+let appAudioConfig = loadAudioSettings();
 
 // Kiné Studio Instance
 const kineRoutineManager = new KineRoutineManager();
@@ -249,150 +263,107 @@ function addDailyLog(type, title, mode, score = null) {
 }
 
 // ----------------------------------------------------
-// PACING & TIMER
+// SESSION DE RÉÉDUCATION KINÉ (30 MIN)
 // ----------------------------------------------------
-function updateTimerDisplayTitles() {
-  const titleEl = document.getElementById('timerTitle');
-  const subEl = document.getElementById('timerSub');
-  if (!titleEl || !subEl) return;
-
-  if (currentMode === 'assis') {
-    titleEl.innerText = t('title_sit');
-    subEl.innerText = `${t('sub_sit_prefix')}${pacingConfig.sittingMinutes}${t('sub_sit_suffix')}`;
-  } else if (currentMode === 'debout') {
-    titleEl.innerText = t('title_stand');
-    subEl.innerText = `${t('sub_stand_prefix')}${pacingConfig.standingAlertMinutes}${t('sub_stand_suffix')}`;
-  } else {
-    titleEl.innerText = t('title_pause');
-    subEl.innerText = t('sub_pause');
+function updateSessionBadge(text, color = 'var(--fluent-fg-muted)') {
+  const badge = document.getElementById('sessionStatusBadge');
+  if (badge) {
+    badge.innerText = text;
+    badge.style.color = color;
   }
 }
 
 function renderTimerDigits(sec) {
   const digits = document.getElementById('timerDigits');
+  if (!digits) return;
   if (sec < 0) {
-    digits.innerText = `-${formatSec(Math.abs(sec))}`;
+    digits.innerText = `00:00`;
   } else {
     digits.innerText = formatSec(sec);
   }
 }
 
-function startCountdown(durationSec) {
+function startSessionCountdown() {
   clearInterval(timerInterval);
-  remainingSeconds = durationSec;
-  renderTimerDigits(remainingSeconds);
+  isSessionRunning = true;
+  updateSessionBadge('Session en cours', 'var(--status-success)');
+  const digits = document.getElementById('timerDigits');
+  if (digits) {
+    digits.style.color = 'var(--status-success)';
+  }
 
   timerInterval = setInterval(() => {
+    if (!isSessionRunning) return;
+
     remainingSeconds--;
     renderTimerDigits(remainingSeconds);
 
-    const widget = document.getElementById('pacingWidget');
-    const digits = document.getElementById('timerDigits');
-    const subEl = document.getElementById('timerSub');
-
-    if (remainingSeconds === 0) {
+    if (remainingSeconds <= 0) {
+      clearInterval(timerInterval);
+      isSessionRunning = false;
       playCycleChime();
-      if (sessionTotalFrames > 20 && !sessionCycleLogged) {
-        sessionCycleLogged = true;
-        const cycleScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
-        addDailyLog('summary', `${t('cycle_summary_title')} ${t('title_' + currentMode)}`, currentMode, cycleScore);
-      }
-    }
 
-    if (remainingSeconds < 0) {
-      widget.style.borderColor = 'var(--status-warning)';
-      digits.style.color = 'var(--status-warning)';
-      digits.classList.add('overtime');
-      subEl.innerText = t('sub_overtime');
+      let finalScore = 100;
+      if (sessionTotalFrames > 20) {
+        finalScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
+      }
+      addDailyLog('summary', `Session Rééducation (${sessionDurationMinutes} min) terminée`, 'session', finalScore);
+
+      updateSessionBadge('Session terminée • Reposez-vous !', 'var(--fluent-brand)');
+      if (digits) digits.style.color = 'var(--fluent-brand)';
+
+      // Arrêt préventif de la caméra pour éviter la fatigue musculaire
+      stopCamera();
+      setStatusUI('var(--fluent-brand)', 'Bravo ! Session terminée. Bougez librement.');
+      
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("ErgoVision AI — Session accomplie !", {
+          body: `Bravo pour vos ${sessionDurationMinutes} min de rééducation posturale (Maintien : ${finalScore}%). Relâchez vos muscles !`
+        });
+      }
     }
   }, 1000);
 }
 
-function startStandingCountUp() {
+function pauseSessionTimer() {
+  isSessionRunning = false;
   clearInterval(timerInterval);
-  elapsedStanding = 0;
-  renderTimerDigits(0);
-
-  timerInterval = setInterval(() => {
-    elapsedStanding++;
-    renderTimerDigits(elapsedStanding);
-
-    const warnSec = pacingConfig.standingAlertMinutes * 60;
-    const subEl = document.getElementById('timerSub');
-    const widget = document.getElementById('pacingWidget');
-    const digits = document.getElementById('timerDigits');
-
-    if (elapsedStanding === warnSec) {
-      playCycleChime();
-      if (sessionTotalFrames > 20 && !sessionCycleLogged) {
-        sessionCycleLogged = true;
-        const cycleScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
-        addDailyLog('summary', `${t('cycle_summary_title')} ${t('title_stand')}`, 'debout', cycleScore);
-      }
-    }
-
-    if (elapsedStanding >= warnSec) {
-      widget.style.borderColor = 'var(--status-warning)';
-      digits.style.color = 'var(--status-warning)';
-      digits.classList.add('overtime');
-      subEl.innerText = `${Math.floor(elapsedStanding / 60)} ${t('standing_alert_sub')}`;
-    } else if (elapsedStanding >= warnSec * 0.8) {
-      subEl.innerText = `${Math.floor(elapsedStanding / 60)} ${t('standing_warning_sub')}`;
-    }
-  }, 1000);
+  updateSessionBadge('Session en pause', 'var(--status-warning)');
+  const digits = document.getElementById('timerDigits');
+  if (digits) digits.style.color = 'var(--status-warning)';
 }
 
 function resetCurrentModeTimer() {
-  const widget = document.getElementById('pacingWidget');
-  const digits = document.getElementById('timerDigits');
-  widget.style.borderColor = 'var(--fluent-stroke-subtle)';
-  digits.style.color = 'var(--fluent-fg-primary)';
-  digits.classList.remove('overtime');
+  clearInterval(timerInterval);
+  isSessionRunning = false;
+  sessionDurationMinutes = pacingConfig.sessionMinutes || 30;
+  remainingSeconds = sessionDurationMinutes * 60;
+  renderTimerDigits(remainingSeconds);
 
   sessionGoodFrames = 0;
   sessionTotalFrames = 0;
   sessionCycleLogged = false;
 
-  updateTimerDisplayTitles();
-
-  if (currentMode === 'assis') {
-    startCountdown(pacingConfig.sittingMinutes * 60);
-  } else if (currentMode === 'debout') {
-    startStandingCountUp();
-  } else {
-    startCountdown(pacingConfig.pauseMinutes * 60);
-  }
+  const digits = document.getElementById('timerDigits');
+  if (digits) digits.style.color = 'var(--fluent-fg-primary)';
+  updateSessionBadge('En attente de calibration', 'var(--fluent-fg-muted)');
 }
 
-function setMode(mode) {
-  if (currentMode !== mode) {
-    if (sessionTotalFrames > 30 && !sessionCycleLogged) {
-      const partialScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
-      addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)} (${partialScore}% ${t('title_neutral').toLowerCase()})`, mode, partialScore);
-    } else {
-      addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)}`, mode);
-    }
-  }
+function openKineRoutineFromUI() {
+  if (!kineStudioView) return;
+  const container = document.getElementById('kineStudioContainer');
+  if (!container) return;
 
-  currentMode = mode;
-  document.getElementById('segAssis').classList.toggle('active', mode === 'assis');
-  document.getElementById('segAssis').setAttribute('aria-selected', mode === 'assis');
-  document.getElementById('segDebout').classList.toggle('active', mode === 'debout');
-  document.getElementById('segDebout').setAttribute('aria-selected', mode === 'debout');
-  document.getElementById('segPause').classList.toggle('active', mode === 'pause');
-  document.getElementById('segPause').setAttribute('aria-selected', mode === 'pause');
-
-  stopContinuousPostureAlert();
-  resetCurrentModeTimer();
-
-  if (kineStudioView) {
-    if (mode === 'pause') {
-      kineStudioView.show();
-      kineRoutineManager.start();
-    } else {
-      kineStudioView.hide();
-      kineRoutineManager.stop();
-    }
+  const isVisible = container.style.display !== 'none';
+  if (isVisible) {
+    container.style.display = 'none';
+    kineRoutineManager.stop();
+  } else {
+    container.style.display = 'block';
+    kineStudioView.show();
+    kineRoutineManager.start();
+    // Scroll doux vers l'atelier kiné
+    container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
 
@@ -447,7 +418,8 @@ function startCalibrationCountdown() {
       overlay.classList.remove('visible');
       baseline = computeMetrics(currentLandmarks);
       playTone(880, 0.25, 'triangle', 0.15);
-      setStatusUI('var(--status-success)', `Point Zéro verrouillé (${currentMode.toUpperCase()})`);
+      setStatusUI('var(--status-success)', `Point Zéro verrouillé`);
+      startSessionCountdown();
     }
   }, 1000);
 }
@@ -499,20 +471,8 @@ function onResults(results) {
       alertLatched = false;
       stopContinuousPostureAlert();
       document.body.classList.remove('alert-active');
-    } else if (currentMode === 'pause') {
-      hudStatus = t('hud_pause') || "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT";
-      hudColor = "rgba(40, 134, 222, 0.92)";
-      document.body.classList.remove('alert-active');
-      badPostureStart = null;
-      alertLatched = false;
-      stopContinuousPostureAlert();
-      setStatusUI('var(--fluent-brand)', 'Pause active en cours — alertes suspendues');
-      updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
-      updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
-      updateGauge('cardTilt', 'badgeTilt', 'fillTilt', 0);
-      updateGauge('cardDistance', 'badgeDistance', 'fillDistance', 0);
     } else if (baseline) {
-      const sens = parseFloat(sensitivitySelect.value);
+      const sens = sensitivity || 1.0;
 
       const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
       const shoulderDelta = Math.abs(current.shoulderDiffRatio - baseline.shoulderDiffRatio);
@@ -553,8 +513,10 @@ function onResults(results) {
       if (totalFrames % 15 === 0) {
         const score = Math.round((goodFrames / totalFrames) * 100);
         const scoreEl = document.getElementById('scoreDigits');
-        scoreEl.innerText = `${score}%`;
-        scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
+        if (scoreEl) {
+          scoreEl.innerText = `${score}%`;
+          scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
+        }
       }
 
       if (anyBad) {
@@ -567,7 +529,7 @@ function onResults(results) {
           badPostureStart = Date.now();
         }
 
-        const alertThresholdMs = (audioSettings.delaySeconds || 2.5) * 1000;
+        const alertThresholdMs = (appAudioConfig.delaySeconds || 2.5) * 1000;
         if (Date.now() - badPostureStart > alertThresholdMs) {
           document.body.classList.add('alert-active');
           hudStatus = t('hud_correct') + " " + reason.toUpperCase();
@@ -578,7 +540,7 @@ function onResults(results) {
 
           if (!alertLatched) {
             alertLatched = true;
-            addDailyLog('alert', reason, currentMode);
+            addDailyLog('alert', reason, 'session');
             triggerAlertNotification(reason);
           }
         }
@@ -587,11 +549,9 @@ function onResults(results) {
         alertLatched = false;
         stopContinuousPostureAlert();
         document.body.classList.remove('alert-active');
-        const modeKeyMap = { assis: 'title_sit', debout: 'title_stand', pause: 'title_pause' };
-        const modeLabel = t(modeKeyMap[currentMode]) || currentMode;
-        hudStatus = `${t('hud_neutral')} (${modeLabel.toUpperCase()})`;
+        hudStatus = t('hud_neutral') || "✓ POSTURE NEUTRE";
         hudColor = "rgba(16, 185, 129, 0.88)";
-        setStatusUI('var(--status-success)', `${t('status_optimal')} (${modeLabel})`);
+        setStatusUI('var(--status-success)', t('status_optimal') || "Posture optimale");
       }
     }
   } else {
@@ -672,51 +632,21 @@ function setLanguage(lang) {
     }
   });
 
-  document.querySelector('.brand-sub').innerText = t('brand_sub');
-  document.getElementById('segAssis').childNodes[2].nodeValue = " " + t('mode_sit');
-  document.getElementById('segDebout').childNodes[2].nodeValue = " " + t('mode_stand');
-  document.getElementById('segPause').childNodes[2].nodeValue = " " + t('mode_pause');
-
-  if (btnSound) {
-    const span = btnSound.querySelector('span');
-    if (span) span.innerText = isSoundEnabled() ? t('btn_audio') : t('btn_mute');
-  }
-
-  if (btnNotif) {
-    const span = btnNotif.querySelector('span');
-    if (span && !btnNotif.classList.contains('active-toggle')) span.innerText = t('btn_notif');
-  }
-
-  if (btnPiP) {
-    const span = btnPiP.querySelector('span');
-    if (span) span.innerText = t('btn_pip');
-  }
-
-  if (kineStudioView && currentMode === 'pause') {
-    kineStudioView.renderInitialStructure();
-    kineStudioView.updateExercise(kineRoutineManager.getCurrentExercise(), kineRoutineManager.currentIndex, kineRoutineManager.exercises.length);
-  }
+  const brandSub = document.querySelector('.brand-sub');
+  if (brandSub) brandSub.innerText = lang === 'fr' ? 'Rééducation Posturale • Sessions Ciblées' : 'Postural Rehabilitation • Targeted Sessions';
 
   // Gauges titles & descriptions
   const cardNeckTitle = document.querySelector('#cardNeck .gauge-title-box span');
-  const cardNeckCaption = document.querySelector('#cardNeck .gauge-caption');
-  if (cardNeckTitle) cardNeckTitle.innerText = t('gauge_neck_title');
-  if (cardNeckCaption) cardNeckCaption.innerText = t('gauge_neck_desc');
+  if (cardNeckTitle) cardNeckTitle.innerText = t('gauge_neck_title') ? t('gauge_neck_title').replace(/^[0-9]\.\s*/, '') : 'Projection Nuque';
 
   const cardShoulderTitle = document.querySelector('#cardShoulder .gauge-title-box span');
-  const cardShoulderCaption = document.querySelector('#cardShoulder .gauge-caption');
-  if (cardShoulderTitle) cardShoulderTitle.innerText = t('gauge_shoulder_title');
-  if (cardShoulderCaption) cardShoulderCaption.innerText = t('gauge_shoulder_desc');
+  if (cardShoulderTitle) cardShoulderTitle.innerText = t('gauge_shoulder_title') ? t('gauge_shoulder_title').replace(/^[0-9]\.\s*/, '') : 'Épaules & Trapèzes';
 
   const cardTiltTitle = document.getElementById('titleGaugeTilt');
-  const cardTiltCaption = document.getElementById('descGaugeTilt');
-  if (cardTiltTitle) cardTiltTitle.innerText = t('gauge_tilt_title');
-  if (cardTiltCaption) cardTiltCaption.innerText = t('gauge_tilt_desc');
+  if (cardTiltTitle) cardTiltTitle.innerText = t('gauge_tilt_title') ? t('gauge_tilt_title').replace(/^[0-9]\.\s*/, '') : 'Inclinaison Tête';
 
   const titleDist = document.getElementById('titleGaugeDistance');
-  const descDist = document.getElementById('descGaugeDistance');
-  if (titleDist) titleDist.innerText = t('gauge_distance_title');
-  if (descDist) descDist.innerText = t('gauge_distance_desc');
+  if (titleDist) titleDist.innerText = t('gauge_distance_title') ? t('gauge_distance_title').replace(/^[0-9]\.\s*/, '') : 'Distance Écran';
 
   // Eye rest banner
   const eyeTitle = document.getElementById('eyeRestTitle');
@@ -739,7 +669,17 @@ function setLanguage(lang) {
   if (btnCalibrateSpan) btnCalibrateSpan.innerText = t('btn_calibrate');
   if (btnStopCamSpan) btnStopCamSpan.innerText = t('btn_stop');
 
-  // Pacing & Journal widgets
+  // Popout active card
+  const popTitle = document.getElementById('popoutActiveTitle');
+  const popDesc = document.getElementById('popoutActiveDesc');
+  const labelReclaim = document.getElementById('labelReclaimPopout');
+  const btnExp = document.getElementById('btnExpandPopout');
+  if (popTitle) popTitle.innerText = t('popout_active_title');
+  if (popDesc) popDesc.innerText = t('popout_active_desc');
+  if (labelReclaim) labelReclaim.innerText = t('btn_reclaim_popout');
+  if (btnExp) btnExp.setAttribute('title', t('btn_popout_expand'));
+
+  // Session & Journal widgets
   const btnSettingsSpan = document.querySelector('#btnPacingSettings span');
   const btnResetSpan = document.querySelector('#btnResetTimer span');
   const btnExportSpan = document.querySelector('#btnExportCsv span');
@@ -752,7 +692,6 @@ function setLanguage(lang) {
   const footer = document.querySelector('footer');
   if (footer) footer.innerText = t('footer_text');
 
-  updateTimerDisplayTitles();
   renderAllLogs();
   updateLicenseUI();
 }
@@ -763,34 +702,36 @@ function toggleLanguage() {
 }
 
 // ----------------------------------------------------
-// MODAL TABS & PACING SETTINGS
+// MODAL TABS & SESSION SETTINGS
 // ----------------------------------------------------
 function openPacingModal() {
   const modal = document.getElementById('pacingModal');
-  document.getElementById('rangeSittingMinutes').value = pacingConfig.sittingMinutes;
-  document.getElementById('inputSittingMinutes').value = pacingConfig.sittingMinutes;
-  document.getElementById('hintSitVal').innerText = pacingConfig.sittingMinutes + ' min';
+  const sessionMin = pacingConfig.sessionMinutes || 30;
+  
+  const rangeSession = document.getElementById('rangeSessionMinutes');
+  const inputSession = document.getElementById('inputSessionMinutes');
+  const hintSession = document.getElementById('hintSessionVal');
+  if (rangeSession) rangeSession.value = sessionMin;
+  if (inputSession) inputSession.value = sessionMin;
+  if (hintSession) hintSession.innerText = sessionMin + ' min';
 
-  document.getElementById('rangeStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
-  document.getElementById('inputStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
-  document.getElementById('hintStandVal').innerText = pacingConfig.standingAlertMinutes + ' min';
-
-  document.getElementById('rangePauseMinutes').value = pacingConfig.pauseMinutes;
-  document.getElementById('inputPauseMinutes').value = pacingConfig.pauseMinutes;
-  document.getElementById('hintPauseVal').innerText = pacingConfig.pauseMinutes + ' min';
-
-  if (audioSettings.mode === 'continuous') {
-    document.getElementById('audioModeContinuous').checked = true;
+  if (appAudioConfig.mode === 'continuous') {
+    const rCont = document.getElementById('audioModeContinuous');
+    if (rCont) rCont.checked = true;
   } else {
-    document.getElementById('audioModePulse').checked = true;
+    const rPulse = document.getElementById('audioModePulse');
+    if (rPulse) rPulse.checked = true;
   }
-  const volInt = Math.round(audioSettings.volume * 100);
-  document.getElementById('rangeAudioVolume').value = volInt;
-  document.getElementById('valAudioVolume').innerText = volInt + '%';
-  document.getElementById('selectAlertDelay').value = String(audioSettings.delaySeconds);
+  const volInt = Math.round(appAudioConfig.volume * 100);
+  const rangeVol = document.getElementById('rangeAudioVolume');
+  const valVol = document.getElementById('valAudioVolume');
+  if (rangeVol) rangeVol.value = volInt;
+  if (valVol) valVol.innerText = volInt + '%';
+  const delaySelect = document.getElementById('selectAlertDelay');
+  if (delaySelect) delaySelect.value = String(appAudioConfig.delaySeconds);
 
-  document.getElementById('selectModalLanguage').value = getCurrentLanguage();
-  document.getElementById('selectModalSensitivity').value = sensitivitySelect.value;
+  const langSelect = document.getElementById('selectModalLanguage');
+  if (langSelect) langSelect.value = getCurrentLanguage();
 
   if (typeof modal.showModal === 'function') {
     modal.showModal();
@@ -838,10 +779,10 @@ function updateLicenseUI() {
   if (btnProStatus && labelProBadge) {
     if (proActive) {
       btnProStatus.classList.add('active-pro');
-      labelProBadge.innerText = `${t('pro_badge_active_prefix')}${remainingDays}${t('pro_badge_active_suffix')}`;
+      labelProBadge.innerText = `🛡️ ${remainingDays}j`;
     } else {
       btnProStatus.classList.remove('active-pro');
-      labelProBadge.innerText = t('pro_badge_free');
+      labelProBadge.innerText = t('pro_badge_free') || '✨ Pass 7€/an';
     }
   }
 
@@ -859,7 +800,6 @@ function updateLicenseUI() {
         overlay.setAttribute('title', t('lock_tooltip_gauge'));
         overlay.innerHTML = `
           <span class="lock-badge">🔒 ${t('pro_badge_free')}</span>
-          <span class="lock-sub">${t('lock_tooltip_gauge')}</span>
         `;
         overlay.addEventListener('click', openLicenseModal);
         cardEl.appendChild(overlay);
@@ -872,10 +812,7 @@ function updateLicenseUI() {
 
   // Bouton PiP
   if (btnPiP) {
-    const span = btnPiP.querySelector('span');
-    if (span) {
-      span.innerText = flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`;
-    }
+    btnPiP.setAttribute('title', flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`);
   }
 }
 
@@ -904,18 +841,120 @@ function closeLicenseModal() {
 // ----------------------------------------------------
 // EVENT LISTENERS BINDING
 // ----------------------------------------------------
-document.getElementById('btnStartCamera').addEventListener('click', startCamera);
-btnStopCam.addEventListener('click', stopCamera);
+document.getElementById('btnStartCamera').addEventListener('click', () => startCamera());
+btnStopCam.addEventListener('click', () => {
+  stopCamera();
+  pauseSessionTimer();
+});
 document.getElementById('btnCalibrate').addEventListener('click', startCalibrationCountdown);
 
-btnPiP.addEventListener('click', () => {
-  const flags = getFeatureFlags();
-  if (!flags.pipMiniWindow) {
-    openLicenseModal();
-    return;
+function showPopoutActiveState(active) {
+  if (popoutActiveCard) {
+    popoutActiveCard.style.display = active ? 'flex' : 'none';
   }
-  togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
-});
+  if (cameraPlaceholder) {
+    cameraPlaceholder.style.display = active ? 'none' : (!getIsCameraActive() ? 'flex' : 'none');
+  }
+  if (canvasElement) {
+    canvasElement.style.display = active ? 'none' : (getIsCameraActive() ? 'block' : 'none');
+  }
+  const controlsBar = document.querySelector('.camera-controls-bar');
+  if (controlsBar) {
+    controlsBar.style.display = active ? 'none' : 'flex';
+  }
+}
+
+if (btnPiP) {
+  btnPiP.addEventListener('click', async () => {
+    const flags = getFeatureFlags();
+    if (!flags.pipMiniWindow) {
+      openLicenseModal();
+      return;
+    }
+
+    if (isPopoutMode()) {
+      // Déjà dans la mini-fenêtre popout : active le PiP vidéo W3C standard si souhaité
+      togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
+      return;
+    }
+
+    // Depuis le panneau latéral ou l'onglet principal :
+    // Bascule vers le Mode Fenêtre Décrochée OS autonome (Solution A)
+    try {
+      if (getIsCameraActive()) {
+        await stopCamera();
+        pauseSessionTimer();
+      }
+      showPopoutActiveState(true);
+      syncChannel.postMessage({ type: 'POPOUT_ACTIVATED' });
+      openPopoutWindow();
+    } catch (e) {
+      console.warn("Échec lancement Pop-out, repli sur PiP standard :", e);
+      togglePictureInPicture(canvasElement, pipVideo).catch(err => alert(err.message));
+    }
+  });
+}
+
+if (btnReclaimPopout) {
+  btnReclaimPopout.addEventListener('click', async () => {
+    syncChannel.postMessage({ type: 'RECLAIM_REQUESTED' });
+    showPopoutActiveState(false);
+    await startCamera();
+  });
+}
+
+if (btnExpandPopout) {
+  btnExpandPopout.addEventListener('click', () => {
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.open(cleanUrl, '_blank');
+    window.close();
+  });
+}
+
+// Popover Notifs & Audio
+if (btnNotifMenu && notifsDropdown) {
+  btnNotifMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isHidden = notifsDropdown.style.display === 'none';
+    notifsDropdown.style.display = isHidden ? 'flex' : 'none';
+    btnNotifMenu.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!notifsDropdown.contains(e.target) && e.target !== btnNotifMenu) {
+      notifsDropdown.style.display = 'none';
+      btnNotifMenu.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+if (chkAudioToggle) {
+  chkAudioToggle.checked = isSoundEnabled();
+  chkAudioToggle.addEventListener('change', (e) => {
+    setSoundEnabled(e.target.checked);
+  });
+}
+
+if (rangeDropdownVol && labelDropdownVol) {
+  const initVol = Math.round(appAudioConfig.volume * 100);
+  rangeDropdownVol.value = initVol;
+  labelDropdownVol.innerText = initVol + '%';
+  rangeDropdownVol.addEventListener('input', (e) => {
+    labelDropdownVol.innerText = e.target.value + '%';
+    appAudioConfig.volume = parseInt(e.target.value, 10) / 100;
+    saveAudioSettings(appAudioConfig);
+  });
+}
+
+if (chkNotifToggle) {
+  chkNotifToggle.checked = ("Notification" in window) && Notification.permission === "granted";
+  chkNotifToggle.addEventListener('change', async (e) => {
+    if (e.target.checked) {
+      await requestNotifPermission();
+      chkNotifToggle.checked = Notification.permission === "granted";
+    }
+  });
+}
 
 const btnPro = document.getElementById('btnProStatus');
 if (btnPro) btnPro.addEventListener('click', openLicenseModal);
@@ -950,77 +989,59 @@ if (licenseForm) {
     }
   });
 }
-btnNotif.addEventListener('click', requestNotifPermission);
 
 document.getElementById('btnToggleLang').addEventListener('click', toggleLanguage);
-
-btnSound.addEventListener('click', () => {
-  const next = !isSoundEnabled();
-  setSoundEnabled(next);
-  btnSound.classList.toggle('active-toggle', next);
-  btnSound.setAttribute('aria-pressed', next ? 'true' : 'false');
-  btnSound.querySelector('span').innerText = next ? t('btn_audio') : t('btn_mute');
-  const iconSound = document.getElementById('iconSound');
-  if (iconSound) {
-    iconSound.innerHTML = next 
-      ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>'
-      : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-  }
-});
-
 cameraSelect.addEventListener('change', (e) => switchCamera(e.target.value));
-
-document.getElementById('segAssis').addEventListener('click', () => setMode('assis'));
-document.getElementById('segDebout').addEventListener('click', () => setMode('debout'));
-document.getElementById('segPause').addEventListener('click', () => setMode('pause'));
 
 document.getElementById('btnPacingSettings').addEventListener('click', openPacingModal);
 document.getElementById('btnResetTimer').addEventListener('click', resetCurrentModeTimer);
 document.getElementById('btnClosePacingModal').addEventListener('click', closePacingModal);
 document.getElementById('btnCancelPacingModal').addEventListener('click', closePacingModal);
 
+const btnKineRoutine = document.getElementById('btnOpenKineRoutine');
+if (btnKineRoutine) {
+  btnKineRoutine.addEventListener('click', openKineRoutineFromUI);
+}
+
 // Modal sliders 2-way sync
-const rangeSit = document.getElementById('rangeSittingMinutes');
-const inputSit = document.getElementById('inputSittingMinutes');
-const hintSit = document.getElementById('hintSitVal');
-rangeSit.addEventListener('input', () => { inputSit.value = rangeSit.value; hintSit.innerText = rangeSit.value + ' min'; });
-inputSit.addEventListener('input', () => { rangeSit.value = inputSit.value; hintSit.innerText = inputSit.value + ' min'; });
-
-const rangeStand = document.getElementById('rangeStandingAlertMinutes');
-const inputStand = document.getElementById('inputStandingAlertMinutes');
-const hintStand = document.getElementById('hintStandVal');
-rangeStand.addEventListener('input', () => { inputStand.value = rangeStand.value; hintStand.innerText = rangeStand.value + ' min'; });
-inputStand.addEventListener('input', () => { rangeStand.value = inputStand.value; hintStand.innerText = inputStand.value + ' min'; });
-
-const rangePause = document.getElementById('rangePauseMinutes');
-const inputPause = document.getElementById('inputPauseMinutes');
-const hintPause = document.getElementById('hintPauseVal');
-rangePause.addEventListener('input', () => { inputPause.value = rangePause.value; hintPause.innerText = rangePause.value + ' min'; });
-inputPause.addEventListener('input', () => { rangePause.value = inputPause.value; hintPause.innerText = inputPause.value + ' min'; });
+const rangeSession = document.getElementById('rangeSessionMinutes');
+const inputSession = document.getElementById('inputSessionMinutes');
+const hintSession = document.getElementById('hintSessionVal');
+if (rangeSession && inputSession && hintSession) {
+  rangeSession.addEventListener('input', () => { inputSession.value = rangeSession.value; hintSession.innerText = rangeSession.value + ' min'; });
+  inputSession.addEventListener('input', () => { rangeSession.value = inputSession.value; hintSession.innerText = inputSession.value + ' min'; });
+}
 
 const rangeVol = document.getElementById('rangeAudioVolume');
 const valVol = document.getElementById('valAudioVolume');
-rangeVol.addEventListener('input', () => {
-  valVol.innerText = rangeVol.value + '%';
-  audioSettings.volume = parseInt(rangeVol.value, 10) / 100;
-});
-
-const modalSens = document.getElementById('selectModalSensitivity');
-modalSens.addEventListener('change', () => {
-  sensitivitySelect.value = modalSens.value;
-});
+if (rangeVol && valVol) {
+  rangeVol.addEventListener('input', () => {
+    valVol.innerText = rangeVol.value + '%';
+    appAudioConfig.volume = parseInt(rangeVol.value, 10) / 100;
+  });
+}
 
 const modalLang = document.getElementById('selectModalLanguage');
-modalLang.addEventListener('change', () => {
-  setLanguage(modalLang.value);
-});
+if (modalLang) {
+  modalLang.addEventListener('change', () => {
+    setLanguage(modalLang.value);
+  });
+}
 
 document.getElementById('btnResetDefaults').addEventListener('click', () => {
-  document.getElementById('presetStandard').click();
-  document.getElementById('audioModePulse').checked = true;
-  rangeVol.value = 15;
-  valVol.innerText = '15%';
-  document.getElementById('selectAlertDelay').value = '2.5';
+  if (rangeSession) {
+    rangeSession.value = 30;
+    inputSession.value = 30;
+    hintSession.innerText = '30 min';
+  }
+  const audioPulse = document.getElementById('audioModePulse');
+  if (audioPulse) audioPulse.checked = true;
+  if (rangeVol) {
+    rangeVol.value = 15;
+    valVol.innerText = '15%';
+  }
+  const delaySel = document.getElementById('selectAlertDelay');
+  if (delaySel) delaySel.value = '2.5';
 });
 
 document.getElementById('tabBtnPacing').addEventListener('click', () => switchModalTab('pacing'));
@@ -1029,6 +1050,49 @@ document.getElementById('tabBtnPrefs').addEventListener('click', () => switchMod
 
 document.getElementById('btnTestAudioAlert').addEventListener('click', testAudioAlert);
 document.getElementById('btnTestCycleChime').addEventListener('click', playCycleChime);
+
+// Presets Session
+const preset20 = document.getElementById('presetKine20');
+const preset30 = document.getElementById('presetKine30');
+const preset45 = document.getElementById('presetKine45');
+
+function selectSessionPreset(mins, activeBtn) {
+  if (rangeSession && inputSession && hintSession) {
+    rangeSession.value = mins;
+    inputSession.value = mins;
+    hintSession.innerText = mins + ' min';
+  }
+  [preset20, preset30, preset45].forEach(b => { if (b) b.classList.remove('active'); });
+  if (activeBtn) activeBtn.classList.add('active');
+}
+
+if (preset20) preset20.addEventListener('click', () => selectSessionPreset(20, preset20));
+if (preset30) preset30.addEventListener('click', () => selectSessionPreset(30, preset30));
+if (preset45) preset45.addEventListener('click', () => selectSessionPreset(45, preset45));
+
+// Modal form submit
+document.getElementById('pacingForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const sessionMin = parseInt(inputSession ? inputSession.value : '30', 10);
+
+  if (sessionMin > 0) {
+    pacingConfig = savePacingConfig({ sessionMinutes: sessionMin, sittingMinutes: sessionMin });
+    sessionDurationMinutes = sessionMin;
+  }
+
+  const audioModeEl = document.querySelector('input[name="audioMode"]:checked');
+  const audioMode = audioModeEl ? audioModeEl.value : 'pulse';
+  const vol = rangeVol ? parseInt(rangeVol.value, 10) / 100 : 0.15;
+  const delaySel = document.getElementById('selectAlertDelay');
+  const delay = delaySel ? parseFloat(delaySel.value) : 2.5;
+
+  appAudioConfig = saveAudioSettings({ mode: audioMode, volume: vol, delaySeconds: delay });
+
+  if (modalLang) setLanguage(modalLang.value);
+
+  resetCurrentModeTimer();
+  closePacingModal();
+});
 
 document.getElementById('btnPrintKineReport').addEventListener('click', () => {
   const flags = getFeatureFlags();
@@ -1056,50 +1120,8 @@ document.getElementById('btnClearLogs').addEventListener('click', () => {
   sessionTotalFrames = 0;
   clearDailyLogs(todayKey);
   renderAllLogs();
-  document.getElementById('scoreDigits').innerText = '100%';
-});
-
-// Modal presets
-document.getElementById('presetPomodoro').addEventListener('click', () => {
-  rangeSit.value = 25; inputSit.value = 25; hintSit.innerText = '25 min';
-  rangeStand.value = 10; inputStand.value = 10; hintStand.innerText = '10 min';
-  rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
-});
-
-document.getElementById('presetStandard').addEventListener('click', () => {
-  rangeSit.value = 45; inputSit.value = 45; hintSit.innerText = '45 min';
-  rangeStand.value = 15; inputStand.value = 15; hintStand.innerText = '15 min';
-  rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
-});
-
-document.getElementById('presetActive').addEventListener('click', () => {
-  rangeSit.value = 50; inputSit.value = 50; hintSit.innerText = '50 min';
-  rangeStand.value = 20; inputStand.value = 20; hintStand.innerText = '20 min';
-  rangePause.value = 10; inputPause.value = 10; hintPause.innerText = '10 min';
-});
-
-// Modal form submit
-document.getElementById('pacingForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const sit = parseInt(inputSit.value, 10);
-  const stand = parseInt(inputStand.value, 10);
-  const pause = parseInt(inputPause.value, 10);
-
-  if (sit > 0 && stand > 0 && pause > 0) {
-    pacingConfig = savePacingConfig({ sittingMinutes: sit, standingAlertMinutes: stand, pauseMinutes: pause });
-  }
-
-  const audioMode = document.querySelector('input[name="audioMode"]:checked').value;
-  const vol = parseInt(rangeVol.value, 10) / 100;
-  const delay = parseFloat(document.getElementById('selectAlertDelay').value);
-
-  audioSettings = saveAudioSettings({ mode: audioMode, volume: vol, delaySeconds: delay });
-
-  setLanguage(modalLang.value);
-  sensitivitySelect.value = modalSens.value;
-
-  resetCurrentModeTimer();
-  closePacingModal();
+  const scoreDigits = document.getElementById('scoreDigits');
+  if (scoreDigits) scoreDigits.innerText = '100%';
 });
 
 // App Bootstrap
@@ -1108,3 +1130,49 @@ dailyLogs = loadDailyLogs(todayKey);
 renderAllLogs();
 resetCurrentModeTimer();
 updateLicenseUI();
+
+// ----------------------------------------------------
+// INITIALISATION MODE POP-OUT & SYNCHRONISATION MULTI-FENÊTRES (SOLUTION A)
+// ----------------------------------------------------
+const inPopout = isPopoutMode();
+
+if (inPopout) {
+  document.body.classList.add('mode-popout');
+  if (btnExpandPopout) {
+    btnExpandPopout.style.display = 'inline-flex';
+  }
+  if (btnPiP) {
+    btnPiP.setAttribute('title', 'Activer le Picture-in-Picture W3C');
+  }
+
+  // Démarrage automatique fluide dans la mini-fenêtre autonome
+  setTimeout(() => {
+    startCamera().catch(err => console.warn("Démarrage auto caméra popout :", err));
+  }, 400);
+
+  window.addEventListener('beforeunload', () => {
+    try {
+      syncChannel.postMessage({ type: 'POPOUT_CLOSED' });
+    } catch (_) {}
+  });
+
+  syncChannel.addEventListener('message', (ev) => {
+    if (ev.data && ev.data.type === 'RECLAIM_REQUESTED') {
+      window.close();
+    }
+  });
+} else {
+  // Contexte Hôte (Panneau latéral / Sidebar)
+  syncChannel.addEventListener('message', async (ev) => {
+    if (!ev.data) return;
+    if (ev.data.type === 'POPOUT_ACTIVATED') {
+      if (getIsCameraActive()) {
+        await stopCamera();
+        pauseSessionTimer();
+      }
+      showPopoutActiveState(true);
+    } else if (ev.data.type === 'POPOUT_CLOSED') {
+      showPopoutActiveState(false);
+    }
+  });
+}

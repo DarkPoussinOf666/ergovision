@@ -49,12 +49,36 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       handleSystemNotification(message);
       break;
 
+    case 'OPEN_POPOUT_WINDOW':
+      handleOpenPopout(message);
+      break;
+
     default:
       break;
   }
 
   sendResponse({ status: 'ok' });
 });
+
+// Ouverture de la fenêtre pop-out autonome (Solution A)
+function handleOpenPopout(msg) {
+  if (typeof chrome !== 'undefined' && chrome.windows && chrome.windows.create) {
+    const width = msg.width || 420;
+    const height = msg.height || 640;
+    const left = typeof msg.left === 'number' ? msg.left : 100;
+    const top = typeof msg.top === 'number' ? msg.top : 50;
+
+    chrome.windows.create({
+      url: chrome.runtime.getURL('index.html?mode=popout'),
+      type: 'popup',
+      width: width,
+      height: height,
+      left: left,
+      top: top,
+      focused: true
+    }).catch(err => console.warn("Erreur ouverture fenêtre popup :", err));
+  }
+}
 
 // Gestion du badge visuel sur l'icône de l'extension
 function handlePostureStatus({ status, detail }) {

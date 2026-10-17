@@ -47,6 +47,8 @@ function build() {
     { file: 'src/kine/routine-timer.js', name: 'routine' },
     { file: 'src/ui/kine-studio-view.js', name: 'kineStudioView' },
     { file: 'src/pacing/eye-rest-timer.js', name: 'eyeRest' },
+    { file: 'src/license/license-gate.js', name: 'licenseGate' },
+    { file: 'src/reports/kine-report.js', name: 'kineReport' },
     { file: 'src/app.js', name: 'app' }
   ];
 
@@ -60,6 +62,7 @@ function build() {
     code = code.replace(/import\s+[\s\S]*?from\s+['"][^'"]+['"];?/g, '');
     code = code.replace(/export\s+const\s+/g, 'const ');
     code = code.replace(/export\s+let\s+/g, 'let ');
+    code = code.replace(/export\s+async\s+function\s+/g, 'async function ');
     code = code.replace(/export\s+function\s+/g, 'function ');
     code = code.replace(/export\s+class\s+/g, 'class ');
     code = code.replace(/export\s+default\s+/g, '');

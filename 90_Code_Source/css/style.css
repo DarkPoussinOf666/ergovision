@@ -584,39 +584,128 @@
       100% { transform: scale(1); opacity: 0.9; }
     }
 
-    /* Barre Inférieure de Contrôle sous le Viewport */
-    .viewport-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0.6rem 0.95rem;
-      background: rgba(9, 12, 20, 0.85);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    /* ==========================================================================
+       BARRE DE CONTRÔLES EXTERNE (HORS CADRE VIDÉO) & POPOVER NOTIFS
+       ========================================================================== */
+    .camera-controls-bar {
+      margin-top: 0.65rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--fluent-bg-card);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      box-shadow: var(--shadow-rest);
+    }
+
+    .camera-actions-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-calibrate {
+      flex: 1;
+      background: var(--status-success) !important;
+      color: #ffffff !important;
+      border: none !important;
+      font-weight: 700;
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+      box-shadow: var(--status-success-glow);
+    }
+
+    .btn-calibrate:hover {
+      filter: brightness(1.1);
+    }
+
+    .btn-stop {
+      background: var(--status-danger-bg) !important;
+      color: var(--status-danger) !important;
+      border-color: var(--status-danger-border) !important;
+      padding: 0.55rem 0.85rem;
+      font-weight: 600;
+    }
+
+    .btn-stop:hover {
+      background: var(--status-danger) !important;
+      color: #ffffff !important;
+    }
+
+    .camera-info-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.6rem;
-      z-index: 15;
+      gap: 0.5rem;
+      font-size: 0.75rem;
     }
 
     .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.55rem;
-      font-size: 0.78rem;
+      gap: 0.45rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      color: #ffffff;
+      color: var(--fluent-fg-secondary);
     }
 
     .status-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: var(--radius-pill);
       background: var(--fluent-fg-muted);
-      box-shadow: 0 0 10px currentColor;
+      box-shadow: 0 0 8px currentColor;
       transition: background-color var(--transition-fast);
+    }
+
+    .camera-select-discreet {
+      font-size: 0.72rem !important;
+      padding: 0.2rem 0.5rem !important;
+      min-height: 28px !important;
+      max-width: 170px;
+      text-overflow: ellipsis;
+    }
+
+    /* Popover Menu Notifs & Audio */
+    .notifs-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      width: 230px;
+      background: var(--fluent-bg-surface-flyout);
+      border: 1px solid var(--fluent-stroke-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-modal);
+      padding: 0.85rem;
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      animation: fadeIn var(--transition-fast);
+    }
+
+    .notifs-dropdown-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--fluent-fg-primary);
+      border-bottom: 1px solid var(--fluent-stroke-subtle);
+      padding-bottom: 0.4rem;
+    }
+
+    .notifs-row {
+      font-size: 0.76rem;
+      color: var(--fluent-fg-secondary);
+    }
+
+    .btn-icon-only {
+      width: 36px;
+      height: 36px;
+      padding: 0 !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* ==========================================================================
@@ -1483,4 +1572,102 @@
       .presets-grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    /* ==========================================================================
+       POPOUT ACTIVE BANNER / CARD (HOST SIDE PANEL STATE)
+       ========================================================================== */
+    .popout-active-card {
+      position: absolute;
+      inset: 0;
+      background: var(--fluent-bg-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem;
+      z-index: 15;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .popout-hero-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(15, 108, 189, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ==========================================================================
+       MODE POP-OUT AUTONOME (MINI-FENÊTRE OS FLOTTANTE)
+       ========================================================================== */
+    body.mode-popout {
+      overflow-x: hidden;
+      min-width: 320px;
+    }
+
+    body.mode-popout .topbar {
+      padding: 0.4rem 0.6rem;
+      gap: 0.4rem;
+    }
+
+    body.mode-popout .topbar .brand h1 {
+      font-size: 0.95rem;
+    }
+
+    body.mode-popout .topbar .brand-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    body.mode-popout .bento-grid {
+      grid-template-columns: 1fr !important;
+      padding: 0.4rem;
+      gap: 0.5rem;
+    }
+
+    body.mode-popout .panel {
+      padding: 0.6rem;
+    }
+
+    /* Masquer les sections volumineuses non requises durant le travail en arrière-plan */
+    body.mode-popout #panelTimeline,
+    body.mode-popout #panelKine:not(.kine-active) {
+      display: none !important;
+    }
+
+    body.mode-popout .viewport {
+      aspect-ratio: 4 / 3;
+    }
+
+    body.mode-popout .gauges-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.4rem;
+    }
+
+    body.mode-popout .gauge-card {
+      padding: 0.45rem 0.55rem;
+    }
+
+    body.mode-popout .gauge-header {
+      margin-bottom: 0.2rem;
+    }
+
+    body.mode-popout .gauge-val {
+      font-size: 1.1rem;
+    }
+
+    body.mode-popout .camera-controls-bar {
+      margin-top: 0.4rem;
+      gap: 0.4rem;
+    }
+
+    body.mode-popout .btn-calibrate,
+    body.mode-popout .btn-stop {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.78rem;
     }

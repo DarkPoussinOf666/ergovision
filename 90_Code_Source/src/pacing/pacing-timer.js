@@ -4,7 +4,8 @@
  */
 
 export const DEFAULT_PACING_CONFIG = {
-  sittingMinutes: 45,
+  sessionMinutes: 30,
+  sittingMinutes: 30,
   standingAlertMinutes: 15,
   pauseMinutes: 5
 };
@@ -14,8 +15,13 @@ export function loadPacingConfig() {
     const saved = localStorage.getItem('ergovision_pacing_config');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed.sittingMinutes && parsed.standingAlertMinutes && parsed.pauseMinutes) {
-        return parsed;
+      if (parsed.sessionMinutes || parsed.sittingMinutes) {
+        return {
+          sessionMinutes: parsed.sessionMinutes || parsed.sittingMinutes || 30,
+          sittingMinutes: parsed.sittingMinutes || 30,
+          standingAlertMinutes: parsed.standingAlertMinutes || 15,
+          pauseMinutes: parsed.pauseMinutes || 5
+        };
       }
     }
   } catch (e) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -819,39 +819,128 @@
       100% { transform: scale(1); opacity: 0.9; }
     }
 
-    /* Barre Inférieure de Contrôle sous le Viewport */
-    .viewport-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0.6rem 0.95rem;
-      background: rgba(9, 12, 20, 0.85);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    /* ==========================================================================
+       BARRE DE CONTRÔLES EXTERNE (HORS CADRE VIDÉO) & POPOVER NOTIFS
+       ========================================================================== */
+    .camera-controls-bar {
+      margin-top: 0.65rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--fluent-bg-card);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-top: 1px solid var(--fluent-glass-highlight);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      box-shadow: var(--shadow-rest);
+    }
+
+    .camera-actions-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-calibrate {
+      flex: 1;
+      background: var(--status-success) !important;
+      color: #ffffff !important;
+      border: none !important;
+      font-weight: 700;
+      padding: 0.55rem 1rem;
+      font-size: 0.85rem;
+      box-shadow: var(--status-success-glow);
+    }
+
+    .btn-calibrate:hover {
+      filter: brightness(1.1);
+    }
+
+    .btn-stop {
+      background: var(--status-danger-bg) !important;
+      color: var(--status-danger) !important;
+      border-color: var(--status-danger-border) !important;
+      padding: 0.55rem 0.85rem;
+      font-weight: 600;
+    }
+
+    .btn-stop:hover {
+      background: var(--status-danger) !important;
+      color: #ffffff !important;
+    }
+
+    .camera-info-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.6rem;
-      z-index: 15;
+      gap: 0.5rem;
+      font-size: 0.75rem;
     }
 
     .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.55rem;
-      font-size: 0.78rem;
+      gap: 0.45rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      color: #ffffff;
+      color: var(--fluent-fg-secondary);
     }
 
     .status-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: var(--radius-pill);
       background: var(--fluent-fg-muted);
-      box-shadow: 0 0 10px currentColor;
+      box-shadow: 0 0 8px currentColor;
       transition: background-color var(--transition-fast);
+    }
+
+    .camera-select-discreet {
+      font-size: 0.72rem !important;
+      padding: 0.2rem 0.5rem !important;
+      min-height: 28px !important;
+      max-width: 170px;
+      text-overflow: ellipsis;
+    }
+
+    /* Popover Menu Notifs & Audio */
+    .notifs-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      width: 230px;
+      background: var(--fluent-bg-surface-flyout);
+      border: 1px solid var(--fluent-stroke-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-modal);
+      padding: 0.85rem;
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      animation: fadeIn var(--transition-fast);
+    }
+
+    .notifs-dropdown-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--fluent-fg-primary);
+      border-bottom: 1px solid var(--fluent-stroke-subtle);
+      padding-bottom: 0.4rem;
+    }
+
+    .notifs-row {
+      font-size: 0.76rem;
+      color: var(--fluent-fg-secondary);
+    }
+
+    .btn-icon-only {
+      width: 36px;
+      height: 36px;
+      padding: 0 !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* ==========================================================================
@@ -1719,11 +1808,109 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ==========================================================================
+       POPOUT ACTIVE BANNER / CARD (HOST SIDE PANEL STATE)
+       ========================================================================== */
+    .popout-active-card {
+      position: absolute;
+      inset: 0;
+      background: var(--fluent-bg-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem;
+      z-index: 15;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .popout-hero-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(15, 108, 189, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ==========================================================================
+       MODE POP-OUT AUTONOME (MINI-FENÊTRE OS FLOTTANTE)
+       ========================================================================== */
+    body.mode-popout {
+      overflow-x: hidden;
+      min-width: 320px;
+    }
+
+    body.mode-popout .topbar {
+      padding: 0.4rem 0.6rem;
+      gap: 0.4rem;
+    }
+
+    body.mode-popout .topbar .brand h1 {
+      font-size: 0.95rem;
+    }
+
+    body.mode-popout .topbar .brand-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    body.mode-popout .bento-grid {
+      grid-template-columns: 1fr !important;
+      padding: 0.4rem;
+      gap: 0.5rem;
+    }
+
+    body.mode-popout .panel {
+      padding: 0.6rem;
+    }
+
+    /* Masquer les sections volumineuses non requises durant le travail en arrière-plan */
+    body.mode-popout #panelTimeline,
+    body.mode-popout #panelKine:not(.kine-active) {
+      display: none !important;
+    }
+
+    body.mode-popout .viewport {
+      aspect-ratio: 4 / 3;
+    }
+
+    body.mode-popout .gauges-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.4rem;
+    }
+
+    body.mode-popout .gauge-card {
+      padding: 0.45rem 0.55rem;
+    }
+
+    body.mode-popout .gauge-header {
+      margin-bottom: 0.2rem;
+    }
+
+    body.mode-popout .gauge-val {
+      font-size: 1.1rem;
+    }
+
+    body.mode-popout .camera-controls-bar {
+      margin-top: 0.4rem;
+      gap: 0.4rem;
+    }
+
+    body.mode-popout .btn-calibrate,
+    body.mode-popout .btn-stop {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.78rem;
+    }
   </style>
 </head>
 <body>
 
-  <!-- BARRE DE NAVIGATION SUPERIEURE (FLUENT WORKSTATION TOPBAR) -->
+  <!-- BARRE DE NAVIGATION SUPERIEURE (TOPBAR EPUREE) -->
   <header class="topbar" role="banner">
     <div class="brand">
       <div class="brand-icon-box" aria-hidden="true">
@@ -1731,58 +1918,60 @@
         <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       </div>
       <div>
-        <div class="brand-title">
-          ErgoVision AI <span class="badge-version">Fluent Workstation v3.2</span>
-        </div>
-        <div class="brand-sub">Copilote Ergonomique • Prévention des TMS en Temps Réel</div>
+        <div class="brand-title">ErgoVision AI</div>
+        <div class="brand-sub" data-i18n="brand_sub">Rééducation Posturale • Sessions Ciblées</div>
       </div>
     </div>
 
-    <!-- Sélecteur de Mode Segmenté Fluent avec Icônes SVG -->
-    <div class="segmented-control" role="tablist" aria-label="Mode de travail ergonomique">
-      <button id="segAssis" class="seg-btn active" role="tab" aria-selected="true">
-        <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
-        Bureau Assis
-      </button>
-      <button id="segDebout" class="seg-btn" role="tab" aria-selected="false">
-        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v10"/><path d="m9 12 3-2 3 2"/><path d="m10 21 2-4 2 4"/></svg>
-        Bureau Debout
-      </button>
-      <button id="segPause" class="seg-btn" role="tab" aria-selected="false">
-        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v7"/><path d="m5 10 7-3 7 3"/><path d="m8 21 4-7 4 7"/></svg>
-        Pause &amp; Étirement
-      </button>
-    </div>
-
-    <!-- Actions Rapides & Contrôles Fluent -->
+    <!-- Actions Rapides Épurées (1 Seule Ligne) -->
     <div class="quick-actions" role="toolbar" aria-label="Actions rapides">
-      <select id="sensitivitySelect" class="input-select" title="Sensibilité de tolérance angulaire" aria-label="Tolérance angulaire">
-        <option value="1.25">Tolérance : Souple (Fin de journée)</option>
-        <option value="1.0" selected>Tolérance : Standard</option>
-        <option value="0.8">Tolérance : Stricte (Protection max)</option>
-      </select>
-
-      <button id="btnSound" class="btn-action active-toggle" title="Activer / Désactiver le retour audio" aria-label="Couper ou activer le son" aria-pressed="true">
-        <svg id="iconSound" class="icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-        <span>Audio</span>
-      </button>
-
-      <button id="btnNotif" class="btn-action" title="Autoriser les alertes système" aria-label="Activer les alertes OS">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-        <span>Notifs OS</span>
-      </button>
-
-      <button id="btnPiP" class="btn-action btn-pip" title="Ouvrir la miniature par-dessus vos outils de travail (Teams, VS Code)" aria-label="Ouvrir la fenêtre Picture-in-Picture">
-        <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
-        <span>Mini-Fenêtre</span>
-      </button>
-
       <button id="btnProStatus" class="btn-pro-badge" title="Gérer votre Pass Annuel Éthique (7 € / an)" aria-label="Gérer votre Pass Annuel">
-        <span id="labelProBadge">✨ Pass Complet · 7€/an</span>
+        <span id="labelProBadge">✨ Pass 7€/an</span>
       </button>
+
+      <button id="btnPiP" class="btn-action btn-icon-only" title="Mini-Fenêtre flottante par-dessus vos outils de travail" aria-label="Ouvrir la fenêtre Picture-in-Picture">
+        <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
+      </button>
+
+      <!-- Bouton Agrandir / Ré-ancrer (visible uniquement en mode mini-fenêtre pop-out) -->
+      <button id="btnExpandPopout" class="btn-action btn-icon-only" style="display:none;" title="Agrandir en grand écran" aria-label="Agrandir en grand écran">
+        <svg class="icon" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </button>
+
+      <!-- Menu Déroulant Popover Notifs & Audio -->
+      <div class="popover-wrapper" style="position:relative;">
+        <button id="btnNotifMenu" class="btn-action btn-icon-only" title="Paramètres audio et notifications" aria-label="Ouvrir le menu audio et notifications" aria-expanded="false">
+          <svg id="iconNotifsBell" class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        </button>
+        <div id="notifsDropdown" class="notifs-dropdown" style="display:none;" role="region" aria-label="Paramètres audio et notifications">
+          <div class="notifs-dropdown-title">Alertes &amp; Signaux</div>
+          
+          <div class="notifs-row">
+            <label style="display:flex; justify-content:space-between; align-items:center; width:100%; cursor:pointer;">
+              <span style="font-weight:600; font-size:0.8rem;">Signal Audio</span>
+              <input type="checkbox" id="chkAudioToggle" checked>
+            </label>
+          </div>
+
+          <div class="notifs-row" id="rowAudioVolume">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:0.25rem;">
+              <span>Volume</span>
+              <span id="labelDropdownVol">15%</span>
+            </div>
+            <input type="range" id="rangeDropdownVol" min="0" max="100" step="5" value="15" style="width:100%;">
+          </div>
+
+          <div class="notifs-row">
+            <label style="display:flex; justify-content:space-between; align-items:center; width:100%; cursor:pointer;">
+              <span style="font-weight:600; font-size:0.8rem;">Notifications OS</span>
+              <input type="checkbox" id="chkNotifToggle">
+            </label>
+          </div>
+        </div>
+      </div>
 
       <button id="btnTheme" class="btn-action btn-theme-toggle" title="Basculer entre Mode Sombre et Mode Clair" aria-label="Basculer le thème">
-        <svg id="iconTheme" class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg id="iconTheme" class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
 
       <button id="btnToggleLang" class="btn-action btn-lang-toggle" title="Changer de langue / Switch language" aria-label="Changer la langue de l'application">
@@ -1794,7 +1983,7 @@
   <!-- CONTENU PRINCIPAL EN GRILLE BENTO -->
   <main class="bento-grid" role="main">
 
-    <!-- COLONNE GAUCHE : FLUX VIDEO, POSE ESTIMATION & JAUGES EN TEMPS REEL -->
+    <!-- COLONNE GAUCHE : FLUX VIDEO, CALIBRATION & JAUGES BIOMÉCANIQUES -->
     <section class="panel" aria-label="Flux vidéo et analyse biomécanique">
       <!-- BANDEAU PAUSE OCULAIRE 20-20-20 -->
       <div id="eyeRestBanner" class="eye-rest-banner" style="display:none;" role="alert" aria-live="polite">
@@ -1813,13 +2002,14 @@
         </div>
       </div>
 
+      <!-- VIEWPORT VIDEO (100% DEGAGE) -->
       <div class="viewport" aria-label="Moniteur vidéo de posture">
         <!-- Écran d'accueil de la caméra -->
         <div id="cameraPlaceholder" class="camera-placeholder">
           <div class="camera-hero-icon" aria-hidden="true">
             <svg class="icon icon-lg" style="width:28px; height:28px;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
-          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--fluent-fg-primary);">Protection Posturale Locale & Confidentielle</h2>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--fluent-fg-primary);">Protection Posturale Locale &amp; Confidentielle</h2>
           <p style="font-size: 0.85rem; color: var(--fluent-fg-secondary); max-width: 440px; line-height: 1.5;">
             L'analyse biomécanique s'exécute à 100% sur votre processeur via WebAssembly. Aucun flux vidéo n'est enregistré ni transmis sur Internet.
           </p>
@@ -1829,6 +2019,21 @@
               <span>Activer le Capteur Optique</span>
             </button>
           </div>
+        </div>
+
+        <!-- Carte de veille active quand la Mini-Fenêtre Popout est ouverte -->
+        <div id="popoutActiveCard" class="popout-active-card" style="display:none;" role="region" aria-label="Mini-fenêtre active">
+          <div class="popout-hero-badge" aria-hidden="true">
+            <svg class="icon" style="width:32px; height:32px; color:var(--brand-primary);" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
+          </div>
+          <h2 id="popoutActiveTitle" style="font-size: 1.15rem; font-weight: 700; color: var(--fluent-fg-primary); margin: 0.6rem 0 0.25rem;">ErgoVision est actif dans votre mini-fenêtre</h2>
+          <p id="popoutActiveDesc" style="font-size: 0.85rem; color: var(--fluent-fg-secondary); max-width: 440px; line-height: 1.5; margin: 0 auto 1.25rem;">
+            Vous pouvez replier ou fermer ce panneau latéral en toute tranquillité pour libérer votre écran. Votre posture reste protégée.
+          </p>
+          <button id="btnReclaimPopout" class="cta-button" style="font-size:0.85rem; padding: 0.55rem 1.2rem;">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+            <span id="labelReclaimPopout">↩️ Rapatrier dans ce panneau</span>
+          </button>
         </div>
 
         <!-- Décompte de calibration 3-2-1 -->
@@ -1843,103 +2048,108 @@
         <video id="input_video" playsinline></video>
         <canvas id="output_canvas" width="640" height="400"></canvas>
         <video id="pip_video" muted playsinline style="display:none;"></video>
+      </div>
 
-        <!-- Bandeau d'état inférieur sous le viewport -->
-        <div class="viewport-bar">
+      <!-- BARRE DE CONTRÔLES EXTERNE (HORS CADRE VIDÉO) -->
+      <div class="camera-controls-bar">
+        <div class="camera-actions-row">
+          <button id="btnCalibrate" class="btn-action btn-calibrate" onclick="startCalibrationCountdown()">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+            <span>Calibrer Point Zéro (3s)</span>
+          </button>
+          <button id="btnStopCam" class="btn-action btn-stop" style="display:none;" onclick="stopCamera()">
+            <svg class="icon" viewBox="0 0 24 24"><rect width="14" height="14" x="5" y="5" rx="2"/></svg>
+            <span>Arrêter</span>
+          </button>
+        </div>
+        <div class="camera-info-row">
           <div class="status-pill" role="status" aria-live="polite">
             <span id="statusDot" class="status-dot"></span>
             <span id="statusText">Capteur en attente</span>
           </div>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <select id="cameraSelect" class="input-select" style="display:none; font-size:0.75rem; padding:0.25rem 0.5rem;" onchange="switchCamera(this.value)" aria-label="Sélectionner la caméra">
-            </select>
-            <button id="btnCalibrate" class="btn-action" style="background:var(--status-success); color:#ffffff; font-weight:600; border:none;" onclick="startCalibrationCountdown()">
-              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
-              <span>Calibrer Point Zéro (3s)</span>
-            </button>
-            <button id="btnStopCam" class="btn-action" style="display:none; background:var(--status-danger-bg); color:var(--status-danger); border-color:var(--status-danger-border);" onclick="stopCamera()">
-              <svg class="icon" viewBox="0 0 24 24"><rect width="14" height="14" x="5" y="5" rx="2"/></svg>
-              <span>Arrêter</span>
-            </button>
-          </div>
+          <select id="cameraSelect" class="input-select camera-select-discreet" style="display:none;" onchange="switchCamera(this.value)" aria-label="Sélectionner la caméra">
+          </select>
         </div>
       </div>
 
-      <!-- 3 Jauges Dédiées à la Prévention des TMS -->
+      <!-- 4 JAUGES BIOMÉCANIQUES COMPACTES (SANS SURCHARGE) -->
       <div class="gauges-grid" role="region" aria-label="Indicateurs de dérives posturales">
-        <div id="cardNeck" class="gauge-card">
+        <div id="cardNeck" class="gauge-card" title="Prévient l'affaissement cervical (« Text-Neck ») et la surcharge cervicale.">
           <div class="gauge-header">
             <div class="gauge-title-box">
               <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="m17 5-5-3-5 3"/><path d="m17 19-5 3-5-3"/></svg>
-              <span>1. Projection Nuque</span>
+              <span>Projection Nuque</span>
             </div>
             <span id="badgeNeck" class="gauge-badge">0%</span>
           </div>
           <div class="gauge-track"><div id="fillNeck" class="gauge-fill"></div></div>
-          <div class="gauge-caption">Prévient l'affaissement cervical (« Text-Neck ») et la surcharge cervicale.</div>
         </div>
 
-        <div id="cardShoulder" class="gauge-card">
+        <div id="cardShoulder" class="gauge-card" title="Surveille l'élévation anormale des épaules et les asymétries posturales.">
           <div class="gauge-header">
             <div class="gauge-title-box">
               <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              <span>2. Épaules &amp; Trapèzes</span>
+              <span>Épaules &amp; Trapèzes</span>
             </div>
             <span id="badgeShoulder" class="gauge-badge">0%</span>
           </div>
           <div class="gauge-track"><div id="fillShoulder" class="gauge-fill"></div></div>
-          <div class="gauge-caption">Surveille l'élévation anormale des épaules et les asymétries posturales.</div>
         </div>
 
-        <div id="cardTilt" class="gauge-card">
+        <div id="cardTilt" class="gauge-card" title="Détecte l'inclinaison latérale prolongée et les tensions asymétriques.">
           <div class="gauge-header">
             <div class="gauge-title-box">
               <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 12a4 4 0 0 1-8 0"/></svg>
-              <span id="titleGaugeTilt">3. Inclinaison Tête</span>
+              <span id="titleGaugeTilt">Inclinaison Tête</span>
             </div>
             <span id="badgeTilt" class="gauge-badge">0%</span>
           </div>
           <div class="gauge-track"><div id="fillTilt" class="gauge-fill"></div></div>
-          <div class="gauge-caption" id="descGaugeTilt">Détecte l'inclinaison latérale prolongée et les tensions asymétriques.</div>
         </div>
 
-        <div id="cardDistance" class="gauge-card">
+        <div id="cardDistance" class="gauge-card" title="Prévient le rapprochement excessif (&lt;50cm) et la fatigue oculaire.">
           <div class="gauge-header">
             <div class="gauge-title-box">
               <svg class="icon" style="color:var(--fluent-brand);" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-              <span id="titleGaugeDistance">4. Distance Écran</span>
+              <span id="titleGaugeDistance">Distance Écran</span>
             </div>
             <span id="badgeDistance" class="gauge-badge">0%</span>
           </div>
           <div class="gauge-track"><div id="fillDistance" class="gauge-fill"></div></div>
-          <div class="gauge-caption" id="descGaugeDistance">Prévient le rapprochement excessif (&lt;50cm) et la fatigue oculaire.</div>
         </div>
       </div>
     </section>
 
-    <!-- COLONNE DROITE : CADENCE, RYTHME & HISTORIQUE -->
-    <section class="panel" aria-label="Cadence de travail et télémétrie">
-      <!-- Pacing & Score de Maintien Neutre -->
+    <!-- COLONNE DROITE : SESSION DE RÉÉDUCATION, SCORE & BILAN -->
+    <section class="panel" aria-label="Session de rééducation et télémétrie">
+      <!-- Session Kiné & Maintien Neutre -->
       <div class="widget-row">
         <div id="pacingWidget" class="widget-box">
           <div class="section-title" style="border:none; padding:0;">
             <div class="section-title-left">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span id="timerTitle">Bureau Assis</span>
+              <span id="timerTitle">Session Rééducation</span>
             </div>
             <div style="display:flex; align-items:center; gap:0.4rem;">
-              <button type="button" id="btnPacingSettings" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Personnaliser les durées">
+              <button type="button" id="btnPacingSettings" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Régler la durée de la session">
                 <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 <span>Régler</span>
               </button>
-              <button type="button" id="btnResetTimer" style="background:none; border:none; cursor:pointer; color:var(--fluent-brand); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Réinitialiser le chrono">
+              <button type="button" id="btnResetTimer" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-muted); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Réinitialiser la session">
                 <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                 <span>Reset</span>
               </button>
             </div>
           </div>
-          <div id="timerDigits" class="mono-big">45:00</div>
-          <div id="timerSub" class="widget-sub">Alternance conseillée toutes les 45 min</div>
+          <div id="timerDigits" class="mono-big">30:00</div>
+          <div id="timerSub" class="widget-sub">Session ciblée conseillée : 2 × 30 min / jour</div>
+          
+          <div style="margin-top:0.75rem; display:flex; gap:0.5rem; justify-content:space-between; align-items:center; border-top:1px solid var(--fluent-stroke-subtle); padding-top:0.6rem;">
+            <button type="button" id="btnOpenKineRoutine" class="btn-action" style="font-size:0.74rem; padding:0.35rem 0.7rem; border-color:var(--fluent-brand-border); background:var(--fluent-brand-tint); color:var(--fluent-brand); font-weight:600;">
+              <span>🧘 Étirements Kiné (5 min)</span>
+            </button>
+            <span id="sessionStatusBadge" style="font-size:0.72rem; color:var(--fluent-fg-muted);">En attente de calibration</span>
+          </div>
         </div>
 
         <div class="widget-box">
@@ -1954,6 +2164,7 @@
           <div class="widget-sub">Ratio de temps en posture conforme</div>
         </div>
       </div>
+
 
       <!-- ATELIER KINÉ DU DOS • PAUSE ACTIVE (FLUENT UI 2) -->
       <div id="kineStudioContainer" style="display:none; margin-bottom:0.75rem;"></div>
@@ -2019,56 +2230,40 @@
     </div>
 
     <form id="pacingForm" method="dialog">
-      <!-- ONGLET 1 : RYTHME & PACING -->
+      <!-- ONGLET 1 : SESSION DE RÉÉDUCATION -->
       <div id="tabPanePacing" class="modal-tab-pane active" role="tabpanel">
-        <div style="font-size:0.75rem; color:var(--fluent-fg-muted); margin-bottom:0.75rem;" data-i18n="presets_title">
-          Presets ergonomiques recommandés :
+        <div style="font-size:0.75rem; color:var(--fluent-fg-muted); margin-bottom:0.75rem;">
+          Durées de session recommandées par les professionnels :
         </div>
         <div class="presets-grid">
-          <button type="button" id="presetPomodoro" class="btn-preset">
-            <strong>Pomodoro 25/5</strong>
-            <span>25m assis • 5m pause</span>
+          <button type="button" id="presetKine20" class="btn-preset">
+            <strong>Douceur • 20 min</strong>
+            <span>Reprise &amp; fatigue cervicale</span>
           </button>
-          <button type="button" id="presetStandard" class="btn-preset">
-            <strong>Standard 45/15</strong>
-            <span>45m assis • 15m debout</span>
+          <button type="button" id="presetKine30" class="btn-preset active">
+            <strong>Kiné • 30 min</strong>
+            <span>Recommandé (2 sessions / jour)</span>
           </button>
-          <button type="button" id="presetActive" class="btn-preset">
-            <strong>Actif 50/10</strong>
-            <span>50m assis • 20m debout</span>
+          <button type="button" id="presetKine45" class="btn-preset">
+            <strong>Endurance • 45 min</strong>
+            <span>Stabilité posturale confirmée</span>
           </button>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="inputSittingMinutes">
-            <span data-i18n="label_sit_duration">Durée Station Assise</span>
-            <span class="form-label-hint" id="hintSitVal">45 min</span>
+          <label class="form-label" for="inputSessionMinutes">
+            <span>Durée de la Session de Rééducation</span>
+            <span class="form-label-hint" id="hintSessionVal">30 min</span>
           </label>
           <div class="slider-row">
-            <input type="range" id="rangeSittingMinutes" min="5" max="120" step="5" value="45" aria-label="Curseur durée station assise">
-            <input type="number" id="inputSittingMinutes" class="form-input" style="width:75px;" min="5" max="120" step="5" required>
+            <input type="range" id="rangeSessionMinutes" min="10" max="60" step="5" value="30" aria-label="Curseur durée session rééducation">
+            <input type="number" id="inputSessionMinutes" class="form-input" style="width:75px;" min="10" max="60" step="5" value="30" required>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="inputStandingAlertMinutes">
-            <span data-i18n="label_stand_alert">Alerte Station Debout Prolongée</span>
-            <span class="form-label-hint" id="hintStandVal">15 min</span>
-          </label>
-          <div class="slider-row">
-            <input type="range" id="rangeStandingAlertMinutes" min="3" max="60" step="1" value="15" aria-label="Curseur alerte station debout">
-            <input type="number" id="inputStandingAlertMinutes" class="form-input" style="width:75px;" min="3" max="60" step="1" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="inputPauseMinutes">
-            <span data-i18n="label_pause_duration">Durée Pause & Étirement Actif</span>
-            <span class="form-label-hint" id="hintPauseVal">5 min</span>
-          </label>
-          <div class="slider-row">
-            <input type="range" id="rangePauseMinutes" min="1" max="30" step="1" value="5" aria-label="Curseur durée pause active">
-            <input type="number" id="inputPauseMinutes" class="form-input" style="width:75px;" min="1" max="30" step="1" required>
+        <div style="background:var(--fluent-bg-card); padding:0.75rem; border-radius:var(--radius-sm); border:1px solid var(--fluent-stroke-subtle); margin-top:0.75rem;">
+          <div style="font-size:0.73rem; color:var(--fluent-fg-secondary); line-height:1.45;">
+            💡 <em>Le saviez-vous ?</em> Un guidage postural continu &gt; 1h fatigue les muscles stabilisateurs et raidit la nuque. Deux courtes sessions de 30 min par jour suffisent à rééduquer la proprioception sans risque de surmenage.
           </div>
         </div>
       </div>
@@ -2272,6 +2467,11 @@
         btn_mute: "Muet",
         btn_notif: "Notifs OS",
         btn_pip: "Mini-Fenêtre",
+        btn_popout: "Mini-Fenêtre Décrochée",
+        btn_popout_expand: "Agrandir en grand écran",
+        popout_active_title: "ErgoVision est actif dans votre mini-fenêtre",
+        popout_active_desc: "Vous pouvez replier ou fermer ce panneau latéral en toute tranquillité pour libérer votre écran. Votre posture reste protégée.",
+        btn_reclaim_popout: "↩️ Rapatrier dans ce panneau",
         hero_title: "Protection Posturale Locale & Confidentielle",
         hero_desc: "L'analyse biomécanique s'exécute à 100% sur votre processeur via WebAssembly. Aucun flux vidéo n'est enregistré ni transmis sur Internet.",
         btn_start_sensor: "Activer le Capteur Optique",
@@ -2425,6 +2625,11 @@
         btn_mute: "Muted",
         btn_notif: "OS Alerts",
         btn_pip: "PiP Mini",
+        btn_popout: "Detached Mini-Window",
+        btn_popout_expand: "Expand to full view",
+        popout_active_title: "ErgoVision is active in your mini-window",
+        popout_active_desc: "You can safely collapse or close this side panel to free up your workspace. Posture tracking remains active.",
+        btn_reclaim_popout: "↩️ Return to this panel",
         hero_title: "Local & Confidential Posture Guardian",
         hero_desc: "Biomechanical analysis runs 100% on your device via WebAssembly. No video feed is recorded or transmitted over the internet.",
         btn_start_sensor: "Start Optical Sensor",
@@ -2596,27 +2801,32 @@
      * ErgoVision AI - Theme Management (Light / Dark Mica Fluent UI 2)
      */
     
+    const THEME_STORAGE_KEY = 'ergovision_theme_v2';
+    
     function getSavedTheme() {
-      return localStorage.getItem('ergovision_theme') || 'dark';
+      return localStorage.getItem(THEME_STORAGE_KEY) || 'light';
     }
     
     function applyTheme(theme, btnTheme = null) {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('ergovision_theme', theme);
+      const finalTheme = theme === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', finalTheme);
+      localStorage.setItem(THEME_STORAGE_KEY, finalTheme);
       if (btnTheme) {
-        if (theme === 'dark') {
+        if (finalTheme === 'dark') {
           btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
           btnTheme.setAttribute('title', 'Passer en Mode Clair');
+          btnTheme.setAttribute('aria-label', 'Passer en Mode Clair');
         } else {
           btnTheme.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
           btnTheme.setAttribute('title', 'Passer en Mode Sombre');
+          btnTheme.setAttribute('aria-label', 'Passer en Mode Sombre');
         }
       }
-      return theme;
+      return finalTheme;
     }
     
     function toggleTheme(btnTheme = null) {
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
       const next = current === 'dark' ? 'light' : 'dark';
       return applyTheme(next, btnTheme);
     }
@@ -2962,7 +3172,8 @@
      */
     
     const DEFAULT_PACING_CONFIG = {
-      sittingMinutes: 45,
+      sessionMinutes: 30,
+      sittingMinutes: 30,
       standingAlertMinutes: 15,
       pauseMinutes: 5
     };
@@ -2972,8 +3183,13 @@
         const saved = localStorage.getItem('ergovision_pacing_config');
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (parsed.sittingMinutes && parsed.standingAlertMinutes && parsed.pauseMinutes) {
-            return parsed;
+          if (parsed.sessionMinutes || parsed.sittingMinutes) {
+            return {
+              sessionMinutes: parsed.sessionMinutes || parsed.sittingMinutes || 30,
+              sittingMinutes: parsed.sittingMinutes || 30,
+              standingAlertMinutes: parsed.standingAlertMinutes || 15,
+              pauseMinutes: parsed.pauseMinutes || 5
+            };
           }
         }
       } catch (e) {
@@ -3075,7 +3291,7 @@
       isCameraActive = val;
     }
     
-    export async function enumerateVideoDevices(selectElement) {
+    async function enumerateVideoDevices(selectElement) {
       if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
         return [];
       }
@@ -3099,7 +3315,7 @@
       }
     }
     
-    export async function initPoseModel(onResultsCallback) {
+    async function initPoseModel(onResultsCallback) {
       if (!poseInstance) {
         poseInstance = new window.Pose({
           locateFile: (file) => {
@@ -3121,7 +3337,7 @@
       return poseInstance;
     }
     
-    export async function startCameraStream(videoElement, onResultsCallback, deviceId = null) {
+    async function startCameraStream(videoElement, onResultsCallback, deviceId = null) {
       await initPoseModel(onResultsCallback);
     
       await stopCameraStream(videoElement);
@@ -3152,7 +3368,7 @@
       return cameraInstance;
     }
     
-    export async function stopCameraStream(videoElement, pipVideoElement = null) {
+    async function stopCameraStream(videoElement, pipVideoElement = null) {
       if (cameraInstance) {
         try {
           await cameraInstance.stop();
@@ -3181,7 +3397,73 @@
       isCameraActive = false;
     }
     
-    export async function togglePictureInPicture(canvasElement, pipVideoElement) {
+    function isPopoutMode() {
+      if (typeof window === 'undefined') return false;
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('mode') === 'popout';
+    }
+    
+    function openPopoutWindow() {
+      const width = 420;
+      const height = 640;
+      const availWidth = (window.screen && window.screen.availWidth) || window.screen.width || 1920;
+      const left = Math.max(0, availWidth - width - 24);
+      const top = 50;
+    
+      // 1. Tenter via l'API WebExtension windows (Chrome MV3 & Firefox)
+      if (typeof chrome !== 'undefined' && chrome.windows && chrome.windows.create) {
+        try {
+          const popoutUrl = chrome.runtime.getURL('index.html?mode=popout');
+          chrome.windows.create({
+            url: popoutUrl,
+            type: 'popup',
+            width,
+            height,
+            left,
+            top,
+            focused: true
+          }).catch(err => {
+            console.warn("Échec chrome.windows.create direct, tentative via background :", err);
+            if (chrome.runtime && chrome.runtime.sendMessage) {
+              chrome.runtime.sendMessage({ type: 'OPEN_POPOUT_WINDOW', width, height, left, top });
+            } else {
+              fallbackWindowOpen(width, height, left, top);
+            }
+          });
+          return;
+        } catch (e) {
+          console.warn("Exception chrome.windows.create :", e);
+        }
+      }
+    
+      // 2. Tenter via message runtime au Service Worker si disponible
+      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+        chrome.runtime.sendMessage({ type: 'OPEN_POPOUT_WINDOW', width, height, left, top }, () => {
+          if (chrome.runtime.lastError) {
+            fallbackWindowOpen(width, height, left, top);
+          }
+        });
+        return;
+      }
+    
+      // 3. Repli Web standard
+      fallbackWindowOpen(width, height, left, top);
+    }
+    
+    function fallbackWindowOpen(width, height, left, top) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('mode', 'popout');
+      const win = window.open(
+        url.toString(),
+        'ErgoVision_Popout_Window',
+        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no`
+      );
+      if (win) {
+        win.focus();
+      }
+    }
+    
+    async function togglePictureInPicture(canvasElement, pipVideoElement) {
       if (!isCameraActive) {
         throw new Error("Activez d'abord la caméra avant d'ouvrir la miniature.");
       }
@@ -3199,70 +3481,17 @@
             pipVideoElement.srcObject = canvasElement.captureStream ? canvasElement.captureStream(25) : null;
           }
           if (pipVideoElement.srcObject) {
-            // Démarre la lecture si nécessaire
             await pipVideoElement.play().catch(() => {});
             await pipVideoElement.requestPictureInPicture();
             return;
           }
         }
       } catch (pipErr) {
-        console.warn("Échec Picture-in-Picture natif, passage en mode Pop-out flottant :", pipErr);
+        console.warn("Échec Picture-in-Picture natif, passage en fenêtre Pop-out :", pipErr);
       }
     
-      // 3. Repli Pop-out détaché (Idéal pour Firefox Sidebar ou quand requestPictureInPicture est restreint)
-      openFloatingPopout(canvasElement);
-    }
-    
-    let popoutWindow = null;
-    function openFloatingPopout(canvasElement) {
-      if (popoutWindow && !popoutWindow.closed) {
-        popoutWindow.focus();
-        return;
-      }
-    
-      const w = 480;
-      const h = 320;
-      const left = window.screen.width - w - 20;
-      const top = 40;
-    
-      popoutWindow = window.open(
-        '',
-        'ErgoVision_MiniPiP',
-        `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=no,status=no`
-      );
-    
-      if (!popoutWindow) {
-        throw new Error("Impossible d'ouvrir la miniature. Veuillez autoriser les fenêtres pop-up.");
-      }
-    
-      popoutWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>ErgoVision AI — Miniature</title>
-          <style>
-            body { margin: 0; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
-            canvas { width: 100%; height: 100%; object-fit: contain; }
-          </style>
-        </head>
-        <body>
-          <canvas id="popCanvas" width="${canvasElement.width}" height="${canvasElement.height}"></canvas>
-        </body>
-        </html>
-      `);
-      popoutWindow.document.close();
-    
-      const popCanvas = popoutWindow.document.getElementById('popCanvas');
-      const popCtx = popCanvas ? popCanvas.getContext('2d') : null;
-    
-      function renderPopout() {
-        if (!popoutWindow || popoutWindow.closed || !isCameraActive) return;
-        if (popCtx) {
-          popCtx.drawImage(canvasElement, 0, 0);
-        }
-        requestAnimationFrame(renderPopout);
-      }
-      requestAnimationFrame(renderPopout);
+      // 3. Repli Pop-out détaché OS
+      openPopoutWindow();
     }
 
     // ==========================================
@@ -3910,6 +4139,469 @@
     }
 
     // ==========================================
+    // MODULE: src/license/license-gate.js
+    // ==========================================
+    /**
+     * ErgoVision AI - License Gate & Ethical Monetization Manager
+     * Gère le statut Freemium (Socle Libre 1 jauge) et le déblocage du "Pass 1 An Libre (7 € / an)"
+     * Zéro abonnement récurrent automatique.
+     */
+    
+    const LICENSE_STORAGE_KEY = 'ergovision_license_v1';
+    const FREE_TIER = 'FREE';
+    const PRO_TIER = 'PRO_ANNUAL_PASS';
+    
+    const DEFAULT_STATE = {
+      tier: FREE_TIER,
+      licenseKey: null,
+      activatedAt: null,
+      expiresAt: null,
+      instanceId: null,
+      practitionerCode: null
+    };
+    
+    /**
+     * Récupère ou génère un identifiant unique local pour la machine
+     */
+    function getOrCreateInstanceId() {
+      let inst = localStorage.getItem('ergovision_instance_id');
+      if (!inst) {
+        inst = 'inst_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now();
+        localStorage.setItem('ergovision_instance_id', inst);
+      }
+      return inst;
+    }
+    
+    /**
+     * Charge l'état de licence sauvegardé
+     */
+    function loadLicenseState() {
+      try {
+        const raw = localStorage.getItem(LICENSE_STORAGE_KEY);
+        if (!raw) return { ...DEFAULT_STATE, instanceId: getOrCreateInstanceId() };
+        const parsed = JSON.parse(raw);
+        return { ...DEFAULT_STATE, ...parsed };
+      } catch (e) {
+        console.warn("Échec lecture état de licence :", e);
+        return { ...DEFAULT_STATE, instanceId: getOrCreateInstanceId() };
+      }
+    }
+    
+    /**
+     * Sauvegarde l'état de licence en local et le synchronise dans chrome.storage s'il existe
+     */
+    function saveLicenseState(state) {
+      try {
+        localStorage.setItem(LICENSE_STORAGE_KEY, JSON.stringify(state));
+        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+          chrome.storage.local.set({ [LICENSE_STORAGE_KEY]: state }).catch(() => {});
+        }
+      } catch (e) {
+        console.error("Échec sauvegarde état de licence :", e);
+      }
+      return state;
+    }
+    
+    /**
+     * Vérifie si le Pass Pro Annuel est actif et non expiré
+     */
+    function isProActive() {
+      const state = loadLicenseState();
+      if (state.tier !== PRO_TIER) return false;
+      if (!state.expiresAt) return false;
+      return Date.now() < state.expiresAt;
+    }
+    
+    /**
+     * Retourne le nombre de jours restants sur le Pass Annuel
+     */
+    function getRemainingDays() {
+      const state = loadLicenseState();
+      if (!isProActive()) return 0;
+      const diffMs = state.expiresAt - Date.now();
+      return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+    }
+    
+    /**
+     * Matrice stricte des fonctionnalités activées (Feature Flags)
+     * Mode FREE : 1 jauge active (Text-Neck), Règle 20-20-20, 1 exercice Kiné (McKenzie)
+     * Mode PRO (7€/an) : 4 jauges, Atelier Kiné complet, PiP, Audio continu & Bilan PDF
+     */
+    function getFeatureFlags() {
+      const pro = isProActive();
+      return {
+        isPro: pro,
+        gaugeNeckSlump: true,          // JAUGE 1 : TOUJOURS GRATUITE (Socle Libre)
+        gaugeShoulderSym: pro,         // JAUGE 2 : Pass 7€/an
+        gaugeHeadTilt: pro,            // JAUGE 3 : Pass 7€/an
+        gaugeScreenDist: pro,          // JAUGE 4 : Pass 7€/an
+        eyeRest202020: true,           // Règle oculaire : GRATUITE
+        customPacingDurations: pro,    // Sliders de durées sur-mesure : Pass 7€/an
+        pipMiniWindow: pro,            // Mode Picture-in-Picture : Pass 7€/an
+        allowedKineExercises: pro 
+          ? ['mckenzie', 'brugger', 'thoracic', 'pelvic'] 
+          : ['mckenzie'],
+        continuousDroneAudio: pro,     // Alerte continue & bols tibétains : Pass 7€/an
+        kinePdfReport: pro             // Rapport d'observance Kiné A4 : Pass 7€/an
+      };
+    }
+    
+    /**
+     * Valide une clé de licence (API LemonSqueezy ou Clé signée de test/cabinet kiné)
+     */
+    async function activateLicenseKey(rawKey, practitionerCode = null) {
+      const cleanKey = (rawKey || '').trim().toUpperCase();
+      if (!cleanKey) {
+        return { success: false, error: 'empty_key' };
+      }
+    
+      // 1. Support des clés de test hors-ligne / modération Store / Cabinets partenaires
+      // Format : ERGO-REVIEWER-2026, ERGO-KINE-XXXX, ERGO-PASS-XXXX
+      if (cleanKey.startsWith('ERGO-')) {
+        const isTestOrKineKey = cleanKey === 'ERGO-REVIEWER-2026' || 
+                                cleanKey.startsWith('ERGO-KINE-') || 
+                                cleanKey.startsWith('ERGO-PASS-');
+        if (isTestOrKineKey) {
+          const now = Date.now();
+          const expiresAt = now + (365 * 24 * 60 * 60 * 1000); // 365 jours
+          const newState = {
+            tier: PRO_TIER,
+            licenseKey: cleanKey,
+            activatedAt: now,
+            expiresAt: expiresAt,
+            instanceId: getOrCreateInstanceId(),
+            practitionerCode: practitionerCode || (cleanKey.startsWith('ERGO-KINE-') ? cleanKey : null)
+          };
+          saveLicenseState(newState);
+          return { success: true, state: newState };
+        }
+      }
+    
+      // 2. Validation en ligne via LemonSqueezy Licenses API
+      try {
+        const response = await fetch('https://api.lemonsqueezy.com/v1/licenses/activate', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            license_key: cleanKey,
+            instance_name: `ErgoVision_${getOrCreateInstanceId()}`
+          })
+        });
+    
+        const data = await response.json();
+        if (response.ok && data.activated) {
+          const now = Date.now();
+          // Durée de 365 jours fermes (Pass 1 an libre sans renouvellement automatique)
+          const expiresAt = data.license_key?.expires_at 
+            ? new Date(data.license_key.expires_at).getTime()
+            : (now + (365 * 24 * 60 * 60 * 1000));
+    
+          const newState = {
+            tier: PRO_TIER,
+            licenseKey: cleanKey,
+            activatedAt: now,
+            expiresAt: expiresAt,
+            instanceId: getOrCreateInstanceId(),
+            practitionerCode: practitionerCode || null
+          };
+          saveLicenseState(newState);
+          return { success: true, state: newState };
+        } else {
+          return { success: false, error: data.error || 'invalid_key' };
+        }
+      } catch (err) {
+        console.warn("Échec appel LemonSqueezy :", err);
+        return { success: false, error: 'network_error' };
+      }
+    }
+    
+    /**
+     * Désactivation volontaire de la clé
+     */
+    function deactivateLicense() {
+      const currentState = loadLicenseState();
+      const resetState = {
+        ...DEFAULT_STATE,
+        instanceId: currentState.instanceId
+      };
+      saveLicenseState(resetState);
+      return resetState;
+    }
+
+    // ==========================================
+    // MODULE: src/reports/kine-report.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Clinical Posture Report Generator (PDF / Print View)
+     * Génère une synthèse d'observance ergonomique et d'endurance posturale
+     * prête à être imprimée ou sauvegardée en PDF pour le kinésithérapeute / médecin du travail.
+     */
+    
+    
+    
+    
+    /**
+     * Agréger les logs récents pour la fiche clinique
+     */
+    function aggregateClinicalData(logs) {
+      const summary = {
+        totalAlerts: 0,
+        neckAlerts: 0,
+        shoulderAlerts: 0,
+        tiltAlerts: 0,
+        distanceAlerts: 0,
+        completedCycles: 0,
+        kineStretches: 0,
+        averageNeutralScore: 0
+      };
+    
+      if (!Array.isArray(logs) || logs.length === 0) {
+        return summary;
+      }
+    
+      let totalScoreSum = 0;
+      let scoreCount = 0;
+    
+      logs.forEach(log => {
+        if (log.type === 'alert') {
+          summary.totalAlerts++;
+          const r = (log.reason || '').toLowerCase();
+          if (r.includes('nuque') || r.includes('neck') || r.includes('cervic')) summary.neckAlerts++;
+          else if (r.includes('épaule') || r.includes('shoulder') || r.includes('trapèze')) summary.shoulderAlerts++;
+          else if (r.includes('inclin') || r.includes('tilt')) summary.tiltAlerts++;
+          else if (r.includes('distance') || r.includes('écran') || r.includes('screen')) summary.distanceAlerts++;
+        } else if (log.type === 'cycle_end') {
+          summary.completedCycles++;
+          if (typeof log.score === 'number') {
+            totalScoreSum += log.score;
+            scoreCount++;
+          }
+        } else if (log.type === 'kine_exercise' || log.type === 'stretch') {
+          summary.kineStretches++;
+        }
+      });
+    
+      summary.averageNeutralScore = scoreCount > 0 ? Math.round(totalScoreSum / scoreCount) : 85;
+      return summary;
+    }
+    
+    /**
+     * Génère le HTML imprimable et ouvre la boîte de dialogue d'impression native (Save as PDF)
+     */
+    function printKineClinicalReport(logs, userName = "Patient Télétravailleur") {
+      const data = aggregateClinicalData(logs);
+      const lang = getCurrentLanguage();
+      const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    
+      const printWindow = window.open('', '_blank', 'width=800,height=900');
+      if (!printWindow) {
+        alert("Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan kiné.");
+        return;
+      }
+    
+      const html = `
+    <!DOCTYPE html>
+    <html lang="${lang}">
+    <head>
+      <meta charset="UTF-8">
+      <title>ErgoVision AI — Bilan d'Observance Posturale & Kinésithérapie</title>
+      <style>
+        @page { size: A4 portrait; margin: 15mm; }
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+          color: #1e293b;
+          margin: 0;
+          padding: 0;
+          line-height: 1.45;
+          font-size: 13px;
+        }
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 2px solid #0f6cbd;
+          padding-bottom: 12px;
+          margin-bottom: 20px;
+        }
+        .brand-title {
+          font-size: 20px;
+          font-weight: 800;
+          color: #0f6cbd;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .brand-sub {
+          font-size: 11px;
+          color: #64748b;
+        }
+        .meta-box {
+          text-align: right;
+          font-size: 11px;
+          color: #475569;
+        }
+        .card-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+        .card {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          padding: 12px;
+          text-align: center;
+        }
+        .card-val {
+          font-size: 26px;
+          font-weight: 800;
+          color: #0f6cbd;
+        }
+        .card-lbl {
+          font-size: 11px;
+          font-weight: 600;
+          color: #475569;
+          margin-top: 4px;
+        }
+        .section-title {
+          font-size: 14px;
+          font-weight: 700;
+          color: #0f172a;
+          border-left: 4px solid #0f6cbd;
+          padding-left: 8px;
+          margin: 18px 0 10px 0;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+          font-size: 12px;
+        }
+        th, td {
+          border: 1px solid #e2e8f0;
+          padding: 8px 10px;
+          text-align: left;
+        }
+        th {
+          background: #f1f5f9;
+          color: #334155;
+        }
+        .notes-box {
+          border: 1px dashed #cbd5e1;
+          border-radius: 8px;
+          padding: 12px;
+          min-height: 90px;
+          margin-top: 15px;
+          background: #fafafa;
+        }
+        .footer {
+          margin-top: 30px;
+          border-top: 1px solid #e2e8f0;
+          padding-top: 10px;
+          font-size: 10px;
+          color: #94a3b8;
+          display: flex;
+          justify-content: space-between;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div>
+          <div class="brand-title">🛡️ ErgoVision AI</div>
+          <div class="brand-sub">Copilote Ergonomique • Synthèse d'Observance Clinique & Prévention TMS</div>
+        </div>
+        <div class="meta-box">
+          <strong>Date :</strong> ${dateStr}<br>
+          <strong>Bénéficiaire :</strong> ${userName}<br>
+          <strong>Protocole :</strong> 100% Local (RGPD Conforme)
+        </div>
+      </div>
+    
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-val" style="color:#107c41;">${data.averageNeutralScore}%</div>
+          <div class="card-lbl">Maintien en Posture Neutre</div>
+        </div>
+        <div class="card">
+          <div class="card-val" style="color:#0f6cbd;">${data.completedCycles}</div>
+          <div class="card-lbl">Cycles Ergonomiques Réalisés</div>
+        </div>
+        <div class="card">
+          <div class="card-val" style="color:#d13438;">${data.totalAlerts}</div>
+          <div class="card-lbl">Dérives Posturales Corrigées</div>
+        </div>
+      </div>
+    
+      <div class="section-title">1. Répartition des Sollicitations Mécaniques Observées</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Zone Rachidienne Surveillée</th>
+            <th>Compensations Détectées</th>
+            <th>Protocole de Décharge Recommandé</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Rachis Cervical (C5-C7)</strong> — Text-Neck / Projection antérieure</td>
+            <td>${data.neckAlerts} alertes</td>
+            <td>Rétractions axiales guidées (McKenzie chin tuck)</td>
+          </tr>
+          <tr>
+            <td><strong>Ceinture Scapulaire</strong> — Hausse réflexe des trapèzes</td>
+            <td>${data.shoulderAlerts} alertes</td>
+            <td>Déroulement scapulaire & posture Brügger</td>
+          </tr>
+          <tr>
+            <td><strong>Asymétrie Latérale</strong> — Inclinaison de la tête</td>
+            <td>${data.tiltAlerts} alertes</td>
+            <td>Réalignement bilatéral et étirement trapèze moyen</td>
+          </tr>
+          <tr>
+            <td><strong>Proximité Visuelle & Charnière Dorsale</strong> (&lt;50cm)</td>
+            <td>${data.distanceAlerts} alertes</td>
+            <td>Règle oculaire 20-20-20 & Extension thoracique sur dossier</td>
+          </tr>
+        </tbody>
+      </table>
+    
+      <div class="section-title">2. Observance des Micro-Pauses Kiné & Exercices du Dos</div>
+      <p style="font-size: 12px; color: #475569;">
+        Le patient a validé <strong>${data.kineStretches} session(s) d'étirement actif</strong> au cours de ses journées de travail.
+      </p>
+    
+      <div class="section-title">3. Observations & Recommandations du Praticien (Kiné / Ostéopathe / Médecin)</div>
+      <div class="notes-box">
+        <em style="color:#94a3b8; font-size:11px;">Zone réservée aux annotations manuscrites du praticien lors de la consultation :</em>
+      </div>
+    
+      <div class="footer">
+        <span>Document d'hygiène ergonomique non diagnostique — ErgoVision AI v3.0 (Pass Éthique Annuel)</span>
+        <span>Traitement local WebAssembly • Aucune image vidéo stockée</span>
+      </div>
+    
+      <scr` + `ipt>
+        window.addEventListener('load', () => {
+          setTimeout(() => { window.print(); }, 400);
+        });
+      </scr` + `ipt>
+    </body>
+    </html>
+      `;
+    
+      printWindow.document.open();
+      printWindow.document.write(html);
+      printWindow.document.close();
+    }
+
+    // ==========================================
     // MODULE: src/app.js
     // ==========================================
     /**
@@ -3938,13 +4630,24 @@
     const cameraSelect = document.getElementById('cameraSelect');
     const btnStopCam = document.getElementById('btnStopCam');
     const btnTheme = document.getElementById('btnTheme');
-    const btnSound = document.getElementById('btnSound');
-    const btnNotif = document.getElementById('btnNotif');
-    const btnPiP = document.querySelector('.btn-pip');
-    const sensitivitySelect = document.getElementById('sensitivitySelect');
+    const btnNotifMenu = document.getElementById('btnNotifMenu');
+    const notifsDropdown = document.getElementById('notifsDropdown');
+    const chkAudioToggle = document.getElementById('chkAudioToggle');
+    const rangeDropdownVol = document.getElementById('rangeDropdownVol');
+    const labelDropdownVol = document.getElementById('labelDropdownVol');
+    const chkNotifToggle = document.getElementById('chkNotifToggle');
+    const btnPiP = document.getElementById('btnPiP') || document.querySelector('.btn-pip');
+    const popoutActiveCard = document.getElementById('popoutActiveCard');
+    const btnReclaimPopout = document.getElementById('btnReclaimPopout');
+    const btnExpandPopout = document.getElementById('btnExpandPopout');
+    
+    // Canal de synchronisation inter-fenêtres (BroadcastChannel)
+    const syncChannel = (typeof window !== 'undefined' && typeof window.BroadcastChannel !== 'undefined')
+      ? new window.BroadcastChannel('ergovision_sync')
+      : { postMessage: () => {}, addEventListener: () => {} };
     
     // State
-    let currentMode = 'assis';
+    let currentMode = 'session';
     let baseline = null;
     let currentLandmarks = null;
     let badPostureStart = null;
@@ -3962,11 +4665,13 @@
     let sessionCycleLogged = false;
     
     let timerInterval = null;
-    let remainingSeconds = 45 * 60;
-    let elapsedStanding = 0;
-    
     let pacingConfig = loadPacingConfig();
-    let audioSettings = loadAudioSettings();
+    let sessionDurationMinutes = pacingConfig.sessionMinutes || 30;
+    let remainingSeconds = sessionDurationMinutes * 60;
+    let isSessionRunning = false;
+    let sensitivity = 1.0;
+    
+    let appAudioConfig = loadAudioSettings();
     
     // Kiné Studio Instance
     const kineRoutineManager = new KineRoutineManager();
@@ -4155,150 +4860,107 @@
     }
     
     // ----------------------------------------------------
-    // PACING & TIMER
+    // SESSION DE RÉÉDUCATION KINÉ (30 MIN)
     // ----------------------------------------------------
-    function updateTimerDisplayTitles() {
-      const titleEl = document.getElementById('timerTitle');
-      const subEl = document.getElementById('timerSub');
-      if (!titleEl || !subEl) return;
-    
-      if (currentMode === 'assis') {
-        titleEl.innerText = t('title_sit');
-        subEl.innerText = `${t('sub_sit_prefix')}${pacingConfig.sittingMinutes}${t('sub_sit_suffix')}`;
-      } else if (currentMode === 'debout') {
-        titleEl.innerText = t('title_stand');
-        subEl.innerText = `${t('sub_stand_prefix')}${pacingConfig.standingAlertMinutes}${t('sub_stand_suffix')}`;
-      } else {
-        titleEl.innerText = t('title_pause');
-        subEl.innerText = t('sub_pause');
+    function updateSessionBadge(text, color = 'var(--fluent-fg-muted)') {
+      const badge = document.getElementById('sessionStatusBadge');
+      if (badge) {
+        badge.innerText = text;
+        badge.style.color = color;
       }
     }
     
     function renderTimerDigits(sec) {
       const digits = document.getElementById('timerDigits');
+      if (!digits) return;
       if (sec < 0) {
-        digits.innerText = `-${formatSec(Math.abs(sec))}`;
+        digits.innerText = `00:00`;
       } else {
         digits.innerText = formatSec(sec);
       }
     }
     
-    function startCountdown(durationSec) {
+    function startSessionCountdown() {
       clearInterval(timerInterval);
-      remainingSeconds = durationSec;
-      renderTimerDigits(remainingSeconds);
+      isSessionRunning = true;
+      updateSessionBadge('Session en cours', 'var(--status-success)');
+      const digits = document.getElementById('timerDigits');
+      if (digits) {
+        digits.style.color = 'var(--status-success)';
+      }
     
       timerInterval = setInterval(() => {
+        if (!isSessionRunning) return;
+    
         remainingSeconds--;
         renderTimerDigits(remainingSeconds);
     
-        const widget = document.getElementById('pacingWidget');
-        const digits = document.getElementById('timerDigits');
-        const subEl = document.getElementById('timerSub');
-    
-        if (remainingSeconds === 0) {
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          isSessionRunning = false;
           playCycleChime();
-          if (sessionTotalFrames > 20 && !sessionCycleLogged) {
-            sessionCycleLogged = true;
-            const cycleScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
-            addDailyLog('summary', `${t('cycle_summary_title')} ${t('title_' + currentMode)}`, currentMode, cycleScore);
-          }
-        }
     
-        if (remainingSeconds < 0) {
-          widget.style.borderColor = 'var(--status-warning)';
-          digits.style.color = 'var(--status-warning)';
-          digits.classList.add('overtime');
-          subEl.innerText = t('sub_overtime');
+          let finalScore = 100;
+          if (sessionTotalFrames > 20) {
+            finalScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
+          }
+          addDailyLog('summary', `Session Rééducation (${sessionDurationMinutes} min) terminée`, 'session', finalScore);
+    
+          updateSessionBadge('Session terminée • Reposez-vous !', 'var(--fluent-brand)');
+          if (digits) digits.style.color = 'var(--fluent-brand)';
+    
+          // Arrêt préventif de la caméra pour éviter la fatigue musculaire
+          stopCamera();
+          setStatusUI('var(--fluent-brand)', 'Bravo ! Session terminée. Bougez librement.');
+          
+          if ("Notification" in window && Notification.permission === "granted") {
+            new Notification("ErgoVision AI — Session accomplie !", {
+              body: `Bravo pour vos ${sessionDurationMinutes} min de rééducation posturale (Maintien : ${finalScore}%). Relâchez vos muscles !`
+            });
+          }
         }
       }, 1000);
     }
     
-    function startStandingCountUp() {
+    function pauseSessionTimer() {
+      isSessionRunning = false;
       clearInterval(timerInterval);
-      elapsedStanding = 0;
-      renderTimerDigits(0);
-    
-      timerInterval = setInterval(() => {
-        elapsedStanding++;
-        renderTimerDigits(elapsedStanding);
-    
-        const warnSec = pacingConfig.standingAlertMinutes * 60;
-        const subEl = document.getElementById('timerSub');
-        const widget = document.getElementById('pacingWidget');
-        const digits = document.getElementById('timerDigits');
-    
-        if (elapsedStanding === warnSec) {
-          playCycleChime();
-          if (sessionTotalFrames > 20 && !sessionCycleLogged) {
-            sessionCycleLogged = true;
-            const cycleScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
-            addDailyLog('summary', `${t('cycle_summary_title')} ${t('title_stand')}`, 'debout', cycleScore);
-          }
-        }
-    
-        if (elapsedStanding >= warnSec) {
-          widget.style.borderColor = 'var(--status-warning)';
-          digits.style.color = 'var(--status-warning)';
-          digits.classList.add('overtime');
-          subEl.innerText = `${Math.floor(elapsedStanding / 60)} ${t('standing_alert_sub')}`;
-        } else if (elapsedStanding >= warnSec * 0.8) {
-          subEl.innerText = `${Math.floor(elapsedStanding / 60)} ${t('standing_warning_sub')}`;
-        }
-      }, 1000);
+      updateSessionBadge('Session en pause', 'var(--status-warning)');
+      const digits = document.getElementById('timerDigits');
+      if (digits) digits.style.color = 'var(--status-warning)';
     }
     
     function resetCurrentModeTimer() {
-      const widget = document.getElementById('pacingWidget');
-      const digits = document.getElementById('timerDigits');
-      widget.style.borderColor = 'var(--fluent-stroke-subtle)';
-      digits.style.color = 'var(--fluent-fg-primary)';
-      digits.classList.remove('overtime');
+      clearInterval(timerInterval);
+      isSessionRunning = false;
+      sessionDurationMinutes = pacingConfig.sessionMinutes || 30;
+      remainingSeconds = sessionDurationMinutes * 60;
+      renderTimerDigits(remainingSeconds);
     
       sessionGoodFrames = 0;
       sessionTotalFrames = 0;
       sessionCycleLogged = false;
     
-      updateTimerDisplayTitles();
-    
-      if (currentMode === 'assis') {
-        startCountdown(pacingConfig.sittingMinutes * 60);
-      } else if (currentMode === 'debout') {
-        startStandingCountUp();
-      } else {
-        startCountdown(pacingConfig.pauseMinutes * 60);
-      }
+      const digits = document.getElementById('timerDigits');
+      if (digits) digits.style.color = 'var(--fluent-fg-primary)';
+      updateSessionBadge('En attente de calibration', 'var(--fluent-fg-muted)');
     }
     
-    function setMode(mode) {
-      if (currentMode !== mode) {
-        if (sessionTotalFrames > 30 && !sessionCycleLogged) {
-          const partialScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
-          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)} (${partialScore}% ${t('title_neutral').toLowerCase()})`, mode, partialScore);
-        } else {
-          addDailyLog('transition', `${t('transition_to')} ${t('title_' + mode)}`, mode);
-        }
-      }
+    function openKineRoutineFromUI() {
+      if (!kineStudioView) return;
+      const container = document.getElementById('kineStudioContainer');
+      if (!container) return;
     
-      currentMode = mode;
-      document.getElementById('segAssis').classList.toggle('active', mode === 'assis');
-      document.getElementById('segAssis').setAttribute('aria-selected', mode === 'assis');
-      document.getElementById('segDebout').classList.toggle('active', mode === 'debout');
-      document.getElementById('segDebout').setAttribute('aria-selected', mode === 'debout');
-      document.getElementById('segPause').classList.toggle('active', mode === 'pause');
-      document.getElementById('segPause').setAttribute('aria-selected', mode === 'pause');
-    
-      stopContinuousPostureAlert();
-      resetCurrentModeTimer();
-    
-      if (kineStudioView) {
-        if (mode === 'pause') {
-          kineStudioView.show();
-          kineRoutineManager.start();
-        } else {
-          kineStudioView.hide();
-          kineRoutineManager.stop();
-        }
+      const isVisible = container.style.display !== 'none';
+      if (isVisible) {
+        container.style.display = 'none';
+        kineRoutineManager.stop();
+      } else {
+        container.style.display = 'block';
+        kineStudioView.show();
+        kineRoutineManager.start();
+        // Scroll doux vers l'atelier kiné
+        container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }
     
@@ -4353,7 +5015,8 @@
           overlay.classList.remove('visible');
           baseline = computeMetrics(currentLandmarks);
           playTone(880, 0.25, 'triangle', 0.15);
-          setStatusUI('var(--status-success)', `Point Zéro verrouillé (${currentMode.toUpperCase()})`);
+          setStatusUI('var(--status-success)', `Point Zéro verrouillé`);
+          startSessionCountdown();
         }
       }, 1000);
     }
@@ -4405,20 +5068,8 @@
           alertLatched = false;
           stopContinuousPostureAlert();
           document.body.classList.remove('alert-active');
-        } else if (currentMode === 'pause') {
-          hudStatus = t('hud_pause') || "🧘 PAUSE ACTIVE EN COURS • BOUGEZ ET ÉTIREZ-VOUS LIBREMENT";
-          hudColor = "rgba(40, 134, 222, 0.92)";
-          document.body.classList.remove('alert-active');
-          badPostureStart = null;
-          alertLatched = false;
-          stopContinuousPostureAlert();
-          setStatusUI('var(--fluent-brand)', 'Pause active en cours — alertes suspendues');
-          updateGauge('cardNeck', 'badgeNeck', 'fillNeck', 0);
-          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', 0);
-          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', 0);
-          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', 0);
         } else if (baseline) {
-          const sens = parseFloat(sensitivitySelect.value);
+          const sens = sensitivity || 1.0;
     
           const neckDelta = (baseline.neckHeightRatio - current.neckHeightRatio);
           const shoulderDelta = Math.abs(current.shoulderDiffRatio - baseline.shoulderDiffRatio);
@@ -4459,8 +5110,10 @@
           if (totalFrames % 15 === 0) {
             const score = Math.round((goodFrames / totalFrames) * 100);
             const scoreEl = document.getElementById('scoreDigits');
-            scoreEl.innerText = `${score}%`;
-            scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
+            if (scoreEl) {
+              scoreEl.innerText = `${score}%`;
+              scoreEl.style.color = score > 80 ? 'var(--status-success)' : (score > 60 ? 'var(--status-warning)' : 'var(--status-danger)');
+            }
           }
     
           if (anyBad) {
@@ -4473,7 +5126,7 @@
               badPostureStart = Date.now();
             }
     
-            const alertThresholdMs = (audioSettings.delaySeconds || 2.5) * 1000;
+            const alertThresholdMs = (appAudioConfig.delaySeconds || 2.5) * 1000;
             if (Date.now() - badPostureStart > alertThresholdMs) {
               document.body.classList.add('alert-active');
               hudStatus = t('hud_correct') + " " + reason.toUpperCase();
@@ -4484,7 +5137,7 @@
     
               if (!alertLatched) {
                 alertLatched = true;
-                addDailyLog('alert', reason, currentMode);
+                addDailyLog('alert', reason, 'session');
                 triggerAlertNotification(reason);
               }
             }
@@ -4493,11 +5146,9 @@
             alertLatched = false;
             stopContinuousPostureAlert();
             document.body.classList.remove('alert-active');
-            const modeKeyMap = { assis: 'title_sit', debout: 'title_stand', pause: 'title_pause' };
-            const modeLabel = t(modeKeyMap[currentMode]) || currentMode;
-            hudStatus = `${t('hud_neutral')} (${modeLabel.toUpperCase()})`;
+            hudStatus = t('hud_neutral') || "✓ POSTURE NEUTRE";
             hudColor = "rgba(16, 185, 129, 0.88)";
-            setStatusUI('var(--status-success)', `${t('status_optimal')} (${modeLabel})`);
+            setStatusUI('var(--status-success)', t('status_optimal') || "Posture optimale");
           }
         }
       } else {
@@ -4578,51 +5229,21 @@
         }
       });
     
-      document.querySelector('.brand-sub').innerText = t('brand_sub');
-      document.getElementById('segAssis').childNodes[2].nodeValue = " " + t('mode_sit');
-      document.getElementById('segDebout').childNodes[2].nodeValue = " " + t('mode_stand');
-      document.getElementById('segPause').childNodes[2].nodeValue = " " + t('mode_pause');
-    
-      if (btnSound) {
-        const span = btnSound.querySelector('span');
-        if (span) span.innerText = isSoundEnabled() ? t('btn_audio') : t('btn_mute');
-      }
-    
-      if (btnNotif) {
-        const span = btnNotif.querySelector('span');
-        if (span && !btnNotif.classList.contains('active-toggle')) span.innerText = t('btn_notif');
-      }
-    
-      if (btnPiP) {
-        const span = btnPiP.querySelector('span');
-        if (span) span.innerText = t('btn_pip');
-      }
-    
-      if (kineStudioView && currentMode === 'pause') {
-        kineStudioView.renderInitialStructure();
-        kineStudioView.updateExercise(kineRoutineManager.getCurrentExercise(), kineRoutineManager.currentIndex, kineRoutineManager.exercises.length);
-      }
+      const brandSub = document.querySelector('.brand-sub');
+      if (brandSub) brandSub.innerText = lang === 'fr' ? 'Rééducation Posturale • Sessions Ciblées' : 'Postural Rehabilitation • Targeted Sessions';
     
       // Gauges titles & descriptions
       const cardNeckTitle = document.querySelector('#cardNeck .gauge-title-box span');
-      const cardNeckCaption = document.querySelector('#cardNeck .gauge-caption');
-      if (cardNeckTitle) cardNeckTitle.innerText = t('gauge_neck_title');
-      if (cardNeckCaption) cardNeckCaption.innerText = t('gauge_neck_desc');
+      if (cardNeckTitle) cardNeckTitle.innerText = t('gauge_neck_title') ? t('gauge_neck_title').replace(/^[0-9]\.\s*/, '') : 'Projection Nuque';
     
       const cardShoulderTitle = document.querySelector('#cardShoulder .gauge-title-box span');
-      const cardShoulderCaption = document.querySelector('#cardShoulder .gauge-caption');
-      if (cardShoulderTitle) cardShoulderTitle.innerText = t('gauge_shoulder_title');
-      if (cardShoulderCaption) cardShoulderCaption.innerText = t('gauge_shoulder_desc');
+      if (cardShoulderTitle) cardShoulderTitle.innerText = t('gauge_shoulder_title') ? t('gauge_shoulder_title').replace(/^[0-9]\.\s*/, '') : 'Épaules & Trapèzes';
     
       const cardTiltTitle = document.getElementById('titleGaugeTilt');
-      const cardTiltCaption = document.getElementById('descGaugeTilt');
-      if (cardTiltTitle) cardTiltTitle.innerText = t('gauge_tilt_title');
-      if (cardTiltCaption) cardTiltCaption.innerText = t('gauge_tilt_desc');
+      if (cardTiltTitle) cardTiltTitle.innerText = t('gauge_tilt_title') ? t('gauge_tilt_title').replace(/^[0-9]\.\s*/, '') : 'Inclinaison Tête';
     
       const titleDist = document.getElementById('titleGaugeDistance');
-      const descDist = document.getElementById('descGaugeDistance');
-      if (titleDist) titleDist.innerText = t('gauge_distance_title');
-      if (descDist) descDist.innerText = t('gauge_distance_desc');
+      if (titleDist) titleDist.innerText = t('gauge_distance_title') ? t('gauge_distance_title').replace(/^[0-9]\.\s*/, '') : 'Distance Écran';
     
       // Eye rest banner
       const eyeTitle = document.getElementById('eyeRestTitle');
@@ -4645,7 +5266,17 @@
       if (btnCalibrateSpan) btnCalibrateSpan.innerText = t('btn_calibrate');
       if (btnStopCamSpan) btnStopCamSpan.innerText = t('btn_stop');
     
-      // Pacing & Journal widgets
+      // Popout active card
+      const popTitle = document.getElementById('popoutActiveTitle');
+      const popDesc = document.getElementById('popoutActiveDesc');
+      const labelReclaim = document.getElementById('labelReclaimPopout');
+      const btnExp = document.getElementById('btnExpandPopout');
+      if (popTitle) popTitle.innerText = t('popout_active_title');
+      if (popDesc) popDesc.innerText = t('popout_active_desc');
+      if (labelReclaim) labelReclaim.innerText = t('btn_reclaim_popout');
+      if (btnExp) btnExp.setAttribute('title', t('btn_popout_expand'));
+    
+      // Session & Journal widgets
       const btnSettingsSpan = document.querySelector('#btnPacingSettings span');
       const btnResetSpan = document.querySelector('#btnResetTimer span');
       const btnExportSpan = document.querySelector('#btnExportCsv span');
@@ -4658,7 +5289,6 @@
       const footer = document.querySelector('footer');
       if (footer) footer.innerText = t('footer_text');
     
-      updateTimerDisplayTitles();
       renderAllLogs();
       updateLicenseUI();
     }
@@ -4669,34 +5299,36 @@
     }
     
     // ----------------------------------------------------
-    // MODAL TABS & PACING SETTINGS
+    // MODAL TABS & SESSION SETTINGS
     // ----------------------------------------------------
     function openPacingModal() {
       const modal = document.getElementById('pacingModal');
-      document.getElementById('rangeSittingMinutes').value = pacingConfig.sittingMinutes;
-      document.getElementById('inputSittingMinutes').value = pacingConfig.sittingMinutes;
-      document.getElementById('hintSitVal').innerText = pacingConfig.sittingMinutes + ' min';
+      const sessionMin = pacingConfig.sessionMinutes || 30;
+      
+      const rangeSession = document.getElementById('rangeSessionMinutes');
+      const inputSession = document.getElementById('inputSessionMinutes');
+      const hintSession = document.getElementById('hintSessionVal');
+      if (rangeSession) rangeSession.value = sessionMin;
+      if (inputSession) inputSession.value = sessionMin;
+      if (hintSession) hintSession.innerText = sessionMin + ' min';
     
-      document.getElementById('rangeStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
-      document.getElementById('inputStandingAlertMinutes').value = pacingConfig.standingAlertMinutes;
-      document.getElementById('hintStandVal').innerText = pacingConfig.standingAlertMinutes + ' min';
-    
-      document.getElementById('rangePauseMinutes').value = pacingConfig.pauseMinutes;
-      document.getElementById('inputPauseMinutes').value = pacingConfig.pauseMinutes;
-      document.getElementById('hintPauseVal').innerText = pacingConfig.pauseMinutes + ' min';
-    
-      if (audioSettings.mode === 'continuous') {
-        document.getElementById('audioModeContinuous').checked = true;
+      if (appAudioConfig.mode === 'continuous') {
+        const rCont = document.getElementById('audioModeContinuous');
+        if (rCont) rCont.checked = true;
       } else {
-        document.getElementById('audioModePulse').checked = true;
+        const rPulse = document.getElementById('audioModePulse');
+        if (rPulse) rPulse.checked = true;
       }
-      const volInt = Math.round(audioSettings.volume * 100);
-      document.getElementById('rangeAudioVolume').value = volInt;
-      document.getElementById('valAudioVolume').innerText = volInt + '%';
-      document.getElementById('selectAlertDelay').value = String(audioSettings.delaySeconds);
+      const volInt = Math.round(appAudioConfig.volume * 100);
+      const rangeVol = document.getElementById('rangeAudioVolume');
+      const valVol = document.getElementById('valAudioVolume');
+      if (rangeVol) rangeVol.value = volInt;
+      if (valVol) valVol.innerText = volInt + '%';
+      const delaySelect = document.getElementById('selectAlertDelay');
+      if (delaySelect) delaySelect.value = String(appAudioConfig.delaySeconds);
     
-      document.getElementById('selectModalLanguage').value = getCurrentLanguage();
-      document.getElementById('selectModalSensitivity').value = sensitivitySelect.value;
+      const langSelect = document.getElementById('selectModalLanguage');
+      if (langSelect) langSelect.value = getCurrentLanguage();
     
       if (typeof modal.showModal === 'function') {
         modal.showModal();
@@ -4744,10 +5376,10 @@
       if (btnProStatus && labelProBadge) {
         if (proActive) {
           btnProStatus.classList.add('active-pro');
-          labelProBadge.innerText = `${t('pro_badge_active_prefix')}${remainingDays}${t('pro_badge_active_suffix')}`;
+          labelProBadge.innerText = `🛡️ ${remainingDays}j`;
         } else {
           btnProStatus.classList.remove('active-pro');
-          labelProBadge.innerText = t('pro_badge_free');
+          labelProBadge.innerText = t('pro_badge_free') || '✨ Pass 7€/an';
         }
       }
     
@@ -4765,7 +5397,6 @@
             overlay.setAttribute('title', t('lock_tooltip_gauge'));
             overlay.innerHTML = `
               <span class="lock-badge">🔒 ${t('pro_badge_free')}</span>
-              <span class="lock-sub">${t('lock_tooltip_gauge')}</span>
             `;
             overlay.addEventListener('click', openLicenseModal);
             cardEl.appendChild(overlay);
@@ -4778,10 +5409,7 @@
     
       // Bouton PiP
       if (btnPiP) {
-        const span = btnPiP.querySelector('span');
-        if (span) {
-          span.innerText = flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`;
-        }
+        btnPiP.setAttribute('title', flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`);
       }
     }
     
@@ -4810,18 +5438,120 @@
     // ----------------------------------------------------
     // EVENT LISTENERS BINDING
     // ----------------------------------------------------
-    document.getElementById('btnStartCamera').addEventListener('click', startCamera);
-    btnStopCam.addEventListener('click', stopCamera);
+    document.getElementById('btnStartCamera').addEventListener('click', () => startCamera());
+    btnStopCam.addEventListener('click', () => {
+      stopCamera();
+      pauseSessionTimer();
+    });
     document.getElementById('btnCalibrate').addEventListener('click', startCalibrationCountdown);
     
-    btnPiP.addEventListener('click', () => {
-      const flags = getFeatureFlags();
-      if (!flags.pipMiniWindow) {
-        openLicenseModal();
-        return;
+    function showPopoutActiveState(active) {
+      if (popoutActiveCard) {
+        popoutActiveCard.style.display = active ? 'flex' : 'none';
       }
-      togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
-    });
+      if (cameraPlaceholder) {
+        cameraPlaceholder.style.display = active ? 'none' : (!getIsCameraActive() ? 'flex' : 'none');
+      }
+      if (canvasElement) {
+        canvasElement.style.display = active ? 'none' : (getIsCameraActive() ? 'block' : 'none');
+      }
+      const controlsBar = document.querySelector('.camera-controls-bar');
+      if (controlsBar) {
+        controlsBar.style.display = active ? 'none' : 'flex';
+      }
+    }
+    
+    if (btnPiP) {
+      btnPiP.addEventListener('click', async () => {
+        const flags = getFeatureFlags();
+        if (!flags.pipMiniWindow) {
+          openLicenseModal();
+          return;
+        }
+    
+        if (isPopoutMode()) {
+          // Déjà dans la mini-fenêtre popout : active le PiP vidéo W3C standard si souhaité
+          togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
+          return;
+        }
+    
+        // Depuis le panneau latéral ou l'onglet principal :
+        // Bascule vers le Mode Fenêtre Décrochée OS autonome (Solution A)
+        try {
+          if (getIsCameraActive()) {
+            await stopCamera();
+            pauseSessionTimer();
+          }
+          showPopoutActiveState(true);
+          syncChannel.postMessage({ type: 'POPOUT_ACTIVATED' });
+          openPopoutWindow();
+        } catch (e) {
+          console.warn("Échec lancement Pop-out, repli sur PiP standard :", e);
+          togglePictureInPicture(canvasElement, pipVideo).catch(err => alert(err.message));
+        }
+      });
+    }
+    
+    if (btnReclaimPopout) {
+      btnReclaimPopout.addEventListener('click', async () => {
+        syncChannel.postMessage({ type: 'RECLAIM_REQUESTED' });
+        showPopoutActiveState(false);
+        await startCamera();
+      });
+    }
+    
+    if (btnExpandPopout) {
+      btnExpandPopout.addEventListener('click', () => {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.open(cleanUrl, '_blank');
+        window.close();
+      });
+    }
+    
+    // Popover Notifs & Audio
+    if (btnNotifMenu && notifsDropdown) {
+      btnNotifMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = notifsDropdown.style.display === 'none';
+        notifsDropdown.style.display = isHidden ? 'flex' : 'none';
+        btnNotifMenu.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+      });
+    
+      document.addEventListener('click', (e) => {
+        if (!notifsDropdown.contains(e.target) && e.target !== btnNotifMenu) {
+          notifsDropdown.style.display = 'none';
+          btnNotifMenu.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+    
+    if (chkAudioToggle) {
+      chkAudioToggle.checked = isSoundEnabled();
+      chkAudioToggle.addEventListener('change', (e) => {
+        setSoundEnabled(e.target.checked);
+      });
+    }
+    
+    if (rangeDropdownVol && labelDropdownVol) {
+      const initVol = Math.round(appAudioConfig.volume * 100);
+      rangeDropdownVol.value = initVol;
+      labelDropdownVol.innerText = initVol + '%';
+      rangeDropdownVol.addEventListener('input', (e) => {
+        labelDropdownVol.innerText = e.target.value + '%';
+        appAudioConfig.volume = parseInt(e.target.value, 10) / 100;
+        saveAudioSettings(appAudioConfig);
+      });
+    }
+    
+    if (chkNotifToggle) {
+      chkNotifToggle.checked = ("Notification" in window) && Notification.permission === "granted";
+      chkNotifToggle.addEventListener('change', async (e) => {
+        if (e.target.checked) {
+          await requestNotifPermission();
+          chkNotifToggle.checked = Notification.permission === "granted";
+        }
+      });
+    }
     
     const btnPro = document.getElementById('btnProStatus');
     if (btnPro) btnPro.addEventListener('click', openLicenseModal);
@@ -4856,77 +5586,59 @@
         }
       });
     }
-    btnNotif.addEventListener('click', requestNotifPermission);
     
     document.getElementById('btnToggleLang').addEventListener('click', toggleLanguage);
-    
-    btnSound.addEventListener('click', () => {
-      const next = !isSoundEnabled();
-      setSoundEnabled(next);
-      btnSound.classList.toggle('active-toggle', next);
-      btnSound.setAttribute('aria-pressed', next ? 'true' : 'false');
-      btnSound.querySelector('span').innerText = next ? t('btn_audio') : t('btn_mute');
-      const iconSound = document.getElementById('iconSound');
-      if (iconSound) {
-        iconSound.innerHTML = next 
-          ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>'
-          : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-      }
-    });
-    
     cameraSelect.addEventListener('change', (e) => switchCamera(e.target.value));
-    
-    document.getElementById('segAssis').addEventListener('click', () => setMode('assis'));
-    document.getElementById('segDebout').addEventListener('click', () => setMode('debout'));
-    document.getElementById('segPause').addEventListener('click', () => setMode('pause'));
     
     document.getElementById('btnPacingSettings').addEventListener('click', openPacingModal);
     document.getElementById('btnResetTimer').addEventListener('click', resetCurrentModeTimer);
     document.getElementById('btnClosePacingModal').addEventListener('click', closePacingModal);
     document.getElementById('btnCancelPacingModal').addEventListener('click', closePacingModal);
     
+    const btnKineRoutine = document.getElementById('btnOpenKineRoutine');
+    if (btnKineRoutine) {
+      btnKineRoutine.addEventListener('click', openKineRoutineFromUI);
+    }
+    
     // Modal sliders 2-way sync
-    const rangeSit = document.getElementById('rangeSittingMinutes');
-    const inputSit = document.getElementById('inputSittingMinutes');
-    const hintSit = document.getElementById('hintSitVal');
-    rangeSit.addEventListener('input', () => { inputSit.value = rangeSit.value; hintSit.innerText = rangeSit.value + ' min'; });
-    inputSit.addEventListener('input', () => { rangeSit.value = inputSit.value; hintSit.innerText = inputSit.value + ' min'; });
-    
-    const rangeStand = document.getElementById('rangeStandingAlertMinutes');
-    const inputStand = document.getElementById('inputStandingAlertMinutes');
-    const hintStand = document.getElementById('hintStandVal');
-    rangeStand.addEventListener('input', () => { inputStand.value = rangeStand.value; hintStand.innerText = rangeStand.value + ' min'; });
-    inputStand.addEventListener('input', () => { rangeStand.value = inputStand.value; hintStand.innerText = inputStand.value + ' min'; });
-    
-    const rangePause = document.getElementById('rangePauseMinutes');
-    const inputPause = document.getElementById('inputPauseMinutes');
-    const hintPause = document.getElementById('hintPauseVal');
-    rangePause.addEventListener('input', () => { inputPause.value = rangePause.value; hintPause.innerText = rangePause.value + ' min'; });
-    inputPause.addEventListener('input', () => { rangePause.value = inputPause.value; hintPause.innerText = inputPause.value + ' min'; });
+    const rangeSession = document.getElementById('rangeSessionMinutes');
+    const inputSession = document.getElementById('inputSessionMinutes');
+    const hintSession = document.getElementById('hintSessionVal');
+    if (rangeSession && inputSession && hintSession) {
+      rangeSession.addEventListener('input', () => { inputSession.value = rangeSession.value; hintSession.innerText = rangeSession.value + ' min'; });
+      inputSession.addEventListener('input', () => { rangeSession.value = inputSession.value; hintSession.innerText = inputSession.value + ' min'; });
+    }
     
     const rangeVol = document.getElementById('rangeAudioVolume');
     const valVol = document.getElementById('valAudioVolume');
-    rangeVol.addEventListener('input', () => {
-      valVol.innerText = rangeVol.value + '%';
-      audioSettings.volume = parseInt(rangeVol.value, 10) / 100;
-    });
-    
-    const modalSens = document.getElementById('selectModalSensitivity');
-    modalSens.addEventListener('change', () => {
-      sensitivitySelect.value = modalSens.value;
-    });
+    if (rangeVol && valVol) {
+      rangeVol.addEventListener('input', () => {
+        valVol.innerText = rangeVol.value + '%';
+        appAudioConfig.volume = parseInt(rangeVol.value, 10) / 100;
+      });
+    }
     
     const modalLang = document.getElementById('selectModalLanguage');
-    modalLang.addEventListener('change', () => {
-      setLanguage(modalLang.value);
-    });
+    if (modalLang) {
+      modalLang.addEventListener('change', () => {
+        setLanguage(modalLang.value);
+      });
+    }
     
     document.getElementById('btnResetDefaults').addEventListener('click', () => {
-      document.getElementById('presetStandard').click();
-      document.getElementById('audioModePulse').checked = true;
-      rangeVol.value = 15;
-      valVol.innerText = '15%';
-      document.getElementById('selectAlertDelay').value = '2.5';
+      if (rangeSession) {
+        rangeSession.value = 30;
+        inputSession.value = 30;
+        hintSession.innerText = '30 min';
+      }
+      const audioPulse = document.getElementById('audioModePulse');
+      if (audioPulse) audioPulse.checked = true;
+      if (rangeVol) {
+        rangeVol.value = 15;
+        valVol.innerText = '15%';
+      }
+      const delaySel = document.getElementById('selectAlertDelay');
+      if (delaySel) delaySel.value = '2.5';
     });
     
     document.getElementById('tabBtnPacing').addEventListener('click', () => switchModalTab('pacing'));
@@ -4935,6 +5647,49 @@
     
     document.getElementById('btnTestAudioAlert').addEventListener('click', testAudioAlert);
     document.getElementById('btnTestCycleChime').addEventListener('click', playCycleChime);
+    
+    // Presets Session
+    const preset20 = document.getElementById('presetKine20');
+    const preset30 = document.getElementById('presetKine30');
+    const preset45 = document.getElementById('presetKine45');
+    
+    function selectSessionPreset(mins, activeBtn) {
+      if (rangeSession && inputSession && hintSession) {
+        rangeSession.value = mins;
+        inputSession.value = mins;
+        hintSession.innerText = mins + ' min';
+      }
+      [preset20, preset30, preset45].forEach(b => { if (b) b.classList.remove('active'); });
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+    
+    if (preset20) preset20.addEventListener('click', () => selectSessionPreset(20, preset20));
+    if (preset30) preset30.addEventListener('click', () => selectSessionPreset(30, preset30));
+    if (preset45) preset45.addEventListener('click', () => selectSessionPreset(45, preset45));
+    
+    // Modal form submit
+    document.getElementById('pacingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const sessionMin = parseInt(inputSession ? inputSession.value : '30', 10);
+    
+      if (sessionMin > 0) {
+        pacingConfig = savePacingConfig({ sessionMinutes: sessionMin, sittingMinutes: sessionMin });
+        sessionDurationMinutes = sessionMin;
+      }
+    
+      const audioModeEl = document.querySelector('input[name="audioMode"]:checked');
+      const audioMode = audioModeEl ? audioModeEl.value : 'pulse';
+      const vol = rangeVol ? parseInt(rangeVol.value, 10) / 100 : 0.15;
+      const delaySel = document.getElementById('selectAlertDelay');
+      const delay = delaySel ? parseFloat(delaySel.value) : 2.5;
+    
+      appAudioConfig = saveAudioSettings({ mode: audioMode, volume: vol, delaySeconds: delay });
+    
+      if (modalLang) setLanguage(modalLang.value);
+    
+      resetCurrentModeTimer();
+      closePacingModal();
+    });
     
     document.getElementById('btnPrintKineReport').addEventListener('click', () => {
       const flags = getFeatureFlags();
@@ -4962,50 +5717,8 @@
       sessionTotalFrames = 0;
       clearDailyLogs(todayKey);
       renderAllLogs();
-      document.getElementById('scoreDigits').innerText = '100%';
-    });
-    
-    // Modal presets
-    document.getElementById('presetPomodoro').addEventListener('click', () => {
-      rangeSit.value = 25; inputSit.value = 25; hintSit.innerText = '25 min';
-      rangeStand.value = 10; inputStand.value = 10; hintStand.innerText = '10 min';
-      rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
-    });
-    
-    document.getElementById('presetStandard').addEventListener('click', () => {
-      rangeSit.value = 45; inputSit.value = 45; hintSit.innerText = '45 min';
-      rangeStand.value = 15; inputStand.value = 15; hintStand.innerText = '15 min';
-      rangePause.value = 5; inputPause.value = 5; hintPause.innerText = '5 min';
-    });
-    
-    document.getElementById('presetActive').addEventListener('click', () => {
-      rangeSit.value = 50; inputSit.value = 50; hintSit.innerText = '50 min';
-      rangeStand.value = 20; inputStand.value = 20; hintStand.innerText = '20 min';
-      rangePause.value = 10; inputPause.value = 10; hintPause.innerText = '10 min';
-    });
-    
-    // Modal form submit
-    document.getElementById('pacingForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const sit = parseInt(inputSit.value, 10);
-      const stand = parseInt(inputStand.value, 10);
-      const pause = parseInt(inputPause.value, 10);
-    
-      if (sit > 0 && stand > 0 && pause > 0) {
-        pacingConfig = savePacingConfig({ sittingMinutes: sit, standingAlertMinutes: stand, pauseMinutes: pause });
-      }
-    
-      const audioMode = document.querySelector('input[name="audioMode"]:checked').value;
-      const vol = parseInt(rangeVol.value, 10) / 100;
-      const delay = parseFloat(document.getElementById('selectAlertDelay').value);
-    
-      audioSettings = saveAudioSettings({ mode: audioMode, volume: vol, delaySeconds: delay });
-    
-      setLanguage(modalLang.value);
-      sensitivitySelect.value = modalSens.value;
-    
-      resetCurrentModeTimer();
-      closePacingModal();
+      const scoreDigits = document.getElementById('scoreDigits');
+      if (scoreDigits) scoreDigits.innerText = '100%';
     });
     
     // App Bootstrap
@@ -5014,6 +5727,52 @@
     renderAllLogs();
     resetCurrentModeTimer();
     updateLicenseUI();
+    
+    // ----------------------------------------------------
+    // INITIALISATION MODE POP-OUT & SYNCHRONISATION MULTI-FENÊTRES (SOLUTION A)
+    // ----------------------------------------------------
+    const inPopout = isPopoutMode();
+    
+    if (inPopout) {
+      document.body.classList.add('mode-popout');
+      if (btnExpandPopout) {
+        btnExpandPopout.style.display = 'inline-flex';
+      }
+      if (btnPiP) {
+        btnPiP.setAttribute('title', 'Activer le Picture-in-Picture W3C');
+      }
+    
+      // Démarrage automatique fluide dans la mini-fenêtre autonome
+      setTimeout(() => {
+        startCamera().catch(err => console.warn("Démarrage auto caméra popout :", err));
+      }, 400);
+    
+      window.addEventListener('beforeunload', () => {
+        try {
+          syncChannel.postMessage({ type: 'POPOUT_CLOSED' });
+        } catch (_) {}
+      });
+    
+      syncChannel.addEventListener('message', (ev) => {
+        if (ev.data && ev.data.type === 'RECLAIM_REQUESTED') {
+          window.close();
+        }
+      });
+    } else {
+      // Contexte Hôte (Panneau latéral / Sidebar)
+      syncChannel.addEventListener('message', async (ev) => {
+        if (!ev.data) return;
+        if (ev.data.type === 'POPOUT_ACTIVATED') {
+          if (getIsCameraActive()) {
+            await stopCamera();
+            pauseSessionTimer();
+          }
+          showPopoutActiveState(true);
+        } else if (ev.data.type === 'POPOUT_CLOSED') {
+          showPopoutActiveState(false);
+        }
+      });
+    }
 
   })();
   </script>

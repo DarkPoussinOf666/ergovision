@@ -254,11 +254,52 @@
     - [x] Créer `90_Code_Source/src/reports/kine-report.js` agrégeant les logs `ergovision_daily_log_*` sur 7 à 30 jours (score moyen de posture neutre, répartition des dérives C7-C8 / Trapèzes / Inclinaison / Proximité, nombre de routines Kiné complétées, ratio Assis/Debout).
     - [x] Concevoir la feuille de style `@media print` générant un bilan A4 d'une page avec graphiques SVG vectoriels et encart d'observations pour le kinésithérapeute via `window.print()`.
 
-- [x] **Phase 14.4 : Pipeline de Build Multi-Cibles & Dossier de Soumission Stores**
-  - [x] **14.4.1 Script `tasks/build_extension.js`**
-    - [x] Automatiser l'assemblage de `dist/chrome/` (`manifest.chrome.json` -> `manifest.json`) et `dist/firefox/` (`manifest.firefox.json` -> `manifest.json`), vérifier l'absence de tout lien CDN externe et générer les archives `dist/ergovision-chrome-mv3.zip` et `dist/ergovision-firefox-mv3.zip`.
-  - [x] **14.4.2 Guide & Textes de Soumission (`80_Tests_et_Deploiement/STORE_SUBMISSION_GUIDE.md`)**
-    - [x] Rédiger les textes prêts à copier-coller pour Chrome Web Store et Firefox AMO : *Single Purpose*, justifications des permissions (`storage`, `alarms`, `notifications`, `sidePanel`, `camera` local), Politique de Confidentialité Zero-Data et clé de test reviewer (`ERGO-REVIEWER-2026`).
+- [x] **Phase 15 : Refonte UI/UX Épurée & Repositionnement Rééducation Kiné (v3.3)**
+  - [x] **15.1 : Migration Thème Light par Défaut & Design System Épuré**
+    - [x] 15.1.1 Définir le thème `'light'` par défaut dans `90_Code_Source/index.html` (`data-theme="light"`) et migrer la clé de stockage `ergovision_theme_v2` dans `90_Code_Source/src/ui/theme.js` pour purger l'ancien cache sombre.
+    - [x] 15.1.2 Rehausser la palette Light dans `90_Code_Source/css/style.css` : fond Mica clinique (`#f8fafc`), cartes blanches pures (`#ffffff`) avec ombres douces (0 1px 3px rgba(0,0,0,0.05)), suppression de la couleur jaune boueuse au profit d'un ambre chaud lisible.
+    - [x] 15.1.3 Éliminer le fond noir `rgba(9, 12, 20, 0.85)` de `.viewport-bar` au profit d'une barre d'action externe claire sous le flux vidéo.
+  - [x] **15.2 : Header Minimaliste & Menu « Notifs & Alertes » Popover**
+    - [x] 15.2.1 Supprimer les 3 boutons de posture (`#segAssis`, `#segDebout`, `#segPause`), le badge technique `Fluent Workstation v3.2` et le sélecteur `Tolérance / Sensibilité` de la topbar.
+    - [x] 15.2.2 Concevoir le menu popover **« Notifs & Alertes » (`#btnNotifsMenu`)** regroupant : Switch Alerte Audio (On/Off), Curseur de Volume (0-100%), Sélecteur de profil sonore (Pulse doux / Continu), et Switch Notifications OS.
+    - [x] 15.2.3 Réorganiser les actions rapides en 1 seule ligne compacte : Bouclier + Titre à gauche, Badge Pass + Bouton PiP + Menu Notifs (`🔔`) + Réglages (`⚙️`) + Thème + Langue à droite.
+  - [x] **15.3 : Dégagement Intégral du Cadre Caméra & Barre d'Action Externe**
+    - [x] 15.3.1 Sortir `.viewport-bar` du flux vidéo pour créer la barre externe `.camera-controls-bar` sous le canvas.
+    - [x] 15.3.2 Éliminer la mention `(BUREAU ASSIS)` du HUD vidéo et des badges d'état (`POSTURE NEUTRE` épuré).
+    - [x] 15.3.3 Structurer la barre de contrôle : Bouton primaire `🎯 Calibrer Point Zéro (3s)` + Bouton secondaire `⏹️ Arrêter`, et sélecteur de caméra discret.
+  - [x] **15.4 : Repositionnement « Session de Rééducation (30 min) » & Accès Kiné**
+    - [x] 15.4.1 Modifier la logique du timer dans `app.js` et `pacing-timer.js` : Bloquer le défilement automatique au chargement ; ne démarrer le compte à rebours 30:00 qu'après verrouillage effectif du Point Zéro.
+    - [x] 15.4.2 Gérer la fin de session (30 min) : arrêt automatique bienveillant du capteur, carillon doux, félicitations et sauvegarde du score de session.
+    - [x] 15.4.3 Reloger l'accès à l'Atelier Kiné : ajouter un bouton d'action directe **`🧘 Étirements Kiné (5 min)`** dans la carte de session et à l'expiration des 30 minutes.
+  - [x] **15.5 : Allègement des 4 Jauges & Nettoyage du Journal**
+    - [x] 15.5.1 Supprimer les numéros `1.`, `2.`, `3.`, `4.` et condenser les cartes de jauges (supprimer les paragraphes de 2 lignes sous chaque jauge et les basculer en infobulles/tooltips).
+    - [x] 15.5.2 Corriger le bug des clés de traduction `title_assis` / `title_debout` et supprimer les logs de changement de posture intempestifs dans `app.js`.
+  - [x] **15.6 : Synchronisation Standalone, Compilation Extension (`dist/`) & Validation**
+    - [x] 15.6.1 Rétro-porter les améliorations dans le script de build ou `index.html`.
+    - [x] 15.6.2 Exécuter `node tasks/build_extension.js` pour mettre à jour `dist/chrome/` et `dist/firefox/`.
+    - [x] 15.6.3 Valider la conformité de l'extension Firefox MV3 et la propreté visuelle.
+
+---
+
+## 🪟 Phase 16 : Mode « Fenêtre Décrochée » / Pop-out Autonome OS (Solution A)
+
+- [x] **Phase 16.1 : Moteur Pop-out & Cycle de Vie Indépendant (`src/ui/popout.js` / `camera-stream.js`)**
+  - [x] 16.1.1 Conception de `openPopoutWindow()` : ouverture d'une fenêtre OS dédiée (`chrome.windows.create({ type: 'popup', width: 420, height: 640 })` ou `window.open('index.html?mode=popout')`).
+  - [x] 16.1.2 Canal de synchronisation inter-fenêtres `BroadcastChannel('ergovision_sync')` pour coordonner l'ouverture, la fermeture et le rapatriement sans conflit d'accès webcam.
+  - [x] 16.1.3 Décharge propre de la caméra dans le panneau latéral hôte (`stopCamera()`) et affichage d'un panneau d'état rassurant (« Actif dans votre mini-fenêtre ») avec bouton « ↩️ Rapatrier ici ».
+- [x] **Phase 16.2 : Adaptation UI/UX & Responsive Décroché (`mode-popout`)**
+  - [x] 16.2.1 Détection automatique de `?mode=popout` dans l'URL pour appliquer `.mode-popout` sur `<body>` et démarrage automatique du capteur optique.
+  - [x] 16.2.2 Styles CSS Fluent UI 2 dédiés dans `90_Code_Source/css/style.css` pour `.mode-popout` (topbar chirurgicale, canvas vidéo haute lisibilité, jauges 2×2 condensées, masquage des blocs encombrants).
+  - [x] 16.2.3 Bouton de ré-ancrage / plein écran dans la popout permettant de repasser en vue standard ou fermer la mini-fenêtre proprement.
+- [x] **Phase 16.3 : Extension Background & Messages MV3 (`src/extension/background.js`)**
+  - [x] 16.3.1 Prise en charge du message `OPEN_POPOUT_WINDOW` dans `src/extension/background.js` pour Chrome MV3.
+  - [x] 16.3.2 Maintien des badges d'icône d'extension synchronisés depuis la mini-fenêtre popout.
+- [x] **Phase 16.4 : Intégration i18n & Traductions (FR / EN)**
+  - [x] 16.4.1 Clés de traduction pour les infobulles, bandeaux d'état déporté (« ErgoVision tourne dans votre mini-fenêtre ») et boutons d'action (« Rapatrier », « Fenêtre Décrochée »).
+- [x] **Phase 16.5 : Compilation Standalone, Build Extension, Validation & Leçons**
+  - [x] 16.5.1 Intégration dans `tasks/build_standalone.js` et compilation déterministe de `index.html`.
+  - [x] 16.5.2 Exécution de `node tasks/build_extension.js` pour actualiser `dist/chrome/` et `dist/firefox/`.
+  - [x] 16.5.3 Validation syntaxique, intégrité JS/CSS et mise à jour de `tasks/lessons.md`.
 
 ---
 

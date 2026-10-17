@@ -121,6 +121,72 @@ export async function stopCameraStream(videoElement, pipVideoElement = null) {
   isCameraActive = false;
 }
 
+export function isPopoutMode() {
+  if (typeof window === 'undefined') return false;
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('mode') === 'popout';
+}
+
+export function openPopoutWindow() {
+  const width = 420;
+  const height = 640;
+  const availWidth = (window.screen && window.screen.availWidth) || window.screen.width || 1920;
+  const left = Math.max(0, availWidth - width - 24);
+  const top = 50;
+
+  // 1. Tenter via l'API WebExtension windows (Chrome MV3 & Firefox)
+  if (typeof chrome !== 'undefined' && chrome.windows && chrome.windows.create) {
+    try {
+      const popoutUrl = chrome.runtime.getURL('index.html?mode=popout');
+      chrome.windows.create({
+        url: popoutUrl,
+        type: 'popup',
+        width,
+        height,
+        left,
+        top,
+        focused: true
+      }).catch(err => {
+        console.warn("Échec chrome.windows.create direct, tentative via background :", err);
+        if (chrome.runtime && chrome.runtime.sendMessage) {
+          chrome.runtime.sendMessage({ type: 'OPEN_POPOUT_WINDOW', width, height, left, top });
+        } else {
+          fallbackWindowOpen(width, height, left, top);
+        }
+      });
+      return;
+    } catch (e) {
+      console.warn("Exception chrome.windows.create :", e);
+    }
+  }
+
+  // 2. Tenter via message runtime au Service Worker si disponible
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+    chrome.runtime.sendMessage({ type: 'OPEN_POPOUT_WINDOW', width, height, left, top }, () => {
+      if (chrome.runtime.lastError) {
+        fallbackWindowOpen(width, height, left, top);
+      }
+    });
+    return;
+  }
+
+  // 3. Repli Web standard
+  fallbackWindowOpen(width, height, left, top);
+}
+
+function fallbackWindowOpen(width, height, left, top) {
+  const url = new URL(window.location.href);
+  url.searchParams.set('mode', 'popout');
+  const win = window.open(
+    url.toString(),
+    'ErgoVision_Popout_Window',
+    `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no`
+  );
+  if (win) {
+    win.focus();
+  }
+}
+
 export async function togglePictureInPicture(canvasElement, pipVideoElement) {
   if (!isCameraActive) {
     throw new Error("Activez d'abord la caméra avant d'ouvrir la miniature.");
@@ -139,68 +205,15 @@ export async function togglePictureInPicture(canvasElement, pipVideoElement) {
         pipVideoElement.srcObject = canvasElement.captureStream ? canvasElement.captureStream(25) : null;
       }
       if (pipVideoElement.srcObject) {
-        // Démarre la lecture si nécessaire
         await pipVideoElement.play().catch(() => {});
         await pipVideoElement.requestPictureInPicture();
         return;
       }
     }
   } catch (pipErr) {
-    console.warn("Échec Picture-in-Picture natif, passage en mode Pop-out flottant :", pipErr);
+    console.warn("Échec Picture-in-Picture natif, passage en fenêtre Pop-out :", pipErr);
   }
 
-  // 3. Repli Pop-out détaché (Idéal pour Firefox Sidebar ou quand requestPictureInPicture est restreint)
-  openFloatingPopout(canvasElement);
-}
-
-let popoutWindow = null;
-function openFloatingPopout(canvasElement) {
-  if (popoutWindow && !popoutWindow.closed) {
-    popoutWindow.focus();
-    return;
-  }
-
-  const w = 480;
-  const h = 320;
-  const left = window.screen.width - w - 20;
-  const top = 40;
-
-  popoutWindow = window.open(
-    '',
-    'ErgoVision_MiniPiP',
-    `width=${w},height=${h},top=${top},left=${left},resizable=yes,scrollbars=no,status=no`
-  );
-
-  if (!popoutWindow) {
-    throw new Error("Impossible d'ouvrir la miniature. Veuillez autoriser les fenêtres pop-up.");
-  }
-
-  popoutWindow.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>ErgoVision AI — Miniature</title>
-      <style>
-        body { margin: 0; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        canvas { width: 100%; height: 100%; object-fit: contain; }
-      </style>
-    </head>
-    <body>
-      <canvas id="popCanvas" width="${canvasElement.width}" height="${canvasElement.height}"></canvas>
-    </body>
-    </html>
-  `);
-  popoutWindow.document.close();
-
-  const popCanvas = popoutWindow.document.getElementById('popCanvas');
-  const popCtx = popCanvas ? popCanvas.getContext('2d') : null;
-
-  function renderPopout() {
-    if (!popoutWindow || popoutWindow.closed || !isCameraActive) return;
-    if (popCtx) {
-      popCtx.drawImage(canvasElement, 0, 0);
-    }
-    requestAnimationFrame(renderPopout);
-  }
-  requestAnimationFrame(renderPopout);
+  // 3. Repli Pop-out détaché OS
+  openPopoutWindow();
 }
