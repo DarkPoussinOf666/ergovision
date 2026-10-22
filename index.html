@@ -673,7 +673,8 @@
       transform: scale(0.98);
     }
 
-    .btn-action.active-toggle {
+    .btn-action.active-toggle,
+    #btnPiP.active {
       background: var(--status-success-bg);
       border-color: var(--status-success-border);
       color: var(--status-success);
@@ -2500,7 +2501,7 @@
         <span id="labelProBadge">✨ Pass 7€/an</span>
       </button>
 
-      <button id="btnPiP" class="btn-action btn-icon-only" title="Mini-Fenêtre flottante par-dessus vos outils de travail" aria-label="Ouvrir la fenêtre Picture-in-Picture">
+      <button id="btnPiP" class="btn-action btn-icon-only" title="Miniature Toujours au Premier Plan" aria-label="Ouvrir la miniature Always-On-Top">
         <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
       </button>
 
@@ -3101,9 +3102,10 @@
         btn_audio: "Audio",
         btn_mute: "Muet",
         btn_notif: "Notifs OS",
-        btn_pip: "Mini-Fenêtre",
+        btn_pip: "Miniature Toujours au Premier Plan",
         btn_popout: "Mini-Fenêtre Décrochée",
         btn_popout_expand: "Agrandir en grand écran",
+        sensor_inactive_error: "Activez d'abord la caméra avant d'ouvrir la miniature.",
         popout_active_title: "ErgoVision est actif dans votre mini-fenêtre",
         popout_active_desc: "Vous pouvez replier ou fermer ce panneau latéral en toute tranquillité pour libérer votre écran. Votre posture reste protégée.",
         btn_reclaim_popout: "↩️ Rapatrier dans ce panneau",
@@ -3317,9 +3319,10 @@
         btn_audio: "Audio",
         btn_mute: "Muted",
         btn_notif: "OS Alerts",
-        btn_pip: "PiP Mini",
+        btn_pip: "Always-On-Top Miniature",
         btn_popout: "Detached Mini-Window",
         btn_popout_expand: "Expand to full view",
+        sensor_inactive_error: "Please start the camera before opening the floating miniature.",
         popout_active_title: "ErgoVision is active in your mini-window",
         popout_active_desc: "You can safely collapse or close this side panel to free up your workspace. Posture tracking remains active.",
         btn_reclaim_popout: "↩️ Return to this panel",
@@ -4033,6 +4036,7 @@
     let cameraInstance = null;
     let poseInstance = null;
     let isCameraActive = false;
+    let activeDocumentPipWindow = null;
     
     function getIsCameraActive() {
       return isCameraActive;
@@ -4040,6 +4044,25 @@
     
     function setIsCameraActive(val) {
       isCameraActive = val;
+    }
+    
+    function isAlwaysOnTopPiPActive() {
+      if (activeDocumentPipWindow && !activeDocumentPipWindow.closed) return true;
+      if (typeof document !== 'undefined' && document.pictureInPictureElement) return true;
+      return false;
+    }
+    
+    function updateAlwaysOnTopPiPStatus(statusText, statusColor = '#34d399') {
+      if (activeDocumentPipWindow && !activeDocumentPipWindow.closed) {
+        try {
+          const pill = activeDocumentPipWindow.document.getElementById('pipStatusPill');
+          const text = activeDocumentPipWindow.document.getElementById('pipStatusText');
+          const dot = activeDocumentPipWindow.document.getElementById('pipStatusDot');
+          if (text) text.textContent = statusText;
+          if (dot) dot.style.background = statusColor;
+          if (pill) pill.style.borderColor = statusColor;
+        } catch (_) {}
+      }
     }
     
     async function enumerateVideoDevices(selectElement) {
@@ -4145,6 +4168,12 @@
           await document.exitPictureInPicture();
         } catch (_) {}
       }
+      if (activeDocumentPipWindow && !activeDocumentPipWindow.closed) {
+        try {
+          activeDocumentPipWindow.close();
+        } catch (_) {}
+        activeDocumentPipWindow = null;
+      }
       isCameraActive = false;
     }
     
@@ -4154,95 +4183,222 @@
       return urlParams.get('mode') === 'popout';
     }
     
-    function openPopoutWindow() {
-      const width = 420;
-      const height = 640;
-      const availWidth = (window.screen && window.screen.availWidth) || window.screen.width || 1920;
-      const left = Math.max(0, availWidth - width - 24);
-      const top = 50;
+    /**
+     * Bascule le mode Miniature Toujours au Premier Plan (Always-On-Top)
+     * Dual-Engine :
+     * 1. Moteur Primaire (Chrome 116+, Edge) : Document Picture-in-Picture avec micro-HUD (Zéro, statut).
+     * 2. Moteur Universel (Firefox, Safari, Standalone) : Video Picture-in-Picture W3C natif OS.
+     * ZÉRO COUPURE : Le flux de la caméra ne s'interrompt pas.
+     */
+    async function toggleAlwaysOnTopPiP({ canvasElement, pipVideoElement, onZeroCalibrate, t }) {
+      if (!isCameraActive) {
+        const errMsg = t ? t('sensor_inactive_error') : "Activez d'abord la caméra avant d'ouvrir la miniature.";
+        throw new Error(errMsg || "Activez d'abord la caméra avant d'ouvrir la miniature.");
+      }
     
-      // 1. Tenter via l'API WebExtension windows (Chrome MV3 & Firefox)
-      if (typeof chrome !== 'undefined' && chrome.windows && chrome.windows.create) {
+      // 1. Si déjà actif dans l'un des modes Always-On-Top, on le ferme
+      if (activeDocumentPipWindow && !activeDocumentPipWindow.closed) {
+        activeDocumentPipWindow.close();
+        activeDocumentPipWindow = null;
+        return false;
+      }
+      if (typeof document !== 'undefined' && document.pictureInPictureElement) {
+        await document.exitPictureInPicture();
+        return false;
+      }
+    
+      // Obtenir le flux MediaStream depuis le canvas
+      const stream = canvasElement.captureStream ? canvasElement.captureStream(25) : null;
+      if (!stream) {
+        throw new Error("Impossible de capturer le flux du canvas.");
+      }
+    
+      // 2. MOTEUR A : Document Picture-in-Picture API (Chrome 116+, Edge)
+      // Fenêtre flottante OS Always-On-Top dédiée avec micro-HUD interactif
+      if (typeof window !== 'undefined' && 'documentPictureInPicture' in window) {
         try {
-          const popoutUrl = chrome.runtime.getURL('index.html?mode=popout');
-          chrome.windows.create({
-            url: popoutUrl,
-            type: 'popup',
-            width,
-            height,
-            left,
-            top,
-            focused: true
-          }).catch(err => {
-            console.warn("Échec chrome.windows.create direct, tentative via background :", err);
-            if (chrome.runtime && chrome.runtime.sendMessage) {
-              chrome.runtime.sendMessage({ type: 'OPEN_POPOUT_WINDOW', width, height, left, top });
-            } else {
-              fallbackWindowOpen(width, height, left, top);
+          const pipWin = await window.documentPictureInPicture.requestWindow({
+            width: 320,
+            height: 230
+          });
+          activeDocumentPipWindow = pipWin;
+    
+          const doc = pipWin.document;
+          doc.title = "ErgoVision AI — Miniature Posturale";
+    
+          const style = doc.createElement('style');
+          style.textContent = `
+            * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+            body {
+              background: #090d16;
+              color: #f1f5f9;
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, sans-serif;
+              width: 100vw;
+              height: 100vh;
+              overflow: hidden;
+              display: flex;
+              flex-direction: column;
+            }
+            .pip-stage {
+              position: relative;
+              flex: 1;
+              width: 100%;
+              height: 100%;
+              background: #000000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            video {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+            }
+            .pip-overlay-top {
+              position: absolute;
+              top: 8px;
+              left: 8px;
+              right: 8px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              pointer-events: none;
+            }
+            .pip-status-pill {
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              background: rgba(15, 23, 42, 0.88);
+              backdrop-filter: blur(8px);
+              padding: 4px 10px;
+              border-radius: 999px;
+              border: 1px solid #34d399;
+              font-size: 11px;
+              font-weight: 700;
+              color: #ffffff;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+              transition: border-color 0.2s ease;
+            }
+            .pip-status-dot {
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              background: #34d399;
+              box-shadow: 0 0 6px currentColor;
+            }
+            .pip-overlay-bottom {
+              position: absolute;
+              bottom: 8px;
+              right: 8px;
+              display: flex;
+              gap: 6px;
+              pointer-events: auto;
+            }
+            .pip-btn {
+              background: rgba(15, 23, 42, 0.88);
+              backdrop-filter: blur(8px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              color: #ffffff;
+              padding: 4px 9px;
+              border-radius: 6px;
+              font-size: 11px;
+              font-weight: 600;
+              cursor: pointer;
+              display: inline-flex;
+              align-items: center;
+              gap: 4px;
+              transition: background 0.15s, border-color 0.15s;
+            }
+            .pip-btn:hover {
+              background: rgba(30, 41, 59, 0.95);
+              border-color: rgba(255, 255, 255, 0.4);
+            }
+            .pip-btn-zero {
+              background: rgba(16, 185, 129, 0.25);
+              border-color: rgba(16, 185, 129, 0.6);
+              color: #34d399;
+            }
+            .pip-btn-zero:hover {
+              background: rgba(16, 185, 129, 0.45);
+            }
+          `;
+          doc.head.appendChild(style);
+    
+          const stage = doc.createElement('div');
+          stage.className = 'pip-stage';
+    
+          const v = doc.createElement('video');
+          v.autoplay = true;
+          v.muted = true;
+          v.playsInline = true;
+          v.srcObject = stream;
+          v.play().catch(() => {});
+          stage.appendChild(v);
+    
+          const topOverlay = doc.createElement('div');
+          topOverlay.className = 'pip-overlay-top';
+          topOverlay.innerHTML = `
+            <div class="pip-status-pill" id="pipStatusPill">
+              <span class="pip-status-dot" id="pipStatusDot"></span>
+              <span id="pipStatusText">Point Zéro Calibré</span>
+            </div>
+          `;
+          stage.appendChild(topOverlay);
+    
+          const bottomOverlay = doc.createElement('div');
+          bottomOverlay.className = 'pip-overlay-bottom';
+          bottomOverlay.innerHTML = `
+            <button type="button" class="pip-btn pip-btn-zero" id="pipBtnZero" title="Recalibrer le Point Zéro (3s)">🎯 Zéro</button>
+          `;
+          stage.appendChild(bottomOverlay);
+    
+          doc.body.appendChild(stage);
+    
+          const btnZero = doc.getElementById('pipBtnZero');
+          if (btnZero && typeof onZeroCalibrate === 'function') {
+            btnZero.addEventListener('click', () => {
+              onZeroCalibrate();
+            });
+          }
+    
+          pipWin.addEventListener('pagehide', () => {
+            activeDocumentPipWindow = null;
+            if (typeof window !== 'undefined' && window.dispatchEvent) {
+              window.dispatchEvent(new CustomEvent('ergovision_pip_closed'));
             }
           });
-          return;
-        } catch (e) {
-          console.warn("Exception chrome.windows.create :", e);
+    
+          return true;
+        } catch (docPipErr) {
+          console.warn("Document Picture-in-Picture refusé ou indisponible, passage au Video PiP W3C :", docPipErr);
         }
       }
     
-      // 2. Tenter via message runtime au Service Worker si disponible
-      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
-        chrome.runtime.sendMessage({ type: 'OPEN_POPOUT_WINDOW', width, height, left, top }, () => {
-          if (chrome.runtime.lastError) {
-            fallbackWindowOpen(width, height, left, top);
-          }
-        });
-        return;
-      }
-    
-      // 3. Repli Web standard
-      fallbackWindowOpen(width, height, left, top);
-    }
-    
-    function fallbackWindowOpen(width, height, left, top) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('mode', 'popout');
-      const win = window.open(
-        url.toString(),
-        'ErgoVision_Popout_Window',
-        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no`
-      );
-      if (win) {
-        win.focus();
-      }
-    }
-    
-    async function togglePictureInPicture(canvasElement, pipVideoElement) {
-      if (!isCameraActive) {
-        throw new Error("Activez d'abord la caméra avant d'ouvrir la miniature.");
-      }
-    
-      // 1. Si déjà en PiP standard, on le ferme
-      if (document.pictureInPictureElement) {
-        await document.exitPictureInPicture();
-        return;
-      }
-    
-      // 2. Tentative avec l'API W3C Picture-in-Picture standard
-      try {
-        if (pipVideoElement && pipVideoElement.requestPictureInPicture) {
+      // 3. MOTEUR B : Video Picture-in-Picture W3C standard (Firefox, Safari, Fallback)
+      // Forcé au Premier Plan OS (Always-On-Top natif) avec squelette et bandeau HUD sur le canvas
+      if (pipVideoElement && pipVideoElement.requestPictureInPicture) {
+        try {
           if (!pipVideoElement.srcObject) {
-            pipVideoElement.srcObject = canvasElement.captureStream ? canvasElement.captureStream(25) : null;
+            pipVideoElement.srcObject = stream;
           }
-          if (pipVideoElement.srcObject) {
-            await pipVideoElement.play().catch(() => {});
-            await pipVideoElement.requestPictureInPicture();
-            return;
-          }
+          await pipVideoElement.play().catch(() => {});
+          await pipVideoElement.requestPictureInPicture();
+          return true;
+        } catch (videoPipErr) {
+          console.warn("Échec Video Picture-in-Picture standard :", videoPipErr);
+          throw new Error("Impossible d'activer la miniature Always-On-Top sur votre navigateur.");
         }
-      } catch (pipErr) {
-        console.warn("Échec Picture-in-Picture natif, passage en fenêtre Pop-out :", pipErr);
       }
     
-      // 3. Repli Pop-out détaché OS
-      openPopoutWindow();
+      throw new Error("Picture-in-Picture non supporté par ce navigateur.");
+    }
+    
+    /**
+     * Rétro-compatibilité W3C
+     */
+    async function togglePictureInPicture(canvasElement, pipVideoElement) {
+      return toggleAlwaysOnTopPiP({ canvasElement, pipVideoElement });
     }
 
     // ==========================================
@@ -6562,14 +6718,17 @@
     
       canvasCtx.restore();
     
-      // Bandeau HUD superposé
+      // Mise à jour de la miniature Always-On-Top si active
+      updateAlwaysOnTopPiPStatus(hudStatus, hudColor);
+    
+      // Bandeau HUD superposé (haute lisibilité en miniature)
       canvasCtx.save();
       canvasCtx.fillStyle = hudColor;
-      canvasCtx.fillRect(0, 0, canvasElement.width, 38);
+      canvasCtx.fillRect(0, 0, canvasElement.width, 40);
       canvasCtx.fillStyle = "#ffffff";
-      canvasCtx.font = "bold 13px 'Segoe UI Variable Text', -apple-system, sans-serif";
+      canvasCtx.font = "bold 14px 'Segoe UI Variable Text', -apple-system, sans-serif";
       canvasCtx.textBaseline = "middle";
-      canvasCtx.fillText(hudStatus, 14, 19);
+      canvasCtx.fillText(hudStatus, 14, 20);
       canvasCtx.restore();
     }
     
@@ -6900,26 +7059,28 @@
           return;
         }
     
-        if (isPopoutMode()) {
-          // Déjà dans la mini-fenêtre popout : active le PiP vidéo W3C standard si souhaité
-          togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
-          return;
-        }
-    
-        // Depuis le panneau latéral ou l'onglet principal :
-        // Bascule vers le Mode Fenêtre Décrochée OS autonome (Solution A)
         try {
-          if (getIsCameraActive()) {
-            await stopCamera();
-            pauseSessionTimer();
-          }
-          showPopoutActiveState(true);
-          syncChannel.postMessage({ type: 'POPOUT_ACTIVATED' });
-          openPopoutWindow();
+          const active = await toggleAlwaysOnTopPiP({
+            canvasElement,
+            pipVideoElement: pipVideo,
+            onZeroCalibrate: () => {
+              startCalibrationCountdown();
+            },
+            t
+          });
+          btnPiP.classList.toggle('active', !!active);
         } catch (e) {
-          console.warn("Échec lancement Pop-out, repli sur PiP standard :", e);
-          togglePictureInPicture(canvasElement, pipVideo).catch(err => alert(err.message));
+          alert(e.message || "Erreur lors de l'activation de la miniature Always-On-Top.");
         }
+      });
+    }
+    
+    window.addEventListener('ergovision_pip_closed', () => {
+      if (btnPiP) btnPiP.classList.remove('active');
+    });
+    if (pipVideo) {
+      pipVideo.addEventListener('leavepictureinpicture', () => {
+        if (btnPiP) btnPiP.classList.remove('active');
       });
     }
     

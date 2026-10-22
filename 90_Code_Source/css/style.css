@@ -438,7 +438,8 @@
       transform: scale(0.98);
     }
 
-    .btn-action.active-toggle {
+    .btn-action.active-toggle,
+    #btnPiP.active {
       background: var(--status-success-bg);
       border-color: var(--status-success-border);
       color: var(--status-success);

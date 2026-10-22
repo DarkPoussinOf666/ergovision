@@ -366,6 +366,25 @@
 
 ---
 
+## 🪟 Phase 20 : Véritable Miniature Toujours au Premier Plan (Always-On-Top Dual Engine) [TERMINÉE]
+
+- [x] **Phase 20.1 : Moteur Unifié PiP Always-on-Top (`src/vision/camera-stream.js`)**
+  - [x] 20.1.1 Implémenter le moteur Document Picture-in-Picture (`documentPictureInPicture.requestWindow`) pour Chrome/Edge avec injection du canvas et micro-HUD (Point Zéro, statut visuel).
+  - [x] 20.1.2 Consolider le fallback universel Video PiP (`canvas.captureStream(25)` + `video.requestPictureInPicture`) pour Firefox et navigateurs sans Document PiP.
+  - [x] 20.1.3 Assurer la continuité totale sans arrêt de la caméra (`zero-interruption stream`).
+- [x] **Phase 20.2 : Rendu HUD Compact Haute Visibilité sur Canvas (`src/app.js`)**
+  - [x] 20.2.1 Optimiser la typographie, les contrastes et les badges de statut dessinés sur le Canvas pour une lisibilité parfaite en miniature 250×180 px.
+  - [x] 20.2.2 Câbler le bouton miniature directement vers `toggleAlwaysOnTopPiP`.
+  - [x] 20.2.3 Nettoyer les reliquats de l'ancienne fenêtre popout lourde.
+- [x] **Phase 20.3 : Dictionnaire & Nettoyage de l'Extension**
+  - [x] 20.3.1 Mettre à jour les traductions FR/EN dans `src/i18n/translations.js`.
+  - [x] 20.3.2 Nettoyer `src/extension/background.js` et `90_Code_Source/index.html`.
+- [x] **Phase 20.4 : Compilation Standalone, Builds & Validation**
+  - [x] 20.4.1 Recompilation via `tasks/build_standalone.js` et `tasks/build_extension.js`.
+  - [x] 20.4.2 Tests sur Chrome (Always-On-Top au-dessus des fenêtres de travail) et Firefox.
+
+---
+
 ## Logique et Apprentissage
 
 ### Phases 11 & 12 : V2.0 et V2.1 — Kiné du Dos & Hygiène Visuelle Oculaire

@@ -14,7 +14,8 @@ import { DEFAULT_PACING_CONFIG, loadPacingConfig, savePacingConfig, formatSec } 
 import { getTodayKey, loadDailyLogs, saveDailyLogs, clearDailyLogs, createCSVContent, downloadCSV } from './storage/activity-logger.js';
 import { 
   getIsCameraActive, setIsCameraActive, enumerateVideoDevices, startCameraStream, stopCameraStream, 
-  togglePictureInPicture, isPopoutMode, openPopoutWindow 
+  toggleAlwaysOnTopPiP, updateAlwaysOnTopPiPStatus, isAlwaysOnTopPiPActive, 
+  isPopoutMode, openPopoutWindow 
 } from './vision/camera-stream.js';
 import { KineRoutineManager } from './kine/routine-timer.js';
 import { KineStudioView } from './ui/kine-studio-view.js';
@@ -594,14 +595,17 @@ function onResults(results) {
 
   canvasCtx.restore();
 
-  // Bandeau HUD superposé
+  // Mise à jour de la miniature Always-On-Top si active
+  updateAlwaysOnTopPiPStatus(hudStatus, hudColor);
+
+  // Bandeau HUD superposé (haute lisibilité en miniature)
   canvasCtx.save();
   canvasCtx.fillStyle = hudColor;
-  canvasCtx.fillRect(0, 0, canvasElement.width, 38);
+  canvasCtx.fillRect(0, 0, canvasElement.width, 40);
   canvasCtx.fillStyle = "#ffffff";
-  canvasCtx.font = "bold 13px 'Segoe UI Variable Text', -apple-system, sans-serif";
+  canvasCtx.font = "bold 14px 'Segoe UI Variable Text', -apple-system, sans-serif";
   canvasCtx.textBaseline = "middle";
-  canvasCtx.fillText(hudStatus, 14, 19);
+  canvasCtx.fillText(hudStatus, 14, 20);
   canvasCtx.restore();
 }
 
@@ -932,26 +936,28 @@ if (btnPiP) {
       return;
     }
 
-    if (isPopoutMode()) {
-      // Déjà dans la mini-fenêtre popout : active le PiP vidéo W3C standard si souhaité
-      togglePictureInPicture(canvasElement, pipVideo).catch(e => alert(e.message));
-      return;
-    }
-
-    // Depuis le panneau latéral ou l'onglet principal :
-    // Bascule vers le Mode Fenêtre Décrochée OS autonome (Solution A)
     try {
-      if (getIsCameraActive()) {
-        await stopCamera();
-        pauseSessionTimer();
-      }
-      showPopoutActiveState(true);
-      syncChannel.postMessage({ type: 'POPOUT_ACTIVATED' });
-      openPopoutWindow();
+      const active = await toggleAlwaysOnTopPiP({
+        canvasElement,
+        pipVideoElement: pipVideo,
+        onZeroCalibrate: () => {
+          startCalibrationCountdown();
+        },
+        t
+      });
+      btnPiP.classList.toggle('active', !!active);
     } catch (e) {
-      console.warn("Échec lancement Pop-out, repli sur PiP standard :", e);
-      togglePictureInPicture(canvasElement, pipVideo).catch(err => alert(err.message));
+      alert(e.message || "Erreur lors de l'activation de la miniature Always-On-Top.");
     }
+  });
+}
+
+window.addEventListener('ergovision_pip_closed', () => {
+  if (btnPiP) btnPiP.classList.remove('active');
+});
+if (pipVideo) {
+  pipVideo.addEventListener('leavepictureinpicture', () => {
+    if (btnPiP) btnPiP.classList.remove('active');
   });
 }
 

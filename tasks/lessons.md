@@ -63,6 +63,14 @@
 - **Cinématique Visuelle Dédiée en Kinésithérapie** : Les consignes textuelles pures conduisent fréquemment à des compensations parasites (ex: basculer la tête vers le haut au lieu d'effectuer un recul axial horizontal strict dans le protocole McKenzie). L'implémentation de micro-animations vectorielles CSS calées sur les repères articulaires réels (translation crânienne pure, rotation externe des omoplates, pivot thoracique sur dossier T6-T8) clarifie instantanément le geste sans surcharger la mémoire avec de lourdes vidéos MP4.
 - **Proprioception par Surbrillance Vertébrale (C1-L5)** : La mise en surbrillance pulsante des segments rachidiens ciblés (`C5-C7`, `T1-T12`, `T4-T8`, `L4-S1`) ancre la conscience corporelle de l'utilisateur et matérialise le soulagement mécanique ressenti lors de la décompression discale.
 
+## 15. Vrai Premier Plan Forcé (Always-on-Top OS) : Document Picture-in-Picture & Video PiP Découplé (v3.6)
+- **PiP vs Fenêtre Popout Secondaire** : Une fenêtre popout classique créée par `window.open` ou `chrome.windows.create` est une fenêtre standard qui passe derrière les autres applications dès que l'utilisateur clique sur son code ou ses emails. Pour un tuteur ergonomique efficace, seul le Picture-in-Picture natif garantit le maintien permanent au premier plan (Always-On-Top au niveau de l'OS).
+- **Architecture Dual-Engine (Document PiP & Video PiP)** :
+  1. *Chrome 116+ & Edge* : `documentPictureInPicture.requestWindow({ width, height })` projette le flux miroir dans une miniature flottante toujours au premier plan, dotée de micro-commandes interactives (recalibration du Point Zéro en 1 clic, pill de statut en temps réel).
+  2. *Firefox & Fallback* : `canvas.captureStream(25)` sur `pipVideo.requestPictureInPicture()` assure une compatibilité universelle 100% Always-on-Top, avec bandeau HUD haute lisibilité dessiné directement dans le flux Canvas.
+- **Continuité Zéro-Coupure** : Le basculement vers la miniature ne doit jamais couper ni réinitialiser le stream de la webcam. Le streaming local en temps réel du canvas vers le PiP permet une transition instantanée sans interruption de la session.
+
+
 
 
 
