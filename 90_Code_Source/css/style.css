@@ -1960,6 +1960,80 @@
     }
 
     /* ==========================================================================
+       MODE MINIATURE ULTRA-COMPACT (REPLI FIREFOX / STANDALONE)
+       ========================================================================== */
+    body.mode-mini {
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      background: #090d16;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    body.mode-mini .topbar,
+    body.mode-mini .pacing-header-card,
+    body.mode-mini .gauges-grid,
+    body.mode-mini #panelTimeline,
+    body.mode-mini #panelAnalytics,
+    body.mode-mini #panelKine,
+    body.mode-mini footer,
+    body.mode-mini .camera-placeholder .placeholder-content h3,
+    body.mode-mini .camera-placeholder .placeholder-content p {
+      display: none !important;
+    }
+
+    body.mode-mini .bento-grid {
+      display: flex !important;
+      flex-direction: column;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100vw;
+      height: 100vh;
+      gap: 0;
+    }
+
+    body.mode-mini .panel-video {
+      padding: 0 !important;
+      border: none !important;
+      border-radius: 0 !important;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #000;
+    }
+
+    body.mode-mini .viewport {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border-radius: 0 !important;
+      border: none !important;
+      aspect-ratio: auto !important;
+    }
+
+    body.mode-mini .camera-controls-bar {
+      margin: 0;
+      padding: 4px 8px;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    body.mode-mini .btn-calibrate {
+      padding: 3px 8px;
+      font-size: 0.72rem;
+    }
+
+    body.mode-mini .status-pill {
+      padding: 2px 8px;
+      font-size: 0.72rem;
+    }
+
+    /* ==========================================================================
        DASHBOARD & ANALYTICS LOCAUX (7 À 30 JOURS) — FLUENT UI 2
        ========================================================================== */
     .analytics-dashboard-card {

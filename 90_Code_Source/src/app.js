@@ -1232,11 +1232,19 @@ resetCurrentModeTimer();
 updateLicenseUI();
 
 // ----------------------------------------------------
-// INITIALISATION MODE POP-OUT & SYNCHRONISATION MULTI-FENÊTRES (SOLUTION A)
+// INITIALISATION MODE POP-OUT & MINIATURE AUTONOME
 // ----------------------------------------------------
+const urlParams = new URLSearchParams(window.location.search);
+const isMini = urlParams.get('mode') === 'mini';
 const inPopout = isPopoutMode();
 
-if (inPopout) {
+if (isMini) {
+  document.body.classList.add('mode-mini');
+  // Démarrage automatique fluide dans la miniature compacte
+  setTimeout(() => {
+    startCamera().catch(err => console.warn("Démarrage auto caméra mini :", err));
+  }, 350);
+} else if (inPopout) {
   document.body.classList.add('mode-popout');
   if (btnExpandPopout) {
     btnExpandPopout.style.display = 'inline-flex';

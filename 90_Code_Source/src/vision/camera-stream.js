@@ -150,23 +150,55 @@ export async function stopCameraStream(videoElement, pipVideoElement = null) {
 export function isPopoutMode() {
   if (typeof window === 'undefined') return false;
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('mode') === 'popout';
+  return urlParams.get('mode') === 'popout' || urlParams.get('mode') === 'mini';
+}
+
+export function openMiniWindow() {
+  const width = 340;
+  const height = 240;
+  const availWidth = (typeof screen !== 'undefined' && screen.availWidth) || 1920;
+  const left = Math.max(0, availWidth - width - 24);
+  const top = 50;
+
+  // Support WebExtensions (Firefox browser.windows ou Chrome windows)
+  const ext = typeof browser !== 'undefined' ? browser : (typeof chrome !== 'undefined' ? chrome : null);
+  if (ext && ext.windows && ext.windows.create) {
+    try {
+      const miniUrl = ext.runtime.getURL('index.html?mode=mini');
+      ext.windows.create({
+        url: miniUrl,
+        type: 'popup',
+        width,
+        height,
+        left,
+        top,
+        focused: true
+      }).catch(() => {
+        fallbackMiniWindow(width, height, left, top);
+      });
+      return;
+    } catch (_) {}
+  }
+
+  fallbackMiniWindow(width, height, left, top);
+}
+
+function fallbackMiniWindow(width, height, left, top) {
+  if (typeof window === 'undefined') return;
+  const url = new URL(window.location.href);
+  url.searchParams.set('mode', 'mini');
+  window.open(url.toString(), 'ErgoVision_Mini_Window', `width=${width},height=${height},left=${left},top=${top},resizable=yes`);
 }
 
 export function openPopoutWindow() {
-  if (typeof window === 'undefined') return;
-  const url = new URL(window.location.href);
-  url.searchParams.set('mode', 'popout');
-  window.open(url.toString(), 'ErgoVision_Popout_Window', 'width=420,height=640,resizable=yes');
+  openMiniWindow();
 }
 
 /**
  * Bascule le mode Miniature Toujours au Premier Plan (Always-On-Top)
- * Exploite l'API standard W3C Picture-in-Picture sur le flux Canvas (exactement comme en V1).
- * Garantit :
- * - 100% Always-On-Top natif au niveau de l'OS (au-dessus de VS Code, Slack, Office, etc.)
- * - Préservation stricte du User Gesture sans latence
- * - ZÉRO COUPURE : la caméra ne s'interrompt jamais.
+ * 1. Sur Chrome / Edge / Chromium / Safari : API standard W3C Picture-in-Picture (OS Always-On-Top natif).
+ * 2. Sur Firefox (qui ne supporte pas l'API scriptée requestPictureInPicture) : repli immédiat vers
+ *    la mini-fenêtre ultra-compacte (340x240 px) affichant uniquement le flux webcam et le HUD.
  */
 export async function toggleAlwaysOnTopPiP({ canvasElement, pipVideoElement, t }) {
   if (!isCameraActive) {
@@ -174,33 +206,37 @@ export async function toggleAlwaysOnTopPiP({ canvasElement, pipVideoElement, t }
     throw new Error(errMsg || "Activez d'abord la caméra avant d'ouvrir la miniature.");
   }
 
-  // 1. Si déjà actif en PiP standard, on le ferme
-  if (document.pictureInPictureElement) {
+  // 1. Si déjà actif en PiP standard (Chrome / Edge), on le ferme
+  if (typeof document !== 'undefined' && document.pictureInPictureElement) {
     await document.exitPictureInPicture();
     return false;
   }
 
-  if (!pipVideoElement) {
-    throw new Error("Élément vidéo PiP introuvable.");
-  }
+  // 2. Détection du support de l'API W3C Picture-in-Picture
+  // (Firefox n'expose pas requestPictureInPicture sur HTMLVideoElement)
+  const hasNativePiP = !!(pipVideoElement && typeof pipVideoElement.requestPictureInPicture === 'function');
 
-  // 2. Brancher le flux du canvas
-  if (!pipVideoElement.srcObject) {
-    const stream = canvasElement.captureStream 
-      ? canvasElement.captureStream(25) 
-      : (canvasElement.mozCaptureStream ? canvasElement.mozCaptureStream(25) : null);
-    if (!stream) {
-      throw new Error("Impossible de capturer le flux du canvas.");
+  if (hasNativePiP) {
+    if (!pipVideoElement.srcObject) {
+      const stream = canvasElement.captureStream 
+        ? canvasElement.captureStream(25) 
+        : (canvasElement.mozCaptureStream ? canvasElement.mozCaptureStream(25) : null);
+      if (!stream) {
+        throw new Error("Impossible de capturer le flux du canvas.");
+      }
+      pipVideoElement.srcObject = stream;
     }
-    pipVideoElement.srcObject = stream;
+
+    try {
+      await pipVideoElement.play();
+    } catch (_) {}
+
+    await pipVideoElement.requestPictureInPicture();
+    return true;
   }
 
-  // 3. Lancer la lecture et ouvrir le PiP immédiatement
-  try {
-    await pipVideoElement.play();
-  } catch (_) {}
-
-  await pipVideoElement.requestPictureInPicture();
+  // 3. Repli Firefox : ouverture de la mini-fenêtre webcam compacte (mode mini)
+  openMiniWindow();
   return true;
 }
 
