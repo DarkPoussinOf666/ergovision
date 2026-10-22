@@ -196,9 +196,9 @@ export function openPopoutWindow() {
 
 /**
  * Bascule le mode Miniature Toujours au Premier Plan (Always-On-Top)
- * 1. Sur Chrome / Edge / Chromium / Safari : API standard W3C Picture-in-Picture (OS Always-On-Top natif).
- * 2. Sur Firefox (qui ne supporte pas l'API scriptée requestPictureInPicture) : repli immédiat vers
- *    la mini-fenêtre ultra-compacte (340x240 px) affichant uniquement le flux webcam et le HUD.
+ * 1. Sur Chrome / Edge / Chromium : API standard W3C Picture-in-Picture (OS Always-On-Top natif).
+ * 2. Sur Firefox (qui lève 'DOMException: Picture-in-Picture request failed' sur les MediaStreams) :
+ *    repli transparent et immédiat vers la mini-fenêtre ultra-compacte (mode mini 340x240 px).
  */
 export async function toggleAlwaysOnTopPiP({ canvasElement, pipVideoElement, t }) {
   if (!isCameraActive) {
@@ -212,30 +212,35 @@ export async function toggleAlwaysOnTopPiP({ canvasElement, pipVideoElement, t }
     return false;
   }
 
-  // 2. Détection du support de l'API W3C Picture-in-Picture
-  // (Firefox n'expose pas requestPictureInPicture sur HTMLVideoElement)
-  const hasNativePiP = !!(pipVideoElement && typeof pipVideoElement.requestPictureInPicture === 'function');
+  // 2. Détection stricte : Firefox bloque l'API scriptée requestPictureInPicture sur canvas.captureStream
+  const isFirefox = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent);
+  const hasNativePiP = !isFirefox && 
+                       typeof document !== 'undefined' && 
+                       document.pictureInPictureEnabled && 
+                       !!(pipVideoElement && typeof pipVideoElement.requestPictureInPicture === 'function');
 
   if (hasNativePiP) {
-    if (!pipVideoElement.srcObject) {
-      const stream = canvasElement.captureStream 
-        ? canvasElement.captureStream(25) 
-        : (canvasElement.mozCaptureStream ? canvasElement.mozCaptureStream(25) : null);
-      if (!stream) {
-        throw new Error("Impossible de capturer le flux du canvas.");
-      }
-      pipVideoElement.srcObject = stream;
-    }
-
     try {
-      await pipVideoElement.play();
-    } catch (_) {}
+      if (!pipVideoElement.srcObject) {
+        const stream = canvasElement.captureStream 
+          ? canvasElement.captureStream(25) 
+          : (canvasElement.mozCaptureStream ? canvasElement.mozCaptureStream(25) : null);
+        if (!stream) {
+          throw new Error("Impossible de capturer le flux du canvas.");
+        }
+        pipVideoElement.srcObject = stream;
+      }
 
-    await pipVideoElement.requestPictureInPicture();
-    return true;
+      await pipVideoElement.play().catch(() => {});
+      await pipVideoElement.requestPictureInPicture();
+      return true;
+    } catch (pipErr) {
+      console.warn("Échec Picture-in-Picture W3C, repli sur la mini-fenêtre compacte :", pipErr);
+    }
   }
 
-  // 3. Repli Firefox : ouverture de la mini-fenêtre webcam compacte (mode mini)
+  // 3. Repli Firefox & navigateurs sans support direct :
+  // Ouverture immédiate de la mini-fenêtre webcam compacte (mode mini 340x240 px)
   openMiniWindow();
   return true;
 }
