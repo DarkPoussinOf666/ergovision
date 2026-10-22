@@ -1,0 +1,260 @@
+{
+  "lang": "en",
+  "otherLang": "fr",
+  "otherLangLabel": "FR",
+  "otherLangPrefix": "../",
+  "rootPrefix": "../",
+  "appUrl": "../app.html",
+  "githubIssuesUrl": "https://github.com/ErgoVision-AI/ErgoVision/issues",
+  "githubRepoUrl": "https://github.com/ErgoVision-AI/ErgoVision",
+  "nav": {
+    "home": "Home",
+    "guide": "User Guide",
+    "privacy": "Privacy Policy",
+    "legal": "Legal & Disclaimer",
+    "contact": "Contact (GitHub Issues)",
+    "launchApp": "Launch Web App",
+    "toggleTheme": "Toggle light/dark theme"
+  },
+  "footer": {
+    "tagline": "ErgoVision AI — 100% Free & Open-Source Project (MIT License). Built for desk posture comfort and workplace wellness.",
+    "disclaimer": "Disclaimer: ErgoVision AI is a general wellness and desk ergonomics tool. It is not a medical device, does not provide medical diagnosis, and does not replace advice from a qualified healthcare professional."
+  },
+  "landing": {
+    "metaTitle": "ErgoVision AI — 100% Local Desk Posture & Ergonomic Comfort Coach",
+    "metaDesc": "Free, open-source web app and browser extension. Track your desk posture habits, take 20-20-20 eye breaks and stretch — 100% locally via WebAssembly.",
+    "badge": "🛡️ 100% Free • Open-Source (MIT) • Zero Cloud",
+    "heroTitle": "Your local ergonomic copilot for comfortable desk posture.",
+    "heroSubtitle": "ErgoVision AI uses computer vision directly inside your browser (MediaPipe WebAssembly) to detect forward neck leaning, raised shoulders, and screen proximity — without a single video frame ever leaving your computer.",
+    "ctaLaunch": "🚀 Try in Browser",
+    "ctaGuide": "📖 How It Works",
+    "ctaGithub": "⭐ Source Code & Issues (GitHub)",
+    "trustItems": [
+      "🔒 0 video frames sent over the internet",
+      "💸 100% Free, no account or subscription",
+      "🪟 Always-on-Top Miniature (Chrome & Firefox)",
+      "🌍 Bilingual English / French"
+    ],
+    "howTitle": "Simple, mindful, and respectful of your focus",
+    "howDesc": "No need to monitor your posture for 8 hours straight: two focused 30-minute sessions a day are enough to build lasting ergonomic habits.",
+    "steps": [
+      {
+        "num": "1",
+        "title": "Enable the local sensor",
+        "text": "Launch the Web App or open the Chrome / Firefox side panel extension. The MediaPipe model runs entirely on your CPU."
+      },
+      {
+        "num": "2",
+        "title": "Calibrate your Zero Point (3s)",
+        "text": "Sit or stand comfortably with your neck elongated and shoulders relaxed. In 3 seconds, ErgoVision locks your reference posture."
+      },
+      {
+        "num": "3",
+        "title": "Work with peace of mind",
+        "text": "Pop out the Always-on-Top floating miniature. A gentle audio cue only chimes on sustained slumping and stops the instant you straighten up."
+      }
+    ],
+    "featuresTitle": "All features 100% unlocked and free",
+    "featuresDesc": "No paywalls, no locked gauges: every capability of ErgoVision AI is freely available to everyone.",
+    "features": [
+      {
+        "icon": "📐",
+        "title": "4 Real-Time Biomechanical Gauges",
+        "text": "Simultaneous tracking of forward neck projection, shoulder symmetry, lateral head tilt, and eye-to-screen distance (< 50 cm)."
+      },
+      {
+        "icon": "🧘",
+        "title": "Mobility Break & Guided Stretches",
+        "text": "4 gentle desk mobility routines (McKenzie Chin Tuck, Brügger Opening, Upper Back Extension, Pelvic Tilts) with animated vector diagrams and breath pacing."
+      },
+      {
+        "icon": "👁️",
+        "title": "20-20-20 Visual Guardian",
+        "text": "Every 20 minutes, a discreet banner invites you to look 20 feet (6m) away for 20 seconds to relax your eyes, automatically muting posture alerts during the break."
+      },
+      {
+        "icon": "🪟",
+        "title": "Always-on-Top Floating Miniature (PiP)",
+        "text": "Keep a subtle visual indicator above VS Code, your browser, or office apps using Document Picture-in-Picture."
+      },
+      {
+        "icon": "📊",
+        "title": "7-to-30 Day Dashboard & PDF Summary",
+        "text": "Review your daily consistency stored strictly in your browser (localStorage) and print a clean one-page PDF summary in one click."
+      },
+      {
+        "icon": "🔔",
+        "title": "Non-Intrusive Audio Ergonomics",
+        "text": "Choose between a gentle rhythmic pulse or continuous sine tone, with 432 Hz Tibetan bowl chimes and a 2.5-second false-alarm debounce filter."
+      }
+    ],
+    "privacyCalloutTitle": "🔒 Absolute Privacy Guarantee (Zero-Trust Privacy)",
+    "privacyCalloutText": "Unlike cloud tools, ErgoVision AI has no backend server and no remote database. Your webcam feed is processed in volatile RAM and discarded every frame (30 FPS). Zero images, zero videos, and zero personal telemetry ever leave your device.",
+    "faqTitle": "Frequently Asked Questions (FAQ)",
+    "faqs": [
+      {
+        "q": "Is it really 100% free?",
+        "a": "Yes. ErgoVision AI is an open-source project released under the MIT License. All 4 gauges, the floating miniature, the mobility exercises, and the PDF summary are completely free, with no ads and no data collection."
+      },
+      {
+        "q": "Is my webcam video recorded or uploaded?",
+        "a": "Never. Body landmark coordinates (nose, ears, shoulders) are computed locally inside your browser via WebAssembly. You can even disconnect from the internet once the page is loaded and everything keeps working."
+      },
+      {
+        "q": "How do I install the Chrome or Firefox extension?",
+        "a": "You can use the Web App directly in your browser, or install the extension from the Chrome Web Store / Firefox Add-ons (or load the dist/ folder in developer mode). See the User Guide for step-by-step instructions."
+      },
+      {
+        "q": "How can I report a bug or request a feature?",
+        "a": "Visit our GitHub Issues page to open an issue, ask a question, or contribute to the source code."
+      }
+    ]
+  },
+  "guide": {
+    "metaTitle": "User Guide — ErgoVision AI",
+    "metaDesc": "Complete step-by-step guide to installing, calibrating, and using ErgoVision AI at your desk.",
+    "title": "ErgoVision AI User Guide",
+    "subtitle": "Get started with your local posture copilot in under 2 minutes.",
+    "sections": [
+      {
+        "heading": "1. Choose your mode (Web App or Browser Extension)",
+        "paragraphs": [
+          "ErgoVision AI runs immediately in any modern browser (Chrome, Edge, Firefox, Brave) as a Web App, or as a browser extension docked in your side panel.",
+          "• Direct Web App: click 'Launch Web App' in the top navigation bar.",
+          "• Chrome / Firefox Extension: open the side panel to keep the coach right next to your active tabs."
+        ]
+      },
+      {
+        "heading": "2. Position your webcam and calibrate the Zero Point",
+        "paragraphs": [
+          "For accurate tracking, place your webcam facing you (on top of your main monitor or laptop screen). Make sure your head and both shoulders are visible inside the frame.",
+          "1. Click 'Start Optical Sensor' and grant local camera access.",
+          "2. Sit or stand upright, elongate your neck, relax your shoulders downward, and stay about 50–70 cm (20–28 in) from your screen.",
+          "3. Click 'Calibrate Zero Point (3s)' and hold this neutral posture during the 3-2-1 countdown. Your baseline is locked and the 30-minute session timer begins."
+        ]
+      },
+      {
+        "heading": "3. Use the Always-on-Top Floating Miniature (Picture-in-Picture)",
+        "paragraphs": [
+          "When coding, writing, or joining calls, your browser tab often goes behind other windows. Click the 'Always-on-Top Miniature' icon in the top bar:",
+          "• On Chrome & Edge: an interactive mini-window pins itself above all desktop apps with a one-click recalibrate button.",
+          "• On Firefox: trigger native Picture-in-Picture (or press Ctrl+Shift+]) to keep the live posture HUD floating on top."
+        ]
+      },
+      {
+        "heading": "4. Understanding the 4 Gauges and Alerts",
+        "paragraphs": [
+          "• Forward Neck: detects head slump relative to your shoulder line.",
+          "• Shoulders & Traps: spots reflex shoulder shrugging and uneven tension.",
+          "• Head Lateral Tilt: measures sustained sideways head leaning.",
+          "• Screen Distance: detects leaning too close to the display (< 50 cm).",
+          "To prevent false alarms during natural movement, a 2.5-second debounce delay (configurable) filters out brief motions. Audio feedback stops the instant you return to your Zero Point."
+        ]
+      },
+      {
+        "heading": "5. 20-20-20 Eye Breaks & Mobility Breaks (5 min)",
+        "paragraphs": [
+          "Every 20 minutes, the 20-20-20 banner invites you to gaze at a distant point (at least 6 meters / 20 feet away) for 20 seconds. Posture alerts are automatically paused during eye rest.",
+          "At the end of your 30-minute session (or anytime via the 'Mobility Break' button), follow the 4 guided desk stretches with breath pacing to release neck, shoulder, and lower-back stiffness."
+        ]
+      }
+    ]
+  },
+  "privacy": {
+    "metaTitle": "Zero-Data Privacy Policy — ErgoVision AI",
+    "metaDesc": "GDPR, Chrome Web Store Limited Use, and Firefox AMO Privacy Policy for ErgoVision AI: 100% local execution, zero data collection.",
+    "title": "Privacy Policy (Zero-Data Privacy Policy)",
+    "subtitle": "Last updated: October 2026 • Compliant with EU GDPR, Chrome Web Store Limited Use & Mozilla AMO",
+    "sections": [
+      {
+        "heading": "1. Core Principle: Zero Data Collection",
+        "paragraphs": [
+          "ErgoVision AI (website, web application, and browser extensions for Google Chrome and Mozilla Firefox) is built on strict Privacy by Design. The project maintainer operates no backend servers, no remote databases, and collects zero personal, biometric, or video data."
+        ]
+      },
+      {
+        "heading": "2. Local Webcam Processing (WebAssembly)",
+        "paragraphs": [
+          "Camera access (getUserMedia permission) is used exclusively to compute upper-body geometric landmarks (nose, ears, shoulders) in real time using the Google MediaPipe Pose engine running locally inside your browser via WebAssembly.",
+          "• No images or video streams are ever saved to your disk.",
+          "• No images, videos, or biometric coordinates are ever transmitted over the internet or shared with third parties.",
+          "• As soon as you click 'Stop' or close the page, the hardware camera stream is immediately released."
+        ]
+      },
+      {
+        "heading": "3. Local Storage of Preferences and Activity History",
+        "paragraphs": [
+          "Your settings (sensitivity, audio volume, language, light/dark theme) and your daily activity log are stored exclusively on your own device using your browser's standard localStorage / chrome.storage.local API.",
+          "You retain full control over this local data: clicking 'Clear' in the activity log or 'Clear history' in the dashboard permanently deletes all locally stored records."
+        ]
+      },
+      {
+        "heading": "4. No Cookies and No Third-Party Trackers",
+        "paragraphs": [
+          "This website and the ErgoVision AI application set no advertising cookies, use no third-party analytics trackers (no Google Analytics), and embed no tracking SDKs."
+        ]
+      },
+      {
+        "heading": "5. Browser Extension Permissions Justification",
+        "paragraphs": [
+          "• storage: saves your preferences and daily log locally on your device.",
+          "• alarms: schedules the periodic 20-20-20 eye rest reminder.",
+          "• notifications: displays local OS notifications upon sustained posture deviation.",
+          "• sidePanel (Chrome) / sidebarAction (Firefox): opens the user interface inside the browser's side panel."
+        ]
+      },
+      {
+        "heading": "6. Contact",
+        "paragraphs": [
+          "Because no personal data is collected or held by the publisher, we maintain no user records. For any privacy or security inquiries regarding the open-source codebase, please open an issue on our public GitHub Issues repository."
+        ]
+      }
+    ]
+  },
+  "legal": {
+    "metaTitle": "Legal Notice, Wellness Disclaimer & Contact — ErgoVision AI",
+    "metaDesc": "Legal notice (French LCEN), MIT open-source license, non-medical wellness disclaimer, and GitHub Issues contact.",
+    "title": "Legal Notice, Disclaimer & Contact",
+    "subtitle": "Regulatory information, Open-Source License, and support channel",
+    "sections": [
+      {
+        "heading": "1. Publisher & Non-Commercial Status (French LCEN Art. 1-1)",
+        "paragraphs": [
+          "ErgoVision AI is a free, non-commercial open-source software project published under the MIT License.",
+          "In accordance with Article 1-1 II of French Law No. 2004-575 of June 21, 2004 (LCEN), the individual non-professional publisher has elected to remain anonymous.",
+          "• Contact & reporting: via the official GitHub Issues tracker."
+        ]
+      },
+      {
+        "heading": "2. Hosting Provider",
+        "paragraphs": [
+          "This static website is hosted by:",
+          "GitHub, Inc. (GitHub Pages) — 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (https://pages.github.com)."
+        ]
+      },
+      {
+        "heading": "3. Important Wellness Disclaimer (Not a Medical Device)",
+        "paragraphs": [
+          "ErgoVision AI is a general workplace wellness, ergonomic comfort, and postural habit tool.",
+          "In accordance with European Regulation (EU) 2017/745 on Medical Devices (MDR):",
+          "• ErgoVision AI IS NOT a medical device and has no medical purpose.",
+          "• It does not provide medical diagnosis, screening, clinical monitoring, treatment, or prevention of any disease, injury, or musculoskeletal disorder.",
+          "• It does not replace the advice, examination, or care of a physician, physical therapist, or qualified healthcare professional.",
+          "• If you experience pain, persistent stiffness, spinal conditions, or pregnancy, consult a healthcare professional before performing any mobility stretches and stop immediately if discomfort occurs."
+        ]
+      },
+      {
+        "heading": "4. Intellectual Property & MIT Open-Source License",
+        "paragraphs": [
+          "The ErgoVision AI source code is distributed under the permissive MIT License. You are free to inspect, modify, and redistribute it under the terms of the LICENSE file in the GitHub repository."
+        ]
+      },
+      {
+        "heading": "5. Contact Us / Report an Issue (GitHub Issues)",
+        "paragraphs": [
+          "To ask a question, report a bug, suggest an improvement, or submit a legal notice, please use our public GitHub Issues tracker directly (no third-party form collects your email address on this site)."
+        ]
+      }
+    ]
+  }
+}

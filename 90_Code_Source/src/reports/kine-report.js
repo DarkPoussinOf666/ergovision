@@ -1,11 +1,10 @@
 /**
- * ErgoVision AI - Clinical Posture Report Generator (PDF / Print View)
- * Génère une synthèse d'observance ergonomique et d'endurance posturale
- * prête à être imprimée ou sauvegardée en PDF pour le kinésithérapeute / médecin du travail.
+ * ErgoVision AI - Posture Report Generator (PDF / Print View)
+ * Génère une synthèse d'habitudes ergonomiques et d'endurance posturale
+ * prête à être imprimée ou sauvegardée en PDF.
  */
 
 import { t, getCurrentLanguage } from '../i18n/translations.js';
-import { isProActive } from '../license/license-gate.js';
 
 /**
  * Agréger les logs récents pour la fiche clinique
@@ -55,7 +54,7 @@ export function aggregateClinicalData(logs) {
 /**
  * Génère le HTML imprimable et ouvre la boîte de dialogue d'impression native (Save as PDF)
  */
-export function printKineClinicalReport(logs, userName = "Patient Télétravailleur") {
+export function printKineClinicalReport(logs, userName = "Utilisateur") {
   const data = aggregateClinicalData(logs);
   const lang = getCurrentLanguage();
   const isEn = lang === 'en';
@@ -66,8 +65,8 @@ export function printKineClinicalReport(logs, userName = "Patient Télétravaill
   const printWindow = window.open('', '_blank', 'width=800,height=900');
   if (!printWindow) {
     alert(isEn 
-      ? "Please allow pop-up windows to print your physio report." 
-      : "Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan kiné.");
+      ? "Please allow pop-up windows to print your posture report." 
+      : "Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan postural.");
     return;
   }
 
@@ -76,7 +75,7 @@ export function printKineClinicalReport(logs, userName = "Patient Télétravaill
 <html lang="${lang}">
 <head>
   <meta charset="UTF-8">
-  <title>${isEn ? 'ErgoVision AI — Posture Observance & Physio Report' : 'ErgoVision AI — Bilan d\'Observance Posturale & Kinésithérapie'}</title>
+  <title>${isEn ? 'ErgoVision AI — Desk Posture & Mobility Summary' : 'ErgoVision AI — Bilan d\'Habitudes Posturales & Mobilité'}</title>
   <style>
     @page { size: A4 portrait; margin: 15mm; }
     body {
@@ -182,12 +181,12 @@ export function printKineClinicalReport(logs, userName = "Patient Télétravaill
   <div class="header">
     <div>
       <div class="brand-title">🛡️ ErgoVision AI</div>
-      <div class="brand-sub">${isEn ? 'Ergonomic Copilot • Clinical Compliance & RSI Prevention Summary' : 'Copilote Ergonomique • Synthèse d\'Observance Clinique & Prévention TMS'}</div>
+      <div class="brand-sub">${isEn ? 'Ergonomic Copilot • Desk Posture Comfort & Mobility Summary' : 'Copilote Ergonomique • Synthèse de Confort Postural & Mobilité au Bureau'}</div>
     </div>
     <div class="meta-box">
       <strong>${isEn ? 'Date:' : 'Date :'}</strong> ${dateStr}<br>
-      <strong>${isEn ? 'User / Patient:' : 'Bénéficiaire :'}</strong> ${userName}<br>
-      <strong>${isEn ? 'Protocol:' : 'Protocole :'}</strong> ${isEn ? '100% Local (GDPR Compliant)' : '100% Local (RGPD Conforme)'}
+      <strong>${isEn ? 'User:' : 'Utilisateur :'}</strong> ${userName}<br>
+      <strong>${isEn ? 'Execution:' : 'Exécution :'}</strong> ${isEn ? '100% Local (Zero Cloud)' : '100% Locale (Zéro Cloud)'}
     </div>
   </div>
 
@@ -239,21 +238,21 @@ export function printKineClinicalReport(logs, userName = "Patient Télétravaill
     </tbody>
   </table>
 
-  <div class="section-title">${isEn ? '2. Compliance with Physical Therapy Micro-Breaks' : '2. Observance des Micro-Pauses Kiné & Exercices du Dos'}</div>
+  <div class="section-title">${isEn ? '2. Active Mobility & Stretch Breaks' : '2. Pauses Mobilité & Étirements au Bureau'}</div>
   <p style="font-size: 12px; color: #475569;">
     ${isEn 
-      ? `The user completed <strong>${data.kineStretches} active stretch routine(s)</strong> during desk work sessions.`
-      : `Le patient a validé <strong>${data.kineStretches} session(s) d'étirement actif</strong> au cours de ses journées de travail.`
+      ? `The user completed <strong>${data.kineStretches} active mobility routine(s)</strong> during desk work sessions.`
+      : `L'utilisateur a réalisé <strong>${data.kineStretches} pause(s) mobilité et étirements</strong> au cours de ses sessions de bureau.`
     }
   </p>
 
-  <div class="section-title">${isEn ? '3. Practitioner Observations & Recommendations (Physio / Osteopath / Physician)' : '3. Observations & Recommandations du Praticien (Kiné / Ostéopathe / Médecin)'}</div>
+  <div class="section-title">${isEn ? '3. Personal Notes & Ergonomic Observations' : '3. Notes Personnelles & Observations Ergonomiques'}</div>
   <div class="notes-box">
-    <em style="color:#94a3b8; font-size:11px;">${isEn ? 'Dedicated area for handwritten practitioner notes during consultation:' : 'Zone réservée aux annotations manuscrites du praticien lors de la consultation :'}</em>
+    <em style="color:#94a3b8; font-size:11px;">${isEn ? 'Dedicated area for personal or ergonomic advisor notes:' : 'Zone réservée aux annotations personnelles ou ergonomiques :'}</em>
   </div>
 
   <div class="footer">
-    <span>${isEn ? 'Non-diagnostic ergonomic hygiene document — ErgoVision AI (Ethical Annual Pass)' : 'Document d\'hygiène ergonomique non diagnostique — ErgoVision AI v3.0 (Pass Éthique Annuel)'}</span>
+    <span>${isEn ? 'General wellness & ergonomic comfort document (Non-medical, non-diagnostic) — ErgoVision AI (100% Free & Open-Source MIT)' : 'Document de bien-être et d\'ergonomie générale (Non médical, non diagnostique) — ErgoVision AI (100% Gratuit & Open-Source MIT)'}</span>
     <span>${isEn ? 'Local WebAssembly processing • Zero video storage' : 'Traitement local WebAssembly • Aucune image vidéo stockée'}</span>
   </div>
 

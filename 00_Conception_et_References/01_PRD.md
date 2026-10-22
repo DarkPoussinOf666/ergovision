@@ -39,16 +39,17 @@
   - [x] Calibration guidée interactive (3-2-1 sonore) mémorisant le point zéro physiologique.
   - [x] Moteur audio Web Audio API polyphonique : alertes continues/pulsées dynamiques, carillon de cycle, bols zen kiné (432Hz) et carillon oculaire (528Hz).
   - [x] Pacing postural multi-modes : Bureau Assis, Station Debout, Pause & Étirement active avec gestion du dépassement (overtime).
-  - [x] **Atelier Kiné du Dos & Pause Active Intelligente (v2.0)** : Catalogue clinique d'exercices de décharge du rachis (McKenzie, Brügger, Extension thoracique, Bascule pelvienne) avec guidage visuel SVG, timing de maintien, répétitions et respiration guidée.
+  - [x] **Pause Mobilité & Étirements Guidés (v2.0)** : Catalogue d'exercices doux de mobilité au bureau (McKenzie, Brügger, Extension dorsale, Bascules du bassin) avec guidage visuel SVG, timing de maintien, répétitions et respiration guidée.
   - [x] **Surveillance de la Proximité Écran (v2.1)** : 4ème jauge biomécanique en temps réel basée sur la variation d'échelle faciale relative au point zéro.
-  - [x] **Gardien Visuel 20-20-20 (v2.1)** : Gestionnaire de santé oculaire rappelant toutes les 20 minutes de fixer l'horizon pendant 20 secondes avec bannière discrète et bouton « Passer ».
+  - [x] **Gardien Visuel 20-20-20 (v2.1)** : Gestionnaire de confort visuel rappelant toutes les 20 minutes de fixer l'horizon pendant 20 secondes avec bannière discrète et bouton « Passer ».
   - [x] Modal Centre de Contrôle Fluent UI 2 : presets 1-clic, réglage volume, test son, latence et sensibilité.
   - [x] Switch de langue instantané Français / Anglais.
   - [x] Mode Picture-in-Picture (PiP) avec incrustation du HUD de feedback.
-  - [x] Journal chronologique persistant des alertes, transitions, séances kiné, pauses oculaires et scores de cycles avec export CSV.
-- **Hors Périmètre (Out-of-Scope)** :
-  - Pas de backend cloud, pas de base de données distante, pas de compte utilisateur obligatoire.
-  - Pas d'évaluation invasive ou punitive des exercices (guidage bienveillant non bloquant).
+  - [x] Journal chronologique persistant des alertes, transitions, pauses mobilité, pauses oculaires et scores de cycles avec export CSV et Bilan Postural PDF.
+  - [x] **Site Vitrine Statique Bilingue FR / EN & Pages Légales (v3.7)** : Landing page, guide d'utilisation, politique de confidentialité Zero-Data et mentions légales / avertissement MDR hébergés sur GitHub Pages (`public_dist/`), avec support via GitHub Issues.
+- **Hors Périmètre (Out-of-Scope) & Conformité Réglementaire** :
+  - **100 % Gratuit & Open-Source (MIT)** : Aucun système de paiement, aucune clé de licence, aucun backend cloud, aucune base de données distante, aucun compte utilisateur ni compte administrateur.
+  - **Positionnement Bien-être & Ergonomie (UE MDR 2017/745)** : Outil de bien-être et de confort postural à usage général au bureau ; ce n'est pas un dispositif médical (aucun diagnostic, aucune revendication de rééducation ou de traitement médical).
 
 ---
 

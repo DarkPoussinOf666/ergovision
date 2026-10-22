@@ -1,7 +1,7 @@
-# 🛡️ ErgoVision AI — Studio Biomécanique & Gardien Postural
+# 🛡️ ErgoVision AI — Coach Postural & Pause Mobilité
 
 <p align="center">
-  <strong>Copilote ergonomique au poste de travail en temps réel, 100% exécuté dans le navigateur, conçu pour prévenir les TMS, l'affaissement cervical (« Text-Neck ») et les douleurs musculo-squelettiques.</strong>
+  <strong>Copilote ergonomique au poste de travail en temps réel, 100 % exécuté dans le navigateur, conçu pour le confort postural, les pauses oculaires 20-20-20 et la mobilité au bureau.</strong>
 </p>
 
 <p align="center">
@@ -41,12 +41,12 @@ Le travail prolongé devant écran engendre des contraintes mécaniques chroniqu
 - **Suspension Croisée Bienveillante** : Les alertes de posture sont automatiquement suspendues pendant la pause oculaire pour vous laisser contempler l'horizon sans fausse alerte.
 - **Bouton Rapide « Passer »** : Reprise immédiate en cas de visioconférence ou de tâche urgente.
 
-### 3. 🧘 Atelier Kiné du Dos & Pause Active Intelligente (v2.0)
-- **Catalogue Clinique Validé pour le Travail sur Écran** :
-  - **Rétraction Cervicale de McKenzie** : Décompression des disques C5-C6-C7 et correction du « Text-Neck ».
-  - **Posture de Décharge de Brügger** : Resserrement scapulaire et inversion de l'enroulement d'épaules.
-  - **Extension Thoracique Active** : Mobilisation de la charnière dorsale et redressement de la cyphose.
-  - **Bascules Pelviennes Lombo-Sacrées** : Imbibition et réhydratation des disques L4-L5-S1 par roulement sur ischions.
+### 3. 🧘 Pause Mobilité & Étirements Guidés (v2.0)
+- **Exercices Doux de Mobilité pour le Travail sur Écran** :
+  - **Recul Axial du Menton (McKenzie)** : Relâchement de la nuque (C5-C7) et compensation de l'avancée vers l'écran.
+  - **Ouverture Posturale de Brügger** : Ouverture scapulaire et inversion de l'enroulement d'épaules.
+  - **Extension Dorsale sur Dossier** : Mobilisation du milieu du dos et ouverture respiratoire.
+  - **Bascules Douces du Bassin** : Mobilité du bas du dos (L4-L5-S1) après station assise prolongée.
 - **Guidage Visuel & Respiration Rythmée** : Pictogrammes anatomiques vectoriels SVG, jauge de maintien circulaire, décompte de répétitions et tempo respiratoire (inspire/expire).
 - **Accompagnement Sonore Zen** : Sons doux de bol tibétain (~432Hz) marquant le début, la transition et la complétion des exercices sans surstimulation.
 

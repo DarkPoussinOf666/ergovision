@@ -1,7 +1,7 @@
-# 🛡️ ErgoVision AI — Biomechanical Studio & Posture Guardian
+# 🛡️ ErgoVision AI — Desk Posture & Mobility Coach
 
 <p align="center">
-  <strong>Real-time, 100% client-side ergonomic workstation copilot designed to prevent RSI, cervical slump ("Text-Neck"), and spinal strain.</strong>
+  <strong>Real-time, 100% client-side ergonomic workstation copilot designed for desk posture comfort, 20-20-20 eye breaks, and guided mobility stretches.</strong>
 </p>
 
 <p align="center">
@@ -41,12 +41,12 @@ Prolonged screen work leads to repetitive musculoskeletal strain (RSI), upper tr
 - **Thoughtful Alert Suspension**: Postural drift alerts are muted during the 20-second eye rest to let you freely gaze out the window or across the room without false alarms.
 - **Quick "Skip" Control**: Instant one-click dismiss for meetings or urgent workflow moments.
 
-### 3. 🧘 Back Physiotherapy Studio & Active Break (v2.0)
-- **Clinically Validated Desk Micro-Exercises**:
-  - **McKenzie Cervical Retraction**: Decompresses C5-C6-C7 discs and corrects forward "Text-Neck" slump.
-  - **Brügger Postural Relief**: Scapular retraction and reversal of rounded shoulder posture.
-  - **Active Thoracic Extension**: Mobilizes stiff upper back and reverses work-induced kyphosis.
-  - **Lumbosacral Pelvic Tilts**: Gently rehydrates L4-L5-S1 lumbar discs through controlled pelvic rolling.
+### 3. 🧘 Mobility & Stretch Studio (v2.0)
+- **Guided Desk Mobility Micro-Exercises**:
+  - **McKenzie Axial Chin Tuck**: Releases neck tension (C5-C7) and counteracts forward leaning.
+  - **Brügger Postural Opening**: Scapular opening and reversal of rounded shoulder posture.
+  - **Upper Back Extension**: Mobilizes stiff upper back and promotes deep breathing.
+  - **Gentle Pelvic Tilts**: Restores lower back mobility after prolonged sitting.
 - **Visual Guidance & Guided Breathing**: Crisp SVG vector anatomical illustrations, circular hold timer, repetition counter, and rhythmic breath prompts (inhale/exhale).
 - **Zen Soundscape**: Gentle resonant Tibetan singing bowl chimes (~432Hz) marking movement transitions without audio fatigue.
 

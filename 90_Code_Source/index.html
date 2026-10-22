@@ -48,16 +48,12 @@
       </div>
       <div>
         <div class="brand-title">ErgoVision <span class="brand-ai-chip">AI</span></div>
-        <div class="brand-sub" data-i18n="brand_sub">Rééducation Posturale • Sessions Ciblées</div>
+        <div class="brand-sub" data-i18n="brand_sub">Copilote Ergonomique • Confort &amp; Habitudes Posturales au Bureau</div>
       </div>
     </div>
 
     <!-- Actions Rapides Épurées (1 Seule Ligne) -->
     <div class="quick-actions" role="toolbar" aria-label="Actions rapides">
-      <button id="btnProStatus" class="btn-pro-badge" title="Gérer votre Pass Annuel Éthique (7 € / an)" aria-label="Gérer votre Pass Annuel">
-        <span id="labelProBadge">✨ Pass 7€/an</span>
-      </button>
-
       <button id="btnPiP" class="btn-action btn-icon-only" title="Miniature Toujours au Premier Plan" aria-label="Ouvrir la miniature Always-On-Top">
         <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
       </button>
@@ -291,15 +287,15 @@
       </div>
     </section>
 
-    <!-- COLONNE DROITE : SESSION DE RÉÉDUCATION, SCORE & BILAN -->
-    <section class="panel" aria-label="Session de rééducation et télémétrie">
-      <!-- Session Kiné & Maintien Neutre -->
+    <!-- COLONNE DROITE : SESSION POSTURE, SCORE & BILAN -->
+    <section class="panel" aria-label="Session posture et télémétrie">
+      <!-- Session Posture & Maintien Neutre -->
       <div class="widget-row">
         <div id="pacingWidget" class="widget-box">
           <div class="section-title" style="border:none; padding:0;">
             <div class="section-title-left">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span id="timerTitle" data-i18n="title_session">Session Rééducation</span>
+              <span id="timerTitle" data-i18n="title_session">Session Posture</span>
             </div>
             <div style="display:flex; align-items:center; gap:0.4rem;">
               <button type="button" id="btnPacingSettings" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Régler la durée de la session">
@@ -329,7 +325,7 @@
           
           <div style="margin-top:0.75rem; display:flex; gap:0.5rem; justify-content:space-between; align-items:center; border-top:1px solid var(--fluent-stroke-subtle); padding-top:0.6rem;">
             <button type="button" id="btnOpenKineRoutine" class="btn-action" style="font-size:0.74rem; padding:0.35rem 0.7rem; border-color:var(--fluent-brand-border); background:var(--fluent-brand-tint); color:var(--fluent-brand); font-weight:600;">
-              <span id="labelKineRoutine" data-i18n="btn_kine_routine">🧘 Étirements Kiné (5 min)</span>
+              <span id="labelKineRoutine" data-i18n="btn_kine_routine">🧘 Pause Mobilité (5 min)</span>
             </button>
             <span id="sessionStatusBadge" data-i18n="session_waiting_calib" style="font-size:0.72rem; color:var(--fluent-fg-muted);">En attente de calibration</span>
           </div>
@@ -352,7 +348,7 @@
       </div>
 
 
-      <!-- ATELIER KINÉ DU DOS • PAUSE ACTIVE (FLUENT UI 2) -->
+      <!-- PAUSE MOBILITÉ & ÉTIREMENTS • PAUSE ACTIVE (FLUENT UI 2) -->
       <div id="kineStudioContainer" style="display:none; margin-bottom:0.75rem;"></div>
 
       <!-- TABLEAU DE BORD & ANALYTICS LOCAUX (7 À 30 JOURS) -->
@@ -370,9 +366,9 @@
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
               <span data-i18n="analytics_toggle_btn">📊 Tableau de Bord</span>
             </button>
-            <button type="button" id="btnPrintKineReport" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--status-success); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Imprimer ou enregistrer le rapport en PDF pour votre Kiné">
+            <button type="button" id="btnPrintKineReport" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--status-success); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Imprimer ou enregistrer votre bilan postural en PDF">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              <span data-i18n="btn_kine_report">Bilan Kiné (PDF)</span>
+              <span data-i18n="btn_kine_report">Bilan Postural (PDF)</span>
             </button>
             <button type="button" id="btnExportCsv" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-brand); font-weight:600; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -568,70 +564,16 @@
       </div>
     </form>
   </dialog>
- 
-   <!-- MODAL FLUENT UI 2 : PASS ANNUEL ÉTHIQUE (7 € / AN) -->
-   <dialog id="licenseModal" class="fluent-modal" aria-labelledby="modalLicenseTitle">
-     <div class="modal-header">
-       <div class="modal-title-box">
-         <svg class="icon modal-title-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-         <h2 id="modalLicenseTitle" class="modal-title" data-i18n="modal_license_title">Pass Annuel Éthique — 7 € / an</h2>
-       </div>
-       <button type="button" class="btn-close-modal" id="btnCloseLicenseModal" aria-label="Fermer la fenêtre">
-         <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-       </button>
-     </div>
 
-     <div style="padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1.15rem;">
-       <!-- Manifeste Éthique -->
-       <div style="background: linear-gradient(135deg, rgba(15, 108, 189, 0.12) 0%, rgba(16, 124, 65, 0.12) 100%); border: 1px solid var(--fluent-brand-border); border-radius: var(--radius-sm); padding: 0.9rem;">
-         <div style="font-weight: 700; font-size: 0.82rem; color: var(--fluent-brand); margin-bottom: 0.35rem;">
-           🛡️ Notre Engagement : Juste, Local & Sans Prélèvement Caché
-         </div>
-         <p style="font-size: 0.76rem; color: var(--fluent-fg-secondary); line-height: 1.45; margin: 0;" data-i18n="modal_license_manifesto">
-           Zéro abonnement mensuel. Zéro prélèvement automatique récurrent. Aucun serveur cloud (100% privé sur votre ordinateur). Un prix juste pour soutenir le développement et protéger votre dos toute l'année.
-         </p>
-       </div>
-
-       <!-- Liste des déblocages -->
-       <div>
-         <div style="font-size: 0.8rem; font-weight: 700; color: var(--fluent-fg-primary); margin-bottom: 0.5rem;" data-i18n="modal_license_features_title">
-           Fonctionnalités débloquées avec le Pass :
-         </div>
-         <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.76rem; color: var(--fluent-fg-secondary); line-height: 1.6;">
-           <li data-i18n="modal_license_f1">Les 4 jauges biomécaniques simultanées (Nuque, Épaules/Trapèzes, Inclinaison, Distance Z)</li>
-           <li data-i18n="modal_license_f2">Mini-Fenêtre Picture-in-Picture flottante par-dessus VS Code, Teams et Slack</li>
-           <li data-i18n="modal_license_f3">Atelier Kiné complet (McKenzie, Brügger, Extension thoracique, Bascule pelvienne)</li>
-           <li data-i18n="modal_license_f4">Bilan postural imprimable / PDF pour votre Kinésithérapeute ou Ostéopathe</li>
-           <li data-i18n="modal_license_f5">Alerte sonore continue adaptative & bols tibétains réparateurs (432 Hz)</li>
-         </ul>
-       </div>
-
-       <!-- Achat externe -->
-       <div style="display: flex; justify-content: center; margin: 0.25rem 0;">
-         <a href="https://lemonsqueezy.com" target="_blank" rel="noopener noreferrer" id="linkBuyPass" class="btn-action btn-primary" style="text-decoration: none; padding: 0.65rem 1.25rem; font-size: 0.84rem; font-weight: 700; border-radius: var(--radius-sm);" data-i18n="btn_buy_pass">
-           Obtenir mon Pass 1 An (7 € TTC)
-         </a>
-       </div>
-
-       <!-- Formulaire d'activation de clé -->
-       <form id="licenseActivationForm" style="display: flex; flex-direction: column; gap: 0.6rem; border-top: 1px solid var(--fluent-stroke-subtle); padding-top: 1rem;">
-         <label for="inputLicenseKey" class="form-label" style="margin-bottom: 0;">
-           <span data-i18n="label_license_key">Clé d'activation du Pass</span>
-           <span class="form-label-hint">Ex: ERGO-XXXX ou LemonSqueezy</span>
-         </label>
-         <div style="display: flex; gap: 0.5rem;">
-           <input type="text" id="inputLicenseKey" class="form-input" placeholder="ERGO-XXXX-XXXX-XXXX" style="flex: 1;" required autocomplete="off" spellcheck="false">
-           <button type="submit" id="btnSubmitLicense" class="btn-action btn-primary" style="white-space: nowrap;" data-i18n="btn_activate_key">
-             Activer
-           </button>
-         </div>
-         <div id="licenseFeedback" style="font-size: 0.75rem; font-weight: 600; min-height: 1.2rem;"></div>
-       </form>
-     </div>
-   </dialog>
-
-  <footer role="contentinfo">
-    ErgoVision AI — Conçu pour la prévention des douleurs posturales, des TMS et le maintien de la chaîne rachidienne au poste de travail.
+  <footer role="contentinfo" style="display:flex; flex-direction:column; align-items:center; gap:0.35rem;">
+    <span id="footerText" data-i18n="footer_text">ErgoVision AI — Outil gratuit de bien-être et d'ergonomie au bureau (non médical). En cas de douleur, consultez un professionnel de santé.</span>
+    <nav aria-label="Liens utiles et informations légales" style="display:flex; gap:0.9rem; flex-wrap:wrap; justify-content:center; font-size:0.74rem;">
+      <a href="./index.html" style="color:var(--fluent-brand); text-decoration:none;">Accueil</a>
+      <a href="./guide.html" style="color:var(--fluent-brand); text-decoration:none;">Guide</a>
+      <a href="./privacy.html" style="color:var(--fluent-brand); text-decoration:none;">Confidentialité</a>
+      <a href="./legal.html" style="color:var(--fluent-brand); text-decoration:none;">Mentions légales</a>
+      <a href="https://github.com/ErgoVision-AI/ErgoVision/issues" target="_blank" rel="noopener noreferrer" style="color:var(--fluent-brand); text-decoration:none;">Contact (GitHub Issues)</a>
+    </nav>
   </footer>
 
   <!-- SCRIPT LOGIQUE & MOTEUR BIOMÉCANIQUE -->

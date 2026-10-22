@@ -70,6 +70,12 @@
   2. *Firefox & Fallback* : `canvas.captureStream(25)` sur `pipVideo.requestPictureInPicture()` assure une compatibilité universelle 100% Always-on-Top, avec bandeau HUD haute lisibilité dessiné directement dans le flux Canvas.
 - **Continuité Zéro-Coupure** : Le basculement vers la miniature ne doit jamais couper ni réinitialiser le stream de la webcam. Le streaming local en temps réel du canvas vers le PiP permet une transition instantanée sans interruption de la session.
 
+## 16. Sobriété Réglementaire, Modèle 100 % Gratuit & Frontière Dispositif Médical (UE MDR 2017/745) (v3.7)
+- **Qualification par la Destination Revendiquée (MDR art. 2)** : En droit européen (Règlement UE 2017/745), même un logiciel 100 % gratuit et open-source peut être qualifié de Dispositif Médical (SaMD Classe IIa) s'il revendique une finalité médicale (« rééducation », « prévention des TMS », « traitement », « kinésithérapie »). Toujours adopter un vocabulaire de **bien-être et d'ergonomie générale au poste de travail** (« Session Posture », « Pause Mobilité », « Confort Postural ») accompagné d'un avertissement non-médical explicite.
+- **Élimination des Frictions Administratives par le 100 % Gratuit Open-Source** : Le passage d'un modèle freemium à un modèle 100 % gratuit (MIT) supprime intégralement l'obligation d'immatriculation d'entreprise (SIRET/URSSAF), de Merchant of Record, de gestion de clés de licence, de CGV/médiation de la consommation et de formulaire collectant des données personnelles (remplacé par GitHub Issues).
+- **Archivage Git Pré-Suppression** : Avant de retirer une brique architecturale complète (ex: `license-gate.js`), toujours poser un tag Git annoté ou dédié (`v3.6-freemium-archive`) afin de permettre une restauration instantanée en $O(1)$ si le modèle évolue dans le futur.
+
+
 
 
 

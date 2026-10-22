@@ -1966,78 +1966,6 @@
     }
 
     /* ==========================================================================
-       FREEMIUM / PASS ANNUEL 7€ LOCK STYLES & BADGES
-       ========================================================================== */
-    .btn-pro-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.35rem 0.65rem;
-      font-size: 0.74rem;
-      font-weight: 700;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      border: 1px solid var(--fluent-brand-border);
-      background: var(--fluent-brand-tint);
-      color: var(--fluent-brand);
-      transition: all var(--transition-fast);
-    }
-
-    .btn-pro-badge:hover {
-      background: var(--fluent-brand);
-      color: #ffffff;
-      box-shadow: 0 0 10px var(--fluent-brand-tint);
-    }
-
-    .btn-pro-badge.active-pro {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.4);
-      color: var(--status-success);
-    }
-
-    .gauge-card.gauge-locked {
-      position: relative;
-      opacity: 0.72;
-      filter: grayscale(0.25);
-      border: 1px dashed var(--fluent-stroke-subtle);
-    }
-
-    .gauge-lock-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(2px);
-      border-radius: var(--radius-md);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-      cursor: pointer;
-      z-index: 10;
-      transition: background 0.2s ease;
-    }
-
-    .gauge-lock-overlay:hover {
-      background: rgba(15, 23, 42, 0.82);
-    }
-
-    .lock-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      background: var(--fluent-brand);
-      color: #ffffff;
-      padding: 0.25rem 0.5rem;
-      border-radius: var(--radius-pill);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    }
-
-    .lock-sub {
-      font-size: 0.65rem;
-      color: #e2e8f0;
-    }
-
-    /* ==========================================================================
        SIDE PANEL / NARROW VIEWPORT ADAPTATION (< 520px)
        ========================================================================== */
     @media (max-width: 520px) {
@@ -2596,16 +2524,12 @@
       </div>
       <div>
         <div class="brand-title">ErgoVision <span class="brand-ai-chip">AI</span></div>
-        <div class="brand-sub" data-i18n="brand_sub">Rééducation Posturale • Sessions Ciblées</div>
+        <div class="brand-sub" data-i18n="brand_sub">Copilote Ergonomique • Confort &amp; Habitudes Posturales au Bureau</div>
       </div>
     </div>
 
     <!-- Actions Rapides Épurées (1 Seule Ligne) -->
     <div class="quick-actions" role="toolbar" aria-label="Actions rapides">
-      <button id="btnProStatus" class="btn-pro-badge" title="Gérer votre Pass Annuel Éthique (7 € / an)" aria-label="Gérer votre Pass Annuel">
-        <span id="labelProBadge">✨ Pass 7€/an</span>
-      </button>
-
       <button id="btnPiP" class="btn-action btn-icon-only" title="Miniature Toujours au Premier Plan" aria-label="Ouvrir la miniature Always-On-Top">
         <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><rect width="8" height="5" x="12" y="10" rx="1"/></svg>
       </button>
@@ -2839,15 +2763,15 @@
       </div>
     </section>
 
-    <!-- COLONNE DROITE : SESSION DE RÉÉDUCATION, SCORE & BILAN -->
-    <section class="panel" aria-label="Session de rééducation et télémétrie">
-      <!-- Session Kiné & Maintien Neutre -->
+    <!-- COLONNE DROITE : SESSION POSTURE, SCORE & BILAN -->
+    <section class="panel" aria-label="Session posture et télémétrie">
+      <!-- Session Posture & Maintien Neutre -->
       <div class="widget-row">
         <div id="pacingWidget" class="widget-box">
           <div class="section-title" style="border:none; padding:0;">
             <div class="section-title-left">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span id="timerTitle" data-i18n="title_session">Session Rééducation</span>
+              <span id="timerTitle" data-i18n="title_session">Session Posture</span>
             </div>
             <div style="display:flex; align-items:center; gap:0.4rem;">
               <button type="button" id="btnPacingSettings" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Régler la durée de la session">
@@ -2877,7 +2801,7 @@
           
           <div style="margin-top:0.75rem; display:flex; gap:0.5rem; justify-content:space-between; align-items:center; border-top:1px solid var(--fluent-stroke-subtle); padding-top:0.6rem;">
             <button type="button" id="btnOpenKineRoutine" class="btn-action" style="font-size:0.74rem; padding:0.35rem 0.7rem; border-color:var(--fluent-brand-border); background:var(--fluent-brand-tint); color:var(--fluent-brand); font-weight:600;">
-              <span id="labelKineRoutine" data-i18n="btn_kine_routine">🧘 Étirements Kiné (5 min)</span>
+              <span id="labelKineRoutine" data-i18n="btn_kine_routine">🧘 Pause Mobilité (5 min)</span>
             </button>
             <span id="sessionStatusBadge" data-i18n="session_waiting_calib" style="font-size:0.72rem; color:var(--fluent-fg-muted);">En attente de calibration</span>
           </div>
@@ -2900,7 +2824,7 @@
       </div>
 
 
-      <!-- ATELIER KINÉ DU DOS • PAUSE ACTIVE (FLUENT UI 2) -->
+      <!-- PAUSE MOBILITÉ & ÉTIREMENTS • PAUSE ACTIVE (FLUENT UI 2) -->
       <div id="kineStudioContainer" style="display:none; margin-bottom:0.75rem;"></div>
 
       <!-- TABLEAU DE BORD & ANALYTICS LOCAUX (7 À 30 JOURS) -->
@@ -2918,9 +2842,9 @@
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
               <span data-i18n="analytics_toggle_btn">📊 Tableau de Bord</span>
             </button>
-            <button type="button" id="btnPrintKineReport" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--status-success); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Imprimer ou enregistrer le rapport en PDF pour votre Kiné">
+            <button type="button" id="btnPrintKineReport" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--status-success); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Imprimer ou enregistrer votre bilan postural en PDF">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              <span data-i18n="btn_kine_report">Bilan Kiné (PDF)</span>
+              <span data-i18n="btn_kine_report">Bilan Postural (PDF)</span>
             </button>
             <button type="button" id="btnExportCsv" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--fluent-brand); font-weight:600; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -3116,70 +3040,16 @@
       </div>
     </form>
   </dialog>
- 
-   <!-- MODAL FLUENT UI 2 : PASS ANNUEL ÉTHIQUE (7 € / AN) -->
-   <dialog id="licenseModal" class="fluent-modal" aria-labelledby="modalLicenseTitle">
-     <div class="modal-header">
-       <div class="modal-title-box">
-         <svg class="icon modal-title-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-         <h2 id="modalLicenseTitle" class="modal-title" data-i18n="modal_license_title">Pass Annuel Éthique — 7 € / an</h2>
-       </div>
-       <button type="button" class="btn-close-modal" id="btnCloseLicenseModal" aria-label="Fermer la fenêtre">
-         <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-       </button>
-     </div>
 
-     <div style="padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1.15rem;">
-       <!-- Manifeste Éthique -->
-       <div style="background: linear-gradient(135deg, rgba(15, 108, 189, 0.12) 0%, rgba(16, 124, 65, 0.12) 100%); border: 1px solid var(--fluent-brand-border); border-radius: var(--radius-sm); padding: 0.9rem;">
-         <div style="font-weight: 700; font-size: 0.82rem; color: var(--fluent-brand); margin-bottom: 0.35rem;">
-           🛡️ Notre Engagement : Juste, Local & Sans Prélèvement Caché
-         </div>
-         <p style="font-size: 0.76rem; color: var(--fluent-fg-secondary); line-height: 1.45; margin: 0;" data-i18n="modal_license_manifesto">
-           Zéro abonnement mensuel. Zéro prélèvement automatique récurrent. Aucun serveur cloud (100% privé sur votre ordinateur). Un prix juste pour soutenir le développement et protéger votre dos toute l'année.
-         </p>
-       </div>
-
-       <!-- Liste des déblocages -->
-       <div>
-         <div style="font-size: 0.8rem; font-weight: 700; color: var(--fluent-fg-primary); margin-bottom: 0.5rem;" data-i18n="modal_license_features_title">
-           Fonctionnalités débloquées avec le Pass :
-         </div>
-         <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.76rem; color: var(--fluent-fg-secondary); line-height: 1.6;">
-           <li data-i18n="modal_license_f1">Les 4 jauges biomécaniques simultanées (Nuque, Épaules/Trapèzes, Inclinaison, Distance Z)</li>
-           <li data-i18n="modal_license_f2">Mini-Fenêtre Picture-in-Picture flottante par-dessus VS Code, Teams et Slack</li>
-           <li data-i18n="modal_license_f3">Atelier Kiné complet (McKenzie, Brügger, Extension thoracique, Bascule pelvienne)</li>
-           <li data-i18n="modal_license_f4">Bilan postural imprimable / PDF pour votre Kinésithérapeute ou Ostéopathe</li>
-           <li data-i18n="modal_license_f5">Alerte sonore continue adaptative & bols tibétains réparateurs (432 Hz)</li>
-         </ul>
-       </div>
-
-       <!-- Achat externe -->
-       <div style="display: flex; justify-content: center; margin: 0.25rem 0;">
-         <a href="https://lemonsqueezy.com" target="_blank" rel="noopener noreferrer" id="linkBuyPass" class="btn-action btn-primary" style="text-decoration: none; padding: 0.65rem 1.25rem; font-size: 0.84rem; font-weight: 700; border-radius: var(--radius-sm);" data-i18n="btn_buy_pass">
-           Obtenir mon Pass 1 An (7 € TTC)
-         </a>
-       </div>
-
-       <!-- Formulaire d'activation de clé -->
-       <form id="licenseActivationForm" style="display: flex; flex-direction: column; gap: 0.6rem; border-top: 1px solid var(--fluent-stroke-subtle); padding-top: 1rem;">
-         <label for="inputLicenseKey" class="form-label" style="margin-bottom: 0;">
-           <span data-i18n="label_license_key">Clé d'activation du Pass</span>
-           <span class="form-label-hint">Ex: ERGO-XXXX ou LemonSqueezy</span>
-         </label>
-         <div style="display: flex; gap: 0.5rem;">
-           <input type="text" id="inputLicenseKey" class="form-input" placeholder="ERGO-XXXX-XXXX-XXXX" style="flex: 1;" required autocomplete="off" spellcheck="false">
-           <button type="submit" id="btnSubmitLicense" class="btn-action btn-primary" style="white-space: nowrap;" data-i18n="btn_activate_key">
-             Activer
-           </button>
-         </div>
-         <div id="licenseFeedback" style="font-size: 0.75rem; font-weight: 600; min-height: 1.2rem;"></div>
-       </form>
-     </div>
-   </dialog>
-
-  <footer role="contentinfo">
-    ErgoVision AI — Conçu pour la prévention des douleurs posturales, des TMS et le maintien de la chaîne rachidienne au poste de travail.
+  <footer role="contentinfo" style="display:flex; flex-direction:column; align-items:center; gap:0.35rem;">
+    <span id="footerText" data-i18n="footer_text">ErgoVision AI — Outil gratuit de bien-être et d'ergonomie au bureau (non médical). En cas de douleur, consultez un professionnel de santé.</span>
+    <nav aria-label="Liens utiles et informations légales" style="display:flex; gap:0.9rem; flex-wrap:wrap; justify-content:center; font-size:0.74rem;">
+      <a href="./index.html" style="color:var(--fluent-brand); text-decoration:none;">Accueil</a>
+      <a href="./guide.html" style="color:var(--fluent-brand); text-decoration:none;">Guide</a>
+      <a href="./privacy.html" style="color:var(--fluent-brand); text-decoration:none;">Confidentialité</a>
+      <a href="./legal.html" style="color:var(--fluent-brand); text-decoration:none;">Mentions légales</a>
+      <a href="https://github.com/ErgoVision-AI/ErgoVision/issues" target="_blank" rel="noopener noreferrer" style="color:var(--fluent-brand); text-decoration:none;">Contact (GitHub Issues)</a>
+    </nav>
   </footer>
 
   <!-- SCRIPT LOGIQUE & MOTEUR BIOMÉCANIQUE -->
@@ -3197,7 +3067,7 @@
     
     const TRANSLATIONS = {
       fr: {
-        brand_sub: "Copilote Ergonomique • Prévention des TMS en Temps Réel",
+        brand_sub: "Copilote Ergonomique • Confort & Habitudes Posturales au Bureau",
         mode_sit: "Bureau Assis",
         mode_stand: "Bureau Debout",
         mode_pause: "Pause & Étirement",
@@ -3275,7 +3145,7 @@
         btn_defaults: "Valeurs par défaut",
         btn_cancel: "Annuler",
         btn_save: "Enregistrer",
-        footer_text: "ErgoVision AI — Conçu pour la prévention des douleurs posturales, des TMS et le maintien de la chaîne rachidienne au poste de travail.",
+        footer_text: "ErgoVision AI — Outil gratuit de bien-être et d'ergonomie au bureau (non médical). En cas de douleur, consultez un professionnel de santé.",
         hud_neutral: "✅ POSTURE NEUTRE",
         hud_deviation: "⚠️ DÉVIATION :",
         hud_correct: "🚨 CORRIGEZ :",
@@ -3301,12 +3171,12 @@
         cycle_summary_title: "Fin de cycle",
         standing_warning_sub: "min debout : pensez à changer d'appui",
         standing_alert_sub: "min atteintes : repassez ASSIS ou faites une pause !",
-        kine_studio_title: "Atelier Kiné du Dos • Pause Active",
-        kine_studio_subtitle: "Exercices cliniques de décharge vertébrale validés pour le travail sur écran",
+        kine_studio_title: "Pause Mobilité & Étirements • Pause Active",
+        kine_studio_subtitle: "Exercices doux de mobilité et de relâchement pour le travail sur écran",
         kine_phase_prep: "Mise en place",
         kine_phase_hold: "Maintien actif",
         kine_phase_rest: "Relâchez",
-        kine_phase_done: "Bravo ! Pause kiné accomplie",
+        kine_phase_done: "Bravo ! Pause mobilité accomplie",
         kine_rep_label: "Répétition",
         kine_breath_in: "Inspirez par le nez...",
         kine_breath_out: "Expirez lentement par la bouche...",
@@ -3315,50 +3185,26 @@
         kine_btn_pause: "Pause",
         kine_btn_resume: "Reprendre",
         kine_btn_skip: "Passer",
-        kine_zone_cervical: "Rachis Cervical & Trapèzes",
-        kine_zone_thoracic: "Rachis Thoracique & Épaules",
-        kine_zone_lumbar: "Rachis Lombaire & Bassin",
-        ex_mckenzie_chin_tuck_title: "Rétraction Cervicale (McKenzie)",
+        kine_zone_cervical: "Nuque & Épaules",
+        kine_zone_thoracic: "Haut du Dos & Épaules",
+        kine_zone_lumbar: "Bas du Dos & Bassin",
+        ex_mckenzie_chin_tuck_title: "Recul Axial du Menton (McKenzie)",
         ex_mckenzie_chin_tuck_steps: "Glissez la tête horizontalement vers l'arrière en rentrant le menton, sans baisser ni lever la tête.",
-        ex_mckenzie_chin_tuck_benefit: "Décompresse les disques C5-C6-C7 et corrige la projection 'Text-Neck'.",
-        ex_brugger_relief_title: "Posture de Décharge de Brügger",
-        ex_brugger_relief_steps: "En bord de chaise, ouvrez les bras à 45°, tournez les paumes vers l'avant et rapprochez doucement les omoplates vers le bas.",
-        ex_brugger_relief_benefit: "Inverse l'enroulement des épaules vers l'avant et libère la cage thoracique.",
-        ex_thoracic_extension_title: "Extension Thoracique sur Dossier",
-        ex_thoracic_extension_steps: "Placez les mains derrière la nuque pour soutenir le cou, ouvrez les coudes et inclinez doucement le haut du dos vers l'arrière.",
-        ex_thoracic_extension_benefit: "Mobilise la charnière dorsale et redresse la cyphose liée à la fatigue.",
-        ex_pelvic_tilt_title: "Bascules Pelviennes Lombo-Sacrées",
-        ex_pelvic_tilt_steps: "Assis bien au fond du siège, faites rouler doucement votre bassin d'avant en arrière en creusant puis en arrondissant le bas du dos.",
-        ex_pelvic_tilt_benefit: "Réhydrate les disques lombaires L4-L5-S1 par mouvement doux sans contrainte axiale.",
-        
-        // Pass Annuel Éthique (7 € / an) & Monétisation
-        pro_badge_free: "✨ Pass Complet · 7€/an",
-        pro_badge_active_prefix: "🛡️ Pass Actif (",
-        pro_badge_active_suffix: "j restants)",
-        modal_license_title: "Pass Annuel Éthique — 7 € / an",
-        modal_license_manifesto: "Zéro abonnement mensuel. Zéro prélèvement automatique récurrent. Aucun serveur cloud (100% privé sur votre ordinateur). Un prix juste pour soutenir le développement et protéger votre dos toute l'année.",
-        modal_license_features_title: "Fonctionnalités débloquées avec le Pass :",
-        modal_license_f1: "Les 4 jauges biomécaniques simultanées (Nuque, Épaules/Trapèzes, Inclinaison, Distance Z)",
-        modal_license_f2: "Mini-Fenêtre Picture-in-Picture flottante par-dessus VS Code, Teams et Slack",
-        modal_license_f3: "Atelier Kiné complet (McKenzie, Brügger, Extension thoracique, Bascule pelvienne)",
-        modal_license_f4: "Bilan postural imprimable / PDF pour votre Kinésithérapeute ou Ostéopathe",
-        modal_license_f5: "Alerte sonore continue adaptative & bols tibétains réparateurs (432 Hz)",
-        label_license_key: "Clé d'activation du Pass",
-        placeholder_license_key: "ERGO-XXXX-XXXX-XXXX",
-        btn_activate_key: "Activer mon Pass",
-        btn_buy_pass: "Obtenir mon Pass 1 An (7 € TTC)",
-        license_status_free_desc: "Vous utilisez actuellement le socle libre (1 jauge active).",
-        license_success_active: "🎉 Félicitations ! Votre Pass ErgoVision AI est actif pour 365 jours.",
-        license_err_invalid: "❌ Clé invalide ou non reconnue. Vérifiez votre saisie.",
-        license_err_network: "⚠️ Erreur réseau lors de la validation. Réessayez ou vérifiez votre connexion.",
-        lock_tooltip_gauge: "Débloquez les 4 jauges avec le Pass à 7 €/an (zéro abonnement auto)",
-        lock_tooltip_pip: "La miniature Picture-in-Picture fait partie du Pass à 7 €/an",
-        lock_tooltip_kine: "Débloquez les 4 protocoles cliniques avec le Pass à 7 €/an",
-        btn_kine_report: "Imprimer Bilan Kiné (PDF)",
+        ex_mckenzie_chin_tuck_benefit: "Relâche la tension de la nuque (C5-C7) et compense l'avancée de la tête vers l'écran.",
+        ex_brugger_relief_title: "Ouverture Posturale de Brügger",
+        ex_brugger_relief_steps: "En bord de chaise, ouvrez les bras à 45°, tournez les paumes vers l'avant et abaissez doucement les omoplates.",
+        ex_brugger_relief_benefit: "Inverse l'enroulement des épaules vers l'avant et ouvre la cage thoracique.",
+        ex_thoracic_extension_title: "Extension Dorsale sur Dossier",
+        ex_thoracic_extension_steps: "Placez les mains derrière la nuque pour soutenir le cou, ouvrez les coudes et étirez doucement le haut du dos vers l'arrière.",
+        ex_thoracic_extension_benefit: "Mobilise le milieu du dos et favorise une respiration ample.",
+        ex_pelvic_tilt_title: "Bascules Douces du Bassin",
+        ex_pelvic_tilt_steps: "Assis sur votre siège, faites rouler doucement votre bassin d'avant en arrière en creusant puis en arrondissant le bas du dos.",
+        ex_pelvic_tilt_benefit: "Redonne de la mobilité au bas du dos après une station assise prolongée.",
+        btn_kine_report: "Imprimer Bilan Postural (PDF)",
     
         // Analytics Dashboard & Progression
         analytics_title: "Tableau de Bord & Progression",
-        analytics_subtitle: "Synthèse de votre endurance posturale et d'observance ergonomique",
+        analytics_subtitle: "Synthèse de votre régularité et de vos habitudes posturales",
         analytics_toggle_btn: "📊 Tableau de Bord",
         analytics_period_7d: "7 jours",
         analytics_period_14d: "14 jours",
@@ -3366,17 +3212,17 @@
         analytics_kpi_score: "Maintien Neutre",
         analytics_kpi_score_sub: "Score moyen de la période",
         analytics_kpi_sessions: "Sessions Réalisées",
-        analytics_kpi_sessions_sub: "Temps actif de rééducation",
+        analytics_kpi_sessions_sub: "Temps actif suivi",
         analytics_kpi_alerts: "Dérives Corrigées",
-        analytics_kpi_alerts_sub: "Alertes biomécaniques",
-        analytics_kpi_kine: "Exercices Kiné",
-        analytics_kpi_kine_sub: "Décompressions du rachis",
+        analytics_kpi_alerts_sub: "Rappels posturaux",
+        analytics_kpi_kine: "Pauses Mobilité",
+        analytics_kpi_kine_sub: "Étirements guidés",
         analytics_chart_title: "Évolution Quotidienne du Maintien Neutre (%)",
-        analytics_chart_target: "Cible clinique recommandée : 80%",
-        analytics_dist_title: "Répartition Biomécanique des Dérives",
+        analytics_chart_target: "Repère de confort conseillé : 80%",
+        analytics_dist_title: "Répartition des Rappels Posturaux",
         analytics_btn_clear_history: "Effacer l'historique",
         analytics_clear_confirm: "Voulez-vous vraiment effacer tout l'historique multi-jours ?",
-        analytics_no_data: "Aucune donnée sur cette période. Complétez votre première session de rééducation (30 min) pour afficher votre progression.",
+        analytics_no_data: "Aucune donnée sur cette période. Complétez votre première session posture (30 min) pour afficher votre progression.",
         analytics_trend_up: "en hausse",
         analytics_trend_down: "en baisse",
         analytics_trend_stable: "stable",
@@ -3391,16 +3237,16 @@
         label_volume: "Volume",
         label_os_notifications: "Notifications OS",
     
-        // Session Rééducation & Télémétrie
-        title_session: "Session Rééducation",
-        sub_session_target: "Session ciblée conseillée : 2 × 30 min / jour",
-        btn_kine_routine: "🧘 Étirements Kiné (5 min)",
+        // Session Posture & Télémétrie
+        title_session: "Session Posture",
+        sub_session_target: "Rythme conseillé : 2 × 30 min / jour",
+        btn_kine_routine: "🧘 Pause Mobilité (5 min)",
         session_waiting_calib: "En attente de calibration",
         session_completed_msg: "Bravo ! Session terminée. Bougez librement.",
-        session_completed_badge: "Session terminée • Reposez-vous !",
+        session_completed_badge: "Session terminée • Détendez-vous !",
         session_notif_title: "ErgoVision AI — Session accomplie !",
-        session_notif_body: "Bravo pour vos {min} min de rééducation posturale (Maintien : {score}%). Relâchez vos muscles !",
-        session_log_title: "Session Rééducation ({min} min) terminée",
+        session_notif_body: "Bravo pour vos {min} min de suivi postural (Maintien : {score}%). Bougez et relâchez vos épaules !",
+        session_log_title: "Session Posture ({min} min) terminée",
     
         // Capteur & Calibration Point Zéro
         sensor_starting: "Démarrage du capteur...",
@@ -3415,7 +3261,7 @@
         pill_derive: "DÉRIVE"
       },
       en: {
-        brand_sub: "Ergonomic Copilot • Real-Time RSI Prevention",
+        brand_sub: "Ergonomic Copilot • Desk Posture Comfort & Habits",
         mode_sit: "Sitting Desk",
         mode_stand: "Standing Desk",
         mode_pause: "Active Break & Stretch",
@@ -3493,7 +3339,7 @@
         btn_defaults: "Reset Defaults",
         btn_cancel: "Cancel",
         btn_save: "Save",
-        footer_text: "ErgoVision AI — Designed for RSI prevention, cervical health and postural endurance at the workstation.",
+        footer_text: "ErgoVision AI — Free general desk wellness and ergonomic tool (non-medical). If you experience pain, consult a healthcare professional.",
         hud_neutral: "✅ NEUTRAL POSTURE",
         hud_deviation: "⚠️ DEVIATION:",
         hud_correct: "🚨 CORRECT:",
@@ -3519,12 +3365,12 @@
         cycle_summary_title: "Cycle completed",
         standing_warning_sub: "min standing: consider shifting support",
         standing_alert_sub: "min reached: switch to SITTING or take a break!",
-        kine_studio_title: "Back Physiotherapy Studio • Active Break",
-        kine_studio_subtitle: "Clinically validated spinal decompression micro-exercises for desk work",
+        kine_studio_title: "Mobility & Stretch Studio • Active Break",
+        kine_studio_subtitle: "Gentle mobility and postural release micro-exercises for desk work",
         kine_phase_prep: "Get ready",
         kine_phase_hold: "Active hold",
         kine_phase_rest: "Release",
-        kine_phase_done: "Well done! Kiné routine completed",
+        kine_phase_done: "Well done! Mobility break completed",
         kine_rep_label: "Repetition",
         kine_breath_in: "Inhale through your nose...",
         kine_breath_out: "Exhale gently through your mouth...",
@@ -3533,50 +3379,26 @@
         kine_btn_pause: "Pause",
         kine_btn_resume: "Resume",
         kine_btn_skip: "Skip",
-        kine_zone_cervical: "Cervical Spine & Traps",
-        kine_zone_thoracic: "Thoracic Spine & Shoulders",
-        kine_zone_lumbar: "Lumbar Spine & Pelvis",
-        ex_mckenzie_chin_tuck_title: "Cervical Retraction (McKenzie)",
+        kine_zone_cervical: "Neck & Shoulders",
+        kine_zone_thoracic: "Upper Back & Shoulders",
+        kine_zone_lumbar: "Lower Back & Pelvis",
+        ex_mckenzie_chin_tuck_title: "Axial Chin Tuck (McKenzie)",
         ex_mckenzie_chin_tuck_steps: "Glide your head horizontally backwards by tucking your chin, without tilting up or down.",
-        ex_mckenzie_chin_tuck_benefit: "Decompresses C5-C6-C7 discs and corrects 'Text-Neck' projection.",
-        ex_brugger_relief_title: "Brügger Postural Relief",
-        ex_brugger_relief_steps: "Sit on the edge of your chair, open arms at 45°, rotate palms forward and gently squeeze shoulder blades downward.",
+        ex_mckenzie_chin_tuck_benefit: "Releases neck tension (C5-C7) and counteracts forward screen leaning.",
+        ex_brugger_relief_title: "Brügger Postural Opening",
+        ex_brugger_relief_steps: "Sit on the edge of your chair, open arms at 45°, rotate palms forward and gently draw shoulder blades downward.",
         ex_brugger_relief_benefit: "Reverses rounded shoulder posture and opens up ribcage breathing.",
-        ex_thoracic_extension_title: "Thoracic Extension on Chair Back",
+        ex_thoracic_extension_title: "Upper Back Extension on Chair",
         ex_thoracic_extension_steps: "Support the back of your neck with your hands, open elbows wide and gently arch upper back over chair.",
-        ex_thoracic_extension_benefit: "Mobilizes stiff thoracic spine and reverses fatigue-induced slump.",
-        ex_pelvic_tilt_title: "Lumbosacral Pelvic Tilts",
-        ex_pelvic_tilt_steps: "Seated back on your chair, gently rock your pelvis forward and backward, slightly arching then rounding the lower back.",
-        ex_pelvic_tilt_benefit: "Rehydrates L4-L5-S1 lumbar discs through gentle motion without vertical load.",
-    
-        // Ethical Annual Pass ($7 / year) & Monetization
-        pro_badge_free: "✨ Full Pass · $7/yr",
-        pro_badge_active_prefix: "🛡️ Active Pass (",
-        pro_badge_active_suffix: "d left)",
-        modal_license_title: "Ethical Annual Pass — $7 / year",
-        modal_license_manifesto: "No monthly subscriptions. No recurring auto-debits. No cloud servers (100% private on your machine). A fair price to support independent engineering and protect your posture all year long.",
-        modal_license_features_title: "Features unlocked with the Pass:",
-        modal_license_f1: "All 4 simultaneous biomechanical gauges (Forward Neck, Trapezius/Shoulders, Lateral Tilt, Z-Depth)",
-        modal_license_f2: "Floating Picture-in-Picture window over VS Code, Teams and Slack",
-        modal_license_f3: "Full Back Physiotherapy Studio (McKenzie, Brügger, Thoracic Extension, Pelvic Tilts)",
-        modal_license_f4: "Printable / PDF posture compliance report for your Physiotherapist or Chiropractor",
-        modal_license_f5: "Adaptive continuous drone audio & soothing Tibetan singing bowls (432 Hz)",
-        label_license_key: "Pass Activation Key",
-        placeholder_license_key: "ERGO-XXXX-XXXX-XXXX",
-        btn_activate_key: "Activate Pass",
-        btn_buy_pass: "Get My 1-Year Pass ($7)",
-        license_status_free_desc: "You are currently using the free tier (1 active gauge).",
-        license_success_active: "🎉 Congratulations! Your ErgoVision AI Pass is active for 365 days.",
-        license_err_invalid: "❌ Invalid key. Please check your spelling.",
-        license_err_network: "⚠️ Network error during activation. Please check your connection.",
-        lock_tooltip_gauge: "Unlock all 4 gauges with the $7/yr Pass (no auto-renewal)",
-        lock_tooltip_pip: "Floating Picture-in-Picture is part of the $7/yr Pass",
-        lock_tooltip_kine: "Unlock all 4 clinical routines with the $7/yr Pass",
-        btn_kine_report: "Print Physio Report (PDF)",
+        ex_thoracic_extension_benefit: "Mobilizes stiff upper back and promotes deep breathing.",
+        ex_pelvic_tilt_title: "Gentle Pelvic Tilts",
+        ex_pelvic_tilt_steps: "Seated on your chair, gently rock your pelvis forward and backward, slightly arching then rounding the lower back.",
+        ex_pelvic_tilt_benefit: "Restores lower back mobility after prolonged sitting.",
+        btn_kine_report: "Print Posture Report (PDF)",
     
         // Analytics Dashboard & Progress
         analytics_title: "Dashboard & Progress",
-        analytics_subtitle: "Summary of your postural endurance and ergonomic compliance",
+        analytics_subtitle: "Summary of your postural consistency and ergonomic habits",
         analytics_toggle_btn: "📊 Dashboard",
         analytics_period_7d: "7 days",
         analytics_period_14d: "14 days",
@@ -3586,12 +3408,12 @@
         analytics_kpi_sessions: "Completed Sessions",
         analytics_kpi_sessions_sub: "Active monitored time",
         analytics_kpi_alerts: "Corrected Slumps",
-        analytics_kpi_alerts_sub: "Biomechanical alerts",
-        analytics_kpi_kine: "Physio Stretches",
-        analytics_kpi_kine_sub: "Spinal decompressions",
+        analytics_kpi_alerts_sub: "Posture reminders",
+        analytics_kpi_kine: "Mobility Breaks",
+        analytics_kpi_kine_sub: "Guided stretches",
         analytics_chart_title: "Daily Neutral Posture Evolution (%)",
-        analytics_chart_target: "Recommended clinical target: 80%",
-        analytics_dist_title: "Biomechanical Deviation Breakdown",
+        analytics_chart_target: "Recommended comfort target: 80%",
+        analytics_dist_title: "Posture Reminder Breakdown",
         analytics_btn_clear_history: "Clear history",
         analytics_clear_confirm: "Are you sure you want to clear all multi-day history?",
         analytics_no_data: "No data in this period. Complete your first 30-min posture session to view your progress.",
@@ -3609,15 +3431,15 @@
         label_volume: "Volume",
         label_os_notifications: "OS Notifications",
     
-        // Session Rehabilitation & Telemetry
-        title_session: "Rehabilitation Session",
-        sub_session_target: "Recommended targeted session: 2 × 30 min / day",
-        btn_kine_routine: "🧘 Physio Stretches (5 min)",
+        // Session Posture & Telemetry
+        title_session: "Posture Session",
+        sub_session_target: "Recommended rhythm: 2 × 30 min / day",
+        btn_kine_routine: "🧘 Mobility Break (5 min)",
         session_waiting_calib: "Awaiting calibration",
         session_completed_msg: "Well done! Session complete. Move freely.",
         session_completed_badge: "Session complete • Rest your eyes & back!",
         session_notif_title: "ErgoVision AI — Session accomplished!",
-        session_notif_body: "Well done on your {min} min postural session (Alignment: {score}%). Relax your muscles!",
+        session_notif_body: "Well done on your {min} min postural session (Alignment: {score}%). Relax your shoulders!",
         session_log_title: "Posture Session ({min} min) completed",
     
         // Sensor & Calibration Zero Point
@@ -4863,7 +4685,7 @@
               <div style="display:flex; align-items:center; gap:0.45rem;">
                 <span id="kineExerciseIndexBadge" style="font-size:0.72rem; font-weight:700; color:var(--brand-primary); background:rgba(15, 108, 189, 0.1); padding:0.15rem 0.5rem; border-radius:12px;">1 / 4</span>
                 <span id="kineProtocolBadge" class="kine-badge">McKenzie</span>
-                <button type="button" id="btnKineCloseStudio" class="btn-action btn-icon-only" style="width:26px; height:26px; min-height:26px; padding:0; border:none; background:none; cursor:pointer; color:var(--fluent-fg-muted);" title="Fermer l'Atelier Kiné" aria-label="Fermer l'Atelier Kiné">
+                <button type="button" id="btnKineCloseStudio" class="btn-action btn-icon-only" style="width:26px; height:26px; min-height:26px; padding:0; border:none; background:none; cursor:pointer; color:var(--fluent-fg-muted);" title="Fermer la Pause Mobilité" aria-label="Fermer la Pause Mobilité">
                   <svg class="icon" style="width:14px; height:14px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
               </div>
@@ -5164,207 +4986,13 @@
     }
 
     // ==========================================
-    // MODULE: src/license/license-gate.js
-    // ==========================================
-    /**
-     * ErgoVision AI - License Gate & Ethical Monetization Manager
-     * Gère le statut Freemium (Socle Libre 1 jauge) et le déblocage du "Pass 1 An Libre (7 € / an)"
-     * Zéro abonnement récurrent automatique.
-     */
-    
-    const LICENSE_STORAGE_KEY = 'ergovision_license_v1';
-    const FREE_TIER = 'FREE';
-    const PRO_TIER = 'PRO_ANNUAL_PASS';
-    
-    const DEFAULT_STATE = {
-      tier: FREE_TIER,
-      licenseKey: null,
-      activatedAt: null,
-      expiresAt: null,
-      instanceId: null,
-      practitionerCode: null
-    };
-    
-    /**
-     * Récupère ou génère un identifiant unique local pour la machine
-     */
-    function getOrCreateInstanceId() {
-      let inst = localStorage.getItem('ergovision_instance_id');
-      if (!inst) {
-        inst = 'inst_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now();
-        localStorage.setItem('ergovision_instance_id', inst);
-      }
-      return inst;
-    }
-    
-    /**
-     * Charge l'état de licence sauvegardé
-     */
-    function loadLicenseState() {
-      try {
-        const raw = localStorage.getItem(LICENSE_STORAGE_KEY);
-        if (!raw) return { ...DEFAULT_STATE, instanceId: getOrCreateInstanceId() };
-        const parsed = JSON.parse(raw);
-        return { ...DEFAULT_STATE, ...parsed };
-      } catch (e) {
-        console.warn("Échec lecture état de licence :", e);
-        return { ...DEFAULT_STATE, instanceId: getOrCreateInstanceId() };
-      }
-    }
-    
-    /**
-     * Sauvegarde l'état de licence en local et le synchronise dans chrome.storage s'il existe
-     */
-    function saveLicenseState(state) {
-      try {
-        localStorage.setItem(LICENSE_STORAGE_KEY, JSON.stringify(state));
-        if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-          chrome.storage.local.set({ [LICENSE_STORAGE_KEY]: state }).catch(() => {});
-        }
-      } catch (e) {
-        console.error("Échec sauvegarde état de licence :", e);
-      }
-      return state;
-    }
-    
-    /**
-     * Vérifie si le Pass Pro Annuel est actif et non expiré
-     */
-    function isProActive() {
-      const state = loadLicenseState();
-      if (state.tier !== PRO_TIER) return false;
-      if (!state.expiresAt) return false;
-      return Date.now() < state.expiresAt;
-    }
-    
-    /**
-     * Retourne le nombre de jours restants sur le Pass Annuel
-     */
-    function getRemainingDays() {
-      const state = loadLicenseState();
-      if (!isProActive()) return 0;
-      const diffMs = state.expiresAt - Date.now();
-      return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
-    }
-    
-    /**
-     * Matrice stricte des fonctionnalités activées (Feature Flags)
-     * Mode FREE : 1 jauge active (Text-Neck), Règle 20-20-20, 1 exercice Kiné (McKenzie)
-     * Mode PRO (7€/an) : 4 jauges, Atelier Kiné complet, PiP, Audio continu & Bilan PDF
-     */
-    function getFeatureFlags() {
-      const pro = isProActive();
-      return {
-        isPro: pro,
-        gaugeNeckSlump: true,          // JAUGE 1 : TOUJOURS GRATUITE (Socle Libre)
-        gaugeShoulderSym: pro,         // JAUGE 2 : Pass 7€/an
-        gaugeHeadTilt: pro,            // JAUGE 3 : Pass 7€/an
-        gaugeScreenDist: pro,          // JAUGE 4 : Pass 7€/an
-        eyeRest202020: true,           // Règle oculaire : GRATUITE
-        customPacingDurations: pro,    // Sliders de durées sur-mesure : Pass 7€/an
-        pipMiniWindow: pro,            // Mode Picture-in-Picture : Pass 7€/an
-        allowedKineExercises: pro 
-          ? ['mckenzie', 'brugger', 'thoracic', 'pelvic'] 
-          : ['mckenzie'],
-        continuousDroneAudio: pro,     // Alerte continue & bols tibétains : Pass 7€/an
-        kinePdfReport: pro             // Rapport d'observance Kiné A4 : Pass 7€/an
-      };
-    }
-    
-    /**
-     * Valide une clé de licence (API LemonSqueezy ou Clé signée de test/cabinet kiné)
-     */
-    async function activateLicenseKey(rawKey, practitionerCode = null) {
-      const cleanKey = (rawKey || '').trim().toUpperCase();
-      if (!cleanKey) {
-        return { success: false, error: 'empty_key' };
-      }
-    
-      // 1. Support des clés de test hors-ligne / modération Store / Cabinets partenaires
-      // Format : ERGO-REVIEWER-2026, ERGO-KINE-XXXX, ERGO-PASS-XXXX
-      if (cleanKey.startsWith('ERGO-')) {
-        const isTestOrKineKey = cleanKey === 'ERGO-REVIEWER-2026' || 
-                                cleanKey.startsWith('ERGO-KINE-') || 
-                                cleanKey.startsWith('ERGO-PASS-');
-        if (isTestOrKineKey) {
-          const now = Date.now();
-          const expiresAt = now + (365 * 24 * 60 * 60 * 1000); // 365 jours
-          const newState = {
-            tier: PRO_TIER,
-            licenseKey: cleanKey,
-            activatedAt: now,
-            expiresAt: expiresAt,
-            instanceId: getOrCreateInstanceId(),
-            practitionerCode: practitionerCode || (cleanKey.startsWith('ERGO-KINE-') ? cleanKey : null)
-          };
-          saveLicenseState(newState);
-          return { success: true, state: newState };
-        }
-      }
-    
-      // 2. Validation en ligne via LemonSqueezy Licenses API
-      try {
-        const response = await fetch('https://api.lemonsqueezy.com/v1/licenses/activate', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams({
-            license_key: cleanKey,
-            instance_name: `ErgoVision_${getOrCreateInstanceId()}`
-          })
-        });
-    
-        const data = await response.json();
-        if (response.ok && data.activated) {
-          const now = Date.now();
-          // Durée de 365 jours fermes (Pass 1 an libre sans renouvellement automatique)
-          const expiresAt = data.license_key?.expires_at 
-            ? new Date(data.license_key.expires_at).getTime()
-            : (now + (365 * 24 * 60 * 60 * 1000));
-    
-          const newState = {
-            tier: PRO_TIER,
-            licenseKey: cleanKey,
-            activatedAt: now,
-            expiresAt: expiresAt,
-            instanceId: getOrCreateInstanceId(),
-            practitionerCode: practitionerCode || null
-          };
-          saveLicenseState(newState);
-          return { success: true, state: newState };
-        } else {
-          return { success: false, error: data.error || 'invalid_key' };
-        }
-      } catch (err) {
-        console.warn("Échec appel LemonSqueezy :", err);
-        return { success: false, error: 'network_error' };
-      }
-    }
-    
-    /**
-     * Désactivation volontaire de la clé
-     */
-    function deactivateLicense() {
-      const currentState = loadLicenseState();
-      const resetState = {
-        ...DEFAULT_STATE,
-        instanceId: currentState.instanceId
-      };
-      saveLicenseState(resetState);
-      return resetState;
-    }
-
-    // ==========================================
     // MODULE: src/reports/kine-report.js
     // ==========================================
     /**
-     * ErgoVision AI - Clinical Posture Report Generator (PDF / Print View)
-     * Génère une synthèse d'observance ergonomique et d'endurance posturale
-     * prête à être imprimée ou sauvegardée en PDF pour le kinésithérapeute / médecin du travail.
+     * ErgoVision AI - Posture Report Generator (PDF / Print View)
+     * Génère une synthèse d'habitudes ergonomiques et d'endurance posturale
+     * prête à être imprimée ou sauvegardée en PDF.
      */
-    
     
     
     
@@ -5416,7 +5044,7 @@
     /**
      * Génère le HTML imprimable et ouvre la boîte de dialogue d'impression native (Save as PDF)
      */
-    function printKineClinicalReport(logs, userName = "Patient Télétravailleur") {
+    function printKineClinicalReport(logs, userName = "Utilisateur") {
       const data = aggregateClinicalData(logs);
       const lang = getCurrentLanguage();
       const isEn = lang === 'en';
@@ -5427,8 +5055,8 @@
       const printWindow = window.open('', '_blank', 'width=800,height=900');
       if (!printWindow) {
         alert(isEn 
-          ? "Please allow pop-up windows to print your physio report." 
-          : "Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan kiné.");
+          ? "Please allow pop-up windows to print your posture report." 
+          : "Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan postural.");
         return;
       }
     
@@ -5437,7 +5065,7 @@
     <html lang="${lang}">
     <head>
       <meta charset="UTF-8">
-      <title>${isEn ? 'ErgoVision AI — Posture Observance & Physio Report' : 'ErgoVision AI — Bilan d\'Observance Posturale & Kinésithérapie'}</title>
+      <title>${isEn ? 'ErgoVision AI — Desk Posture & Mobility Summary' : 'ErgoVision AI — Bilan d\'Habitudes Posturales & Mobilité'}</title>
       <style>
         @page { size: A4 portrait; margin: 15mm; }
         body {
@@ -5543,12 +5171,12 @@
       <div class="header">
         <div>
           <div class="brand-title">🛡️ ErgoVision AI</div>
-          <div class="brand-sub">${isEn ? 'Ergonomic Copilot • Clinical Compliance & RSI Prevention Summary' : 'Copilote Ergonomique • Synthèse d\'Observance Clinique & Prévention TMS'}</div>
+          <div class="brand-sub">${isEn ? 'Ergonomic Copilot • Desk Posture Comfort & Mobility Summary' : 'Copilote Ergonomique • Synthèse de Confort Postural & Mobilité au Bureau'}</div>
         </div>
         <div class="meta-box">
           <strong>${isEn ? 'Date:' : 'Date :'}</strong> ${dateStr}<br>
-          <strong>${isEn ? 'User / Patient:' : 'Bénéficiaire :'}</strong> ${userName}<br>
-          <strong>${isEn ? 'Protocol:' : 'Protocole :'}</strong> ${isEn ? '100% Local (GDPR Compliant)' : '100% Local (RGPD Conforme)'}
+          <strong>${isEn ? 'User:' : 'Utilisateur :'}</strong> ${userName}<br>
+          <strong>${isEn ? 'Execution:' : 'Exécution :'}</strong> ${isEn ? '100% Local (Zero Cloud)' : '100% Locale (Zéro Cloud)'}
         </div>
       </div>
     
@@ -5600,21 +5228,21 @@
         </tbody>
       </table>
     
-      <div class="section-title">${isEn ? '2. Compliance with Physical Therapy Micro-Breaks' : '2. Observance des Micro-Pauses Kiné & Exercices du Dos'}</div>
+      <div class="section-title">${isEn ? '2. Active Mobility & Stretch Breaks' : '2. Pauses Mobilité & Étirements au Bureau'}</div>
       <p style="font-size: 12px; color: #475569;">
         ${isEn 
-          ? `The user completed <strong>${data.kineStretches} active stretch routine(s)</strong> during desk work sessions.`
-          : `Le patient a validé <strong>${data.kineStretches} session(s) d'étirement actif</strong> au cours de ses journées de travail.`
+          ? `The user completed <strong>${data.kineStretches} active mobility routine(s)</strong> during desk work sessions.`
+          : `L'utilisateur a réalisé <strong>${data.kineStretches} pause(s) mobilité et étirements</strong> au cours de ses sessions de bureau.`
         }
       </p>
     
-      <div class="section-title">${isEn ? '3. Practitioner Observations & Recommendations (Physio / Osteopath / Physician)' : '3. Observations & Recommandations du Praticien (Kiné / Ostéopathe / Médecin)'}</div>
+      <div class="section-title">${isEn ? '3. Personal Notes & Ergonomic Observations' : '3. Notes Personnelles & Observations Ergonomiques'}</div>
       <div class="notes-box">
-        <em style="color:#94a3b8; font-size:11px;">${isEn ? 'Dedicated area for handwritten practitioner notes during consultation:' : 'Zone réservée aux annotations manuscrites du praticien lors de la consultation :'}</em>
+        <em style="color:#94a3b8; font-size:11px;">${isEn ? 'Dedicated area for personal or ergonomic advisor notes:' : 'Zone réservée aux annotations personnelles ou ergonomiques :'}</em>
       </div>
     
       <div class="footer">
-        <span>${isEn ? 'Non-diagnostic ergonomic hygiene document — ErgoVision AI (Ethical Annual Pass)' : 'Document d\'hygiène ergonomique non diagnostique — ErgoVision AI v3.0 (Pass Éthique Annuel)'}</span>
+        <span>${isEn ? 'General wellness & ergonomic comfort document (Non-medical, non-diagnostic) — ErgoVision AI (100% Free & Open-Source MIT)' : 'Document de bien-être et d\'ergonomie générale (Non médical, non diagnostique) — ErgoVision AI (100% Gratuit & Open-Source MIT)'}</span>
         <span>${isEn ? 'Local WebAssembly processing • Zero video storage' : 'Traitement local WebAssembly • Aucune image vidéo stockée'}</span>
       </div>
     
@@ -6136,7 +5764,6 @@
     
     
     
-    
     // DOM References
     const videoElement = document.getElementById('input_video');
     const canvasElement = document.getElementById('output_canvas');
@@ -6625,23 +6252,15 @@
           const tiltThreshold = 0.11 * sens;
           const distanceThreshold = 0.22 * sens;
     
-          const flags = getFeatureFlags();
-    
           updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold, 'pillNeck');
-          if (flags.gaugeShoulderSym) {
-            updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold, 'pillShoulder');
-          }
-          if (flags.gaugeHeadTilt) {
-            updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold, 'pillTilt');
-          }
-          if (flags.gaugeScreenDist) {
-            updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold), 'pillDistance');
-          }
+          updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold, 'pillShoulder');
+          updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold, 'pillTilt');
+          updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold), 'pillDistance');
     
           const isNeckBad = neckDelta > neckThreshold;
-          const isShoulderBad = flags.gaugeShoulderSym && (shoulderDelta > shoulderThreshold);
-          const isTiltBad = flags.gaugeHeadTilt && (tiltDelta > tiltThreshold);
-          const isDistanceBad = flags.gaugeScreenDist && (distanceIncrease > distanceThreshold);
+          const isShoulderBad = shoulderDelta > shoulderThreshold;
+          const isTiltBad = tiltDelta > tiltThreshold;
+          const isDistanceBad = distanceIncrease > distanceThreshold;
           const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !eyeRestManager.isEyeRestActive;
     
           totalFrames++;
@@ -6795,7 +6414,7 @@
       });
     
       const brandSub = document.querySelector('.brand-sub');
-      if (brandSub) brandSub.innerText = lang === 'fr' ? 'Rééducation Posturale • Sessions Ciblées' : 'Postural Rehabilitation • Targeted Sessions';
+      if (brandSub) brandSub.innerText = t('brand_sub');
     
       // Gauges titles & descriptions
       const cardNeckTitle = document.querySelector('#cardNeck .gauge-title-box span');
@@ -6853,7 +6472,7 @@
       if (btnClearSpan) btnClearSpan.innerText = t('btn_clear_logs');
       if (btnToggleAnalyticsSpan) btnToggleAnalyticsSpan.innerText = t('analytics_toggle_btn');
     
-      const footer = document.querySelector('footer');
+      const footer = document.getElementById('footerText');
       if (footer) footer.innerText = t('footer_text');
     
       // Mise à jour des pilules d'état cliniques
@@ -6880,7 +6499,9 @@
     
       renderAllLogs();
       refreshAnalyticsDashboard();
-      updateLicenseUI();
+      if (btnPiP) {
+        btnPiP.setAttribute('title', t('btn_pip'));
+      }
     }
     
     function toggleLanguage() {
@@ -6953,79 +6574,6 @@
     }
     
     // ----------------------------------------------------
-    // LICENSE GATE & FREEMIUM UI
-    // ----------------------------------------------------
-    function updateLicenseUI() {
-      const flags = getFeatureFlags();
-      const proActive = isProActive();
-      const remainingDays = getRemainingDays();
-    
-      // Topbar badge
-      const btnProStatus = document.getElementById('btnProStatus');
-      const labelProBadge = document.getElementById('labelProBadge');
-      if (btnProStatus && labelProBadge) {
-        if (proActive) {
-          btnProStatus.classList.add('active-pro');
-          labelProBadge.innerText = `🛡️ ${remainingDays}j`;
-        } else {
-          btnProStatus.classList.remove('active-pro');
-          labelProBadge.innerText = t('pro_badge_free') || '✨ Pass 7€/an';
-        }
-      }
-    
-      // Jauges verrouillées
-      ['cardShoulder', 'cardTilt', 'cardDistance'].forEach(cardId => {
-        const cardEl = document.getElementById(cardId);
-        if (!cardEl) return;
-    
-        let overlay = cardEl.querySelector('.gauge-lock-overlay');
-        if (!flags.gaugeShoulderSym) {
-          cardEl.classList.add('gauge-locked');
-          if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'gauge-lock-overlay';
-            overlay.setAttribute('title', t('lock_tooltip_gauge'));
-            overlay.innerHTML = `
-              <span class="lock-badge">🔒 ${t('pro_badge_free')}</span>
-            `;
-            overlay.addEventListener('click', openLicenseModal);
-            cardEl.appendChild(overlay);
-          }
-        } else {
-          cardEl.classList.remove('gauge-locked');
-          if (overlay) overlay.remove();
-        }
-      });
-    
-      // Bouton PiP
-      if (btnPiP) {
-        btnPiP.setAttribute('title', flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`);
-      }
-    }
-    
-    function openLicenseModal() {
-      const modal = document.getElementById('licenseModal');
-      if (!modal) return;
-      const feedback = document.getElementById('licenseFeedback');
-      if (feedback) feedback.innerText = '';
-      if (typeof modal.showModal === 'function') {
-        modal.showModal();
-      } else {
-        modal.setAttribute('open', '');
-      }
-    }
-    
-    function closeLicenseModal() {
-      const modal = document.getElementById('licenseModal');
-      if (!modal) return;
-      if (typeof modal.close === 'function') {
-        modal.close();
-      } else {
-        modal.removeAttribute('open');
-      }
-    }
-    
-    // ----------------------------------------------------
     // EVENT LISTENERS BINDING
     // ----------------------------------------------------
     document.getElementById('btnStartCamera').addEventListener('click', () => startCamera());
@@ -7053,12 +6601,6 @@
     
     if (btnPiP) {
       btnPiP.addEventListener('click', async () => {
-        const flags = getFeatureFlags();
-        if (!flags.pipMiniWindow) {
-          openLicenseModal();
-          return;
-        }
-    
         try {
           const active = await toggleAlwaysOnTopPiP({
             canvasElement,
@@ -7142,40 +6684,6 @@
         if (e.target.checked) {
           await requestNotifPermission();
           chkNotifToggle.checked = Notification.permission === "granted";
-        }
-      });
-    }
-    
-    const btnPro = document.getElementById('btnProStatus');
-    if (btnPro) btnPro.addEventListener('click', openLicenseModal);
-    
-    const btnCloseLicense = document.getElementById('btnCloseLicenseModal');
-    if (btnCloseLicense) btnCloseLicense.addEventListener('click', closeLicenseModal);
-    
-    const licenseForm = document.getElementById('licenseActivationForm');
-    if (licenseForm) {
-      licenseForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const input = document.getElementById('inputLicenseKey');
-        const feedback = document.getElementById('licenseFeedback');
-        const key = (input.value || '').trim();
-        if (!key) return;
-    
-        feedback.style.color = 'var(--fluent-brand)';
-        feedback.innerText = 'Vérification de la clé...';
-    
-        const res = await activateLicenseKey(key);
-        if (res.success) {
-          feedback.style.color = 'var(--status-success)';
-          feedback.innerText = t('license_success_active');
-          input.value = '';
-          updateLicenseUI();
-          setTimeout(() => closeLicenseModal(), 1800);
-        } else {
-          feedback.style.color = 'var(--status-danger)';
-          feedback.innerText = res.error === 'network_error' 
-            ? t('license_err_network') 
-            : t('license_err_invalid');
         }
       });
     }
@@ -7285,11 +6793,6 @@
     });
     
     document.getElementById('btnPrintKineReport').addEventListener('click', () => {
-      const flags = getFeatureFlags();
-      if (!flags.kinePdfReport) {
-        openLicenseModal();
-        return;
-      }
       printKineClinicalReport(dailyLogs);
     });
     
@@ -7355,7 +6858,6 @@
     dailyLogs = loadDailyLogs(todayKey);
     renderAllLogs();
     resetCurrentModeTimer();
-    updateLicenseUI();
     
     // ----------------------------------------------------
     // INITIALISATION MODE POP-OUT & MINIATURE AUTONOME

@@ -20,9 +20,6 @@ import {
 import { KineRoutineManager } from './kine/routine-timer.js';
 import { KineStudioView } from './ui/kine-studio-view.js';
 import { EyeRestManager } from './pacing/eye-rest-timer.js';
-import { 
-  isProActive, getRemainingDays, getFeatureFlags, activateLicenseKey, loadLicenseState 
-} from './license/license-gate.js';
 import { printKineClinicalReport } from './reports/kine-report.js';
 import { renderAnalyticsDashboard } from './ui/analytics-view.js';
 
@@ -514,23 +511,15 @@ function onResults(results) {
       const tiltThreshold = 0.11 * sens;
       const distanceThreshold = 0.22 * sens;
 
-      const flags = getFeatureFlags();
-
       updateGauge('cardNeck', 'badgeNeck', 'fillNeck', neckDelta / neckThreshold, 'pillNeck');
-      if (flags.gaugeShoulderSym) {
-        updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold, 'pillShoulder');
-      }
-      if (flags.gaugeHeadTilt) {
-        updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold, 'pillTilt');
-      }
-      if (flags.gaugeScreenDist) {
-        updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold), 'pillDistance');
-      }
+      updateGauge('cardShoulder', 'badgeShoulder', 'fillShoulder', shoulderDelta / shoulderThreshold, 'pillShoulder');
+      updateGauge('cardTilt', 'badgeTilt', 'fillTilt', tiltDelta / tiltThreshold, 'pillTilt');
+      updateGauge('cardDistance', 'badgeDistance', 'fillDistance', Math.max(0, distanceIncrease / distanceThreshold), 'pillDistance');
 
       const isNeckBad = neckDelta > neckThreshold;
-      const isShoulderBad = flags.gaugeShoulderSym && (shoulderDelta > shoulderThreshold);
-      const isTiltBad = flags.gaugeHeadTilt && (tiltDelta > tiltThreshold);
-      const isDistanceBad = flags.gaugeScreenDist && (distanceIncrease > distanceThreshold);
+      const isShoulderBad = shoulderDelta > shoulderThreshold;
+      const isTiltBad = tiltDelta > tiltThreshold;
+      const isDistanceBad = distanceIncrease > distanceThreshold;
       const anyBad = (isNeckBad || isShoulderBad || isTiltBad || isDistanceBad) && !eyeRestManager.isEyeRestActive;
 
       totalFrames++;
@@ -684,7 +673,7 @@ function setLanguage(lang) {
   });
 
   const brandSub = document.querySelector('.brand-sub');
-  if (brandSub) brandSub.innerText = lang === 'fr' ? 'Rééducation Posturale • Sessions Ciblées' : 'Postural Rehabilitation • Targeted Sessions';
+  if (brandSub) brandSub.innerText = t('brand_sub');
 
   // Gauges titles & descriptions
   const cardNeckTitle = document.querySelector('#cardNeck .gauge-title-box span');
@@ -742,7 +731,7 @@ function setLanguage(lang) {
   if (btnClearSpan) btnClearSpan.innerText = t('btn_clear_logs');
   if (btnToggleAnalyticsSpan) btnToggleAnalyticsSpan.innerText = t('analytics_toggle_btn');
 
-  const footer = document.querySelector('footer');
+  const footer = document.getElementById('footerText');
   if (footer) footer.innerText = t('footer_text');
 
   // Mise à jour des pilules d'état cliniques
@@ -769,7 +758,9 @@ function setLanguage(lang) {
 
   renderAllLogs();
   refreshAnalyticsDashboard();
-  updateLicenseUI();
+  if (btnPiP) {
+    btnPiP.setAttribute('title', t('btn_pip'));
+  }
 }
 
 function toggleLanguage() {
@@ -842,79 +833,6 @@ function switchModalTab(tabId) {
 }
 
 // ----------------------------------------------------
-// LICENSE GATE & FREEMIUM UI
-// ----------------------------------------------------
-function updateLicenseUI() {
-  const flags = getFeatureFlags();
-  const proActive = isProActive();
-  const remainingDays = getRemainingDays();
-
-  // Topbar badge
-  const btnProStatus = document.getElementById('btnProStatus');
-  const labelProBadge = document.getElementById('labelProBadge');
-  if (btnProStatus && labelProBadge) {
-    if (proActive) {
-      btnProStatus.classList.add('active-pro');
-      labelProBadge.innerText = `🛡️ ${remainingDays}j`;
-    } else {
-      btnProStatus.classList.remove('active-pro');
-      labelProBadge.innerText = t('pro_badge_free') || '✨ Pass 7€/an';
-    }
-  }
-
-  // Jauges verrouillées
-  ['cardShoulder', 'cardTilt', 'cardDistance'].forEach(cardId => {
-    const cardEl = document.getElementById(cardId);
-    if (!cardEl) return;
-
-    let overlay = cardEl.querySelector('.gauge-lock-overlay');
-    if (!flags.gaugeShoulderSym) {
-      cardEl.classList.add('gauge-locked');
-      if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'gauge-lock-overlay';
-        overlay.setAttribute('title', t('lock_tooltip_gauge'));
-        overlay.innerHTML = `
-          <span class="lock-badge">🔒 ${t('pro_badge_free')}</span>
-        `;
-        overlay.addEventListener('click', openLicenseModal);
-        cardEl.appendChild(overlay);
-      }
-    } else {
-      cardEl.classList.remove('gauge-locked');
-      if (overlay) overlay.remove();
-    }
-  });
-
-  // Bouton PiP
-  if (btnPiP) {
-    btnPiP.setAttribute('title', flags.pipMiniWindow ? t('btn_pip') : `🔒 ${t('btn_pip')}`);
-  }
-}
-
-function openLicenseModal() {
-  const modal = document.getElementById('licenseModal');
-  if (!modal) return;
-  const feedback = document.getElementById('licenseFeedback');
-  if (feedback) feedback.innerText = '';
-  if (typeof modal.showModal === 'function') {
-    modal.showModal();
-  } else {
-    modal.setAttribute('open', '');
-  }
-}
-
-function closeLicenseModal() {
-  const modal = document.getElementById('licenseModal');
-  if (!modal) return;
-  if (typeof modal.close === 'function') {
-    modal.close();
-  } else {
-    modal.removeAttribute('open');
-  }
-}
-
-// ----------------------------------------------------
 // EVENT LISTENERS BINDING
 // ----------------------------------------------------
 document.getElementById('btnStartCamera').addEventListener('click', () => startCamera());
@@ -942,12 +860,6 @@ function showPopoutActiveState(active) {
 
 if (btnPiP) {
   btnPiP.addEventListener('click', async () => {
-    const flags = getFeatureFlags();
-    if (!flags.pipMiniWindow) {
-      openLicenseModal();
-      return;
-    }
-
     try {
       const active = await toggleAlwaysOnTopPiP({
         canvasElement,
@@ -1031,40 +943,6 @@ if (chkNotifToggle) {
     if (e.target.checked) {
       await requestNotifPermission();
       chkNotifToggle.checked = Notification.permission === "granted";
-    }
-  });
-}
-
-const btnPro = document.getElementById('btnProStatus');
-if (btnPro) btnPro.addEventListener('click', openLicenseModal);
-
-const btnCloseLicense = document.getElementById('btnCloseLicenseModal');
-if (btnCloseLicense) btnCloseLicense.addEventListener('click', closeLicenseModal);
-
-const licenseForm = document.getElementById('licenseActivationForm');
-if (licenseForm) {
-  licenseForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const input = document.getElementById('inputLicenseKey');
-    const feedback = document.getElementById('licenseFeedback');
-    const key = (input.value || '').trim();
-    if (!key) return;
-
-    feedback.style.color = 'var(--fluent-brand)';
-    feedback.innerText = 'Vérification de la clé...';
-
-    const res = await activateLicenseKey(key);
-    if (res.success) {
-      feedback.style.color = 'var(--status-success)';
-      feedback.innerText = t('license_success_active');
-      input.value = '';
-      updateLicenseUI();
-      setTimeout(() => closeLicenseModal(), 1800);
-    } else {
-      feedback.style.color = 'var(--status-danger)';
-      feedback.innerText = res.error === 'network_error' 
-        ? t('license_err_network') 
-        : t('license_err_invalid');
     }
   });
 }
@@ -1174,11 +1052,6 @@ document.getElementById('pacingForm').addEventListener('submit', (e) => {
 });
 
 document.getElementById('btnPrintKineReport').addEventListener('click', () => {
-  const flags = getFeatureFlags();
-  if (!flags.kinePdfReport) {
-    openLicenseModal();
-    return;
-  }
   printKineClinicalReport(dailyLogs);
 });
 
@@ -1244,7 +1117,6 @@ setLanguage(getCurrentLanguage());
 dailyLogs = loadDailyLogs(todayKey);
 renderAllLogs();
 resetCurrentModeTimer();
-updateLicenseUI();
 
 // ----------------------------------------------------
 // INITIALISATION MODE POP-OUT & MINIATURE AUTONOME

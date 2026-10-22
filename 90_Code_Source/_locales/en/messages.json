@@ -1,10 +1,10 @@
 {
   "extension_name": {
-    "message": "ErgoVision AI — Posture & Back Physio Guardian",
+    "message": "ErgoVision AI — Desk Posture & Mobility Coach",
     "description": "Extension name shown in Web Stores and browser toolbars"
   },
   "extension_description": {
-    "message": "Real-time 100% client-side biomechanical posture copilot preventing RSI, Text-Neck slump and guiding desk physiotherapy stretches.",
+    "message": "Real-time 100% client-side ergonomic copilot: posture reminders, 20-20-20 eye rest and desk mobility stretches.",
     "description": "Official extension description"
   }
 }

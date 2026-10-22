@@ -30,17 +30,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: Validate & Build Standalone Distribution
+      - name: Validate, Build & Test Site Distribution
         run: |
           node --check 90_Code_Source/src/app.js
           node tasks/build_standalone.js
-          mkdir -p public_dist
-          cp index.html public_dist/
-          cp -r 90_Code_Source public_dist/
-          cp -r 10_Design_et_Assets public_dist/
-          cp README.md public_dist/
-          cp README.fr.md public_dist/
-          cp LICENSE public_dist/
+          node tasks/build_site.js
+          node --test tasks/tests/release_free_and_site.test.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

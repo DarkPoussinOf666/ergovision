@@ -35,3 +35,4 @@ tasks/extract_modules.js
 tasks/build_modular_src.js
 tasks/build_vision_and_app.js
 dist/
+public_dist/

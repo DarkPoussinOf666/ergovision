@@ -47,7 +47,6 @@ function build() {
     { file: 'src/kine/routine-timer.js', name: 'routine' },
     { file: 'src/ui/kine-studio-view.js', name: 'kineStudioView' },
     { file: 'src/pacing/eye-rest-timer.js', name: 'eyeRest' },
-    { file: 'src/license/license-gate.js', name: 'licenseGate' },
     { file: 'src/reports/kine-report.js', name: 'kineReport' },
     { file: 'src/analytics/posture-analytics.js', name: 'analytics' },
     { file: 'src/ui/analytics-view.js', name: 'analyticsView' },

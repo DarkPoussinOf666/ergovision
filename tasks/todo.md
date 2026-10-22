@@ -385,6 +385,30 @@
 
 ---
 
+## 🌐 Phase 21 : Passage en 100 % Gratuit (MIT), Harmonisation Bien-être (MDR) & Site Vitrine Bilingue GitHub Pages [TERMINÉE]
+
+- [x] **Phase 21.1 : Lot A — Suppression du Verrou de Licence & Déblocage Intégral (100 % Gratuit)**
+  - [x] 21.1.1 Poser le tag Git d'archive `v3.6-freemium-archive` avant suppression.
+  - [x] 21.1.2 Supprimer `90_Code_Source/src/license/license-gate.js` et son entrée dans `tasks/build_standalone.js`.
+  - [x] 21.1.3 Nettoyer `90_Code_Source/src/app.js`, `src/reports/kine-report.js`, `90_Code_Source/index.html` et `90_Code_Source/css/style.css` (déblocage inconditionnel des 4 jauges, du PiP et du bilan PDF).
+  - [x] 21.1.4 Purger `api.lemonsqueezy.com` des CSP de `manifest.chrome.json` et `manifest.firefox.json`, et déclarer `data_collection_permissions: none` sur Firefox.
+- [x] **Phase 21.2 : Lot B — Repositionnement Sémantique « Bien-être & Ergonomie » (Conformité UE MDR 2017/745)**
+  - [x] 21.2.1 Mettre à jour `90_Code_Source/src/i18n/translations.js` (FR & EN) : remplacer le vocabulaire médical (« Rééducation », « Kiné », « Prévention des TMS ») par le lexique bien-être (« Session Posture », « Pause Mobilité & Étirements », « Bilan Postural », « Confort Postural »).
+  - [x] 21.2.2 Mettre à jour `90_Code_Source/_locales/fr/messages.json` et `_locales/en/messages.json`.
+  - [x] 21.2.3 Mettre à jour les libellés statiques dans `90_Code_Source/index.html`, `src/ui/kine-studio-view.js` et `src/reports/kine-report.js`.
+- [x] **Phase 21.3 : Lot C — Site Vitrine Statique Bilingue (FR/EN), Pages Légales & Workflow GitHub Pages**
+  - [x] 21.3.1 Créer la feuille de style du site vitrine `90_Code_Source/site/css/site.css` basée sur Fluent UI 2 (`tokens.css`).
+  - [x] 21.3.2 Créer les contenus bilingues `90_Code_Source/site/content/fr.json` et `en.json` (Landing, Guide d'utilisation, Politique de Confidentialité Zero-Data, Mentions Légales non-pro & Avertissement MDR, Contact via GitHub Issues).
+  - [x] 21.3.3 Créer le générateur statique `tasks/build_site.js` produisant `public_dist/` (`index.html`, `guide.html`, `privacy.html`, `legal.html`, `app.html` + `/en/*.html`).
+  - [x] 21.3.4 Mettre à jour `.github/workflows/deploy.yml` pour compiler, tester et déployer proprement `public_dist/`.
+- [x] **Phase 21.4 : Lot D — Tests Automatisés, Validation Navigateur & Documentation**
+  - [x] 21.4.1 Créer et exécuter la suite de tests `tasks/tests/release_free_and_site.test.js` (`node --test` : 5/5 tests passés au vert).
+  - [x] 21.4.2 Compiler le standalone (`node tasks/build_standalone.js`), les extensions (`node tasks/build_extension.js`) et le site (`node tasks/build_site.js`).
+  - [x] 21.4.3 Valider visuellement et fonctionnellement les pages FR/EN et l'application via `@browser` (`chrome-devtools-mcp` : 0 jauge verrouillée, 0 erreur console, rendu Light/Dark validé).
+  - [x] 21.4.4 Mettre à jour `01_PRD.md`, `README.md`, `README.fr.md`, `STORE_SUBMISSION_GUIDE.md` et `tasks/lessons.md`.
+
+---
+
 ## Logique et Apprentissage
 
 ### Phases 11 & 12 : V2.0 et V2.1 — Kiné du Dos & Hygiène Visuelle Oculaire
