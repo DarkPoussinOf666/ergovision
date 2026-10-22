@@ -61,7 +61,7 @@ Ce guide fournit l'ensemble des textes, justifications et procédures à copier-
 
 ## 3. Politique de Confidentialité & Mentions Légales (GitHub Pages)
 
-- **URL de la Politique de Confidentialité (FR)** : `https://<VOTRE_COMPTE>.github.io/ErgoVision/privacy.html`
-- **URL de la Politique de Confidentialité (EN)** : `https://<VOTRE_COMPTE>.github.io/ErgoVision/en/privacy.html`
-- **URL des Mentions Légales & Contact** : `https://<VOTRE_COMPTE>.github.io/ErgoVision/legal.html`
-- **Support Utilisateur** : `https://github.com/<VOTRE_COMPTE>/ErgoVision/issues`
+- **URL de la Politique de Confidentialité (FR)** : `https://DarkPoussinOf666.github.io/ergovision/privacy.html`
+- **URL de la Politique de Confidentialité (EN)** : `https://DarkPoussinOf666.github.io/ergovision/en/privacy.html`
+- **URL des Mentions Légales & Contact** : `https://DarkPoussinOf666.github.io/ergovision/legal.html`
+- **Support Utilisateur** : `https://github.com/DarkPoussinOf666/ergovision/issues`

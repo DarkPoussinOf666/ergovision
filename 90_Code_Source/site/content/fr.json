@@ -5,8 +5,8 @@
   "otherLangPrefix": "./en/",
   "rootPrefix": "./",
   "appUrl": "./app.html",
-  "githubIssuesUrl": "https://github.com/ErgoVision-AI/ErgoVision/issues",
-  "githubRepoUrl": "https://github.com/ErgoVision-AI/ErgoVision",
+  "githubIssuesUrl": "https://github.com/DarkPoussinOf666/ergovision/issues",
+  "githubRepoUrl": "https://github.com/DarkPoussinOf666/ergovision",
   "nav": {
     "home": "Accueil",
     "guide": "Guide d'utilisation",
