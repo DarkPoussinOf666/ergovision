@@ -31,6 +31,10 @@ const videoElement = document.getElementById('input_video');
 const canvasElement = document.getElementById('output_canvas');
 const canvasCtx = canvasElement.getContext('2d');
 const pipVideo = document.getElementById('pip_video');
+const isFirefox = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent);
+if (isFirefox) {
+  document.body.classList.add('is-firefox');
+}
 const cameraPlaceholder = document.getElementById('cameraPlaceholder');
 const cameraSelect = document.getElementById('cameraSelect');
 const btnStopCam = document.getElementById('btnStopCam');
@@ -619,6 +623,14 @@ async function startCamera(deviceId = null) {
   try {
     await startCameraStream(videoElement, onResults, deviceId);
     cameraPlaceholder.classList.add('hidden');
+    if (pipVideo && canvasElement.captureStream) {
+      try {
+        if (!pipVideo.srcObject) {
+          pipVideo.srcObject = canvasElement.captureStream(25);
+        }
+        pipVideo.play().catch(() => {});
+      } catch (_) {}
+    }
     btnStopCam.style.display = 'inline-flex';
     const telemetryBadge = document.getElementById('videoTelemetryBadge');
     if (telemetryBadge) telemetryBadge.style.display = 'flex';
@@ -943,6 +955,9 @@ if (btnPiP) {
         t
       });
       btnPiP.classList.toggle('active', !!active);
+      if (isFirefox) {
+        setStatusUI('var(--fluent-brand)', t('firefox_pip_hint'));
+      }
     } catch (e) {
       console.error("Erreur lors de l'activation de la miniature Always-On-Top :", e);
       alert(e.message || "Erreur lors de l'activation de la miniature Always-On-Top.");

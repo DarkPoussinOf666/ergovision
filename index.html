@@ -798,6 +798,24 @@
       display: block !important;
     }
 
+    /* Support Firefox Natif : la vidéo est superposée au canvas pour afficher le toggle bleu natif PiP au survol */
+    body.is-firefox .viewport {
+      position: relative;
+    }
+
+    body.is-firefox video#pip_video {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      z-index: 2 !important;
+      display: block !important;
+      background: transparent;
+    }
+
     canvas#output_canvas {
       width: 100%;
       height: 100%;
@@ -3193,6 +3211,7 @@
         btn_popout: "Mini-Fenêtre Décrochée",
         btn_popout_expand: "Agrandir en grand écran",
         sensor_inactive_error: "Activez d'abord la caméra avant d'ouvrir la miniature.",
+        firefox_pip_hint: "Sur Firefox : Cliquez sur l'icône bleue ⧉ sur la vidéo (ou Ctrl+Shift+]) pour épingler au premier plan !",
         popout_active_title: "ErgoVision est actif dans votre mini-fenêtre",
         popout_active_desc: "Vous pouvez replier ou fermer ce panneau latéral en toute tranquillité pour libérer votre écran. Votre posture reste protégée.",
         btn_reclaim_popout: "↩️ Rapatrier dans ce panneau",
@@ -3410,6 +3429,7 @@
         btn_popout: "Detached Mini-Window",
         btn_popout_expand: "Expand to full view",
         sensor_inactive_error: "Please start the camera before opening the floating miniature.",
+        firefox_pip_hint: "On Firefox: Click the blue ⧉ overlay on the video (or Ctrl+Shift+]) to pin Always-On-Top!",
         popout_active_title: "ErgoVision is active in your mini-window",
         popout_active_desc: "You can safely collapse or close this side panel to free up your workspace. Posture tracking remains active.",
         btn_reclaim_popout: "↩️ Return to this panel",
@@ -6122,6 +6142,10 @@
     const canvasElement = document.getElementById('output_canvas');
     const canvasCtx = canvasElement.getContext('2d');
     const pipVideo = document.getElementById('pip_video');
+    const isFirefox = typeof navigator !== 'undefined' && /firefox/i.test(navigator.userAgent);
+    if (isFirefox) {
+      document.body.classList.add('is-firefox');
+    }
     const cameraPlaceholder = document.getElementById('cameraPlaceholder');
     const cameraSelect = document.getElementById('cameraSelect');
     const btnStopCam = document.getElementById('btnStopCam');
@@ -6710,6 +6734,14 @@
       try {
         await startCameraStream(videoElement, onResults, deviceId);
         cameraPlaceholder.classList.add('hidden');
+        if (pipVideo && canvasElement.captureStream) {
+          try {
+            if (!pipVideo.srcObject) {
+              pipVideo.srcObject = canvasElement.captureStream(25);
+            }
+            pipVideo.play().catch(() => {});
+          } catch (_) {}
+        }
         btnStopCam.style.display = 'inline-flex';
         const telemetryBadge = document.getElementById('videoTelemetryBadge');
         if (telemetryBadge) telemetryBadge.style.display = 'flex';
@@ -7034,6 +7066,9 @@
             t
           });
           btnPiP.classList.toggle('active', !!active);
+          if (isFirefox) {
+            setStatusUI('var(--fluent-brand)', t('firefox_pip_hint'));
+          }
         } catch (e) {
           console.error("Erreur lors de l'activation de la miniature Always-On-Top :", e);
           alert(e.message || "Erreur lors de l'activation de la miniature Always-On-Top.");
