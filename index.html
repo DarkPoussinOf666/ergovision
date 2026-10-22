@@ -2427,18 +2427,18 @@
           <svg id="iconNotifsBell" class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         </button>
         <div id="notifsDropdown" class="notifs-dropdown" style="display:none;" role="region" aria-label="Paramètres audio et notifications">
-          <div class="notifs-dropdown-title">Alertes &amp; Signaux</div>
+          <div class="notifs-dropdown-title" data-i18n="title_alerts_signals">Alertes &amp; Signaux</div>
           
           <div class="notifs-row">
             <label style="display:flex; justify-content:space-between; align-items:center; width:100%; cursor:pointer;">
-              <span style="font-weight:600; font-size:0.8rem;">Signal Audio</span>
+              <span style="font-weight:600; font-size:0.8rem;" data-i18n="label_audio_signal">Signal Audio</span>
               <input type="checkbox" id="chkAudioToggle" checked>
             </label>
           </div>
 
           <div class="notifs-row" id="rowAudioVolume">
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:0.25rem;">
-              <span>Volume</span>
+              <span data-i18n="label_volume">Volume</span>
               <span id="labelDropdownVol">15%</span>
             </div>
             <input type="range" id="rangeDropdownVol" min="0" max="100" step="5" value="15" style="width:100%;">
@@ -2446,7 +2446,7 @@
 
           <div class="notifs-row">
             <label style="display:flex; justify-content:space-between; align-items:center; width:100%; cursor:pointer;">
-              <span style="font-weight:600; font-size:0.8rem;">Notifications OS</span>
+              <span style="font-weight:600; font-size:0.8rem;" data-i18n="label_os_notifications">Notifications OS</span>
               <input type="checkbox" id="chkNotifToggle">
             </label>
           </div>
@@ -2653,7 +2653,7 @@
           <div class="section-title" style="border:none; padding:0;">
             <div class="section-title-left">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span id="timerTitle">Session Rééducation</span>
+              <span id="timerTitle" data-i18n="title_session">Session Rééducation</span>
             </div>
             <div style="display:flex; align-items:center; gap:0.4rem;">
               <button type="button" id="btnPacingSettings" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Régler la durée de la session">
@@ -2677,15 +2677,15 @@
             </div>
             <div class="session-digits-box">
               <div id="timerDigits" class="mono-big">30:00</div>
-              <div id="timerSub" class="widget-sub">Session ciblée conseillée : 2 × 30 min / jour</div>
+              <div id="timerSub" class="widget-sub" data-i18n="sub_session_target">Session ciblée conseillée : 2 × 30 min / jour</div>
             </div>
           </div>
           
           <div style="margin-top:0.75rem; display:flex; gap:0.5rem; justify-content:space-between; align-items:center; border-top:1px solid var(--fluent-stroke-subtle); padding-top:0.6rem;">
             <button type="button" id="btnOpenKineRoutine" class="btn-action" style="font-size:0.74rem; padding:0.35rem 0.7rem; border-color:var(--fluent-brand-border); background:var(--fluent-brand-tint); color:var(--fluent-brand); font-weight:600;">
-              <span>🧘 Étirements Kiné (5 min)</span>
+              <span id="labelKineRoutine" data-i18n="btn_kine_routine">🧘 Étirements Kiné (5 min)</span>
             </button>
-            <span id="sessionStatusBadge" style="font-size:0.72rem; color:var(--fluent-fg-muted);">En attente de calibration</span>
+            <span id="sessionStatusBadge" data-i18n="session_waiting_calib" style="font-size:0.72rem; color:var(--fluent-fg-muted);">En attente de calibration</span>
           </div>
         </div>
 
@@ -2693,12 +2693,12 @@
           <div class="section-title" style="border:none; padding:0;">
             <div class="section-title-left">
               <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span>Maintien Neutre</span>
+              <span data-i18n="title_neutral">Maintien Neutre</span>
             </div>
             <span id="alertCounterBadge" style="color:var(--status-success); font-size:0.75rem; font-weight:600;">0 alerte</span>
           </div>
           <div id="scoreDigits" class="mono-big" style="color:var(--status-success);">100%</div>
-          <div class="widget-sub">Ratio de temps en posture conforme</div>
+          <div class="widget-sub" data-i18n="sub_neutral">Ratio de temps en posture conforme</div>
           <div class="score-mini-track" aria-hidden="true">
             <div id="scoreMiniFill" class="score-mini-fill" style="width: 100%;"></div>
           </div>
@@ -3178,19 +3178,45 @@
         analytics_chart_title: "Évolution Quotidienne du Maintien Neutre (%)",
         analytics_chart_target: "Cible clinique recommandée : 80%",
         analytics_dist_title: "Répartition Biomécanique des Dérives",
-        analytics_btn_seed: "🧪 Simuler 7 jours",
-        analytics_btn_seed_title: "Injecter des données d'exemple réalistes sur 7 jours pour tester le dashboard",
         analytics_btn_clear_history: "Effacer l'historique",
-        analytics_seed_success: "7 jours d'historique de démonstration ont été générés !",
         analytics_clear_confirm: "Voulez-vous vraiment effacer tout l'historique multi-jours ?",
-        analytics_no_data: "Aucune donnée sur cette période. Complétez une session de 30 min ou cliquez sur « 🧪 Simuler 7 jours ».",
+        analytics_no_data: "Aucune donnée sur cette période. Complétez votre première session de rééducation (30 min) pour afficher votre progression.",
         analytics_trend_up: "en hausse",
         analytics_trend_down: "en baisse",
         analytics_trend_stable: "stable",
         analytics_zone_neck: "Nuque (C7-C8)",
         analytics_zone_shoulder: "Épaules / Trapèzes",
         analytics_zone_tilt: "Inclinaison latérale",
-        analytics_zone_distance: "Distance écran"
+        analytics_zone_distance: "Distance écran",
+    
+        // Dropdown Notifs & Signaux
+        title_alerts_signals: "Alertes & Signaux",
+        label_audio_signal: "Signal Audio",
+        label_volume: "Volume",
+        label_os_notifications: "Notifications OS",
+    
+        // Session Rééducation & Télémétrie
+        title_session: "Session Rééducation",
+        sub_session_target: "Session ciblée conseillée : 2 × 30 min / jour",
+        btn_kine_routine: "🧘 Étirements Kiné (5 min)",
+        session_waiting_calib: "En attente de calibration",
+        session_completed_msg: "Bravo ! Session terminée. Bougez librement.",
+        session_completed_badge: "Session terminée • Reposez-vous !",
+        session_notif_title: "ErgoVision AI — Session accomplie !",
+        session_notif_body: "Bravo pour vos {min} min de rééducation posturale (Maintien : {score}%). Relâchez vos muscles !",
+        session_log_title: "Session Rééducation ({min} min) terminée",
+    
+        // Capteur & Calibration Point Zéro
+        sensor_starting: "Démarrage du capteur...",
+        sensor_active: "Capteur actif • Calibrez votre point zéro",
+        sensor_standby: "Capteur en attente",
+        sensor_error: "Échec de l'accès à la caméra",
+        point_zero_locked: "Point Zéro verrouillé",
+    
+        // Pilules d'état cliniques
+        pill_ok: "OK",
+        pill_attn: "ATTN",
+        pill_derive: "DÉRIVE"
       },
       en: {
         brand_sub: "Ergonomic Copilot • Real-Time RSI Prevention",
@@ -3368,19 +3394,45 @@
         analytics_chart_title: "Daily Neutral Posture Evolution (%)",
         analytics_chart_target: "Recommended clinical target: 80%",
         analytics_dist_title: "Biomechanical Deviation Breakdown",
-        analytics_btn_seed: "🧪 Mock 7 days",
-        analytics_btn_seed_title: "Inject realistic 7-day sample data to test the dashboard",
         analytics_btn_clear_history: "Clear history",
-        analytics_seed_success: "7 days of mock history have been generated!",
         analytics_clear_confirm: "Are you sure you want to clear all multi-day history?",
-        analytics_no_data: "No data in this period. Complete a 30-min session or click '🧪 Mock 7 days'.",
+        analytics_no_data: "No data in this period. Complete your first 30-min posture session to view your progress.",
         analytics_trend_up: "improving",
         analytics_trend_down: "declining",
         analytics_trend_stable: "stable",
         analytics_zone_neck: "Neck (C7-C8)",
         analytics_zone_shoulder: "Shoulders / Traps",
         analytics_zone_tilt: "Lateral Head Tilt",
-        analytics_zone_distance: "Screen Proximity"
+        analytics_zone_distance: "Screen Proximity",
+    
+        // Dropdown Alerts & Signals
+        title_alerts_signals: "Alerts & Signals",
+        label_audio_signal: "Audio Alert",
+        label_volume: "Volume",
+        label_os_notifications: "OS Notifications",
+    
+        // Session Rehabilitation & Telemetry
+        title_session: "Rehabilitation Session",
+        sub_session_target: "Recommended targeted session: 2 × 30 min / day",
+        btn_kine_routine: "🧘 Physio Stretches (5 min)",
+        session_waiting_calib: "Awaiting calibration",
+        session_completed_msg: "Well done! Session complete. Move freely.",
+        session_completed_badge: "Session complete • Rest your eyes & back!",
+        session_notif_title: "ErgoVision AI — Session accomplished!",
+        session_notif_body: "Well done on your {min} min postural session (Alignment: {score}%). Relax your muscles!",
+        session_log_title: "Posture Session ({min} min) completed",
+    
+        // Sensor & Calibration Zero Point
+        sensor_starting: "Starting optical sensor...",
+        sensor_active: "Sensor active • Calibrate zero point",
+        sensor_standby: "Sensor on standby",
+        sensor_error: "Camera access failed",
+        point_zero_locked: "Zero Point locked",
+    
+        // Clinical Deviation Pills
+        pill_ok: "OK",
+        pill_attn: "ATTN",
+        pill_derive: "SLUMP"
       }
     };
     
@@ -5005,13 +5057,16 @@
     function printKineClinicalReport(logs, userName = "Patient Télétravailleur") {
       const data = aggregateClinicalData(logs);
       const lang = getCurrentLanguage();
-      const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+      const isEn = lang === 'en';
+      const dateStr = new Date().toLocaleDateString(isEn ? 'en-US' : 'fr-FR', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
     
       const printWindow = window.open('', '_blank', 'width=800,height=900');
       if (!printWindow) {
-        alert("Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan kiné.");
+        alert(isEn 
+          ? "Please allow pop-up windows to print your physio report." 
+          : "Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan kiné.");
         return;
       }
     
@@ -5020,7 +5075,7 @@
     <html lang="${lang}">
     <head>
       <meta charset="UTF-8">
-      <title>ErgoVision AI — Bilan d'Observance Posturale & Kinésithérapie</title>
+      <title>${isEn ? 'ErgoVision AI — Posture Observance & Physio Report' : 'ErgoVision AI — Bilan d\'Observance Posturale & Kinésithérapie'}</title>
       <style>
         @page { size: A4 portrait; margin: 15mm; }
         body {
@@ -5126,76 +5181,79 @@
       <div class="header">
         <div>
           <div class="brand-title">🛡️ ErgoVision AI</div>
-          <div class="brand-sub">Copilote Ergonomique • Synthèse d'Observance Clinique & Prévention TMS</div>
+          <div class="brand-sub">${isEn ? 'Ergonomic Copilot • Clinical Compliance & RSI Prevention Summary' : 'Copilote Ergonomique • Synthèse d\'Observance Clinique & Prévention TMS'}</div>
         </div>
         <div class="meta-box">
-          <strong>Date :</strong> ${dateStr}<br>
-          <strong>Bénéficiaire :</strong> ${userName}<br>
-          <strong>Protocole :</strong> 100% Local (RGPD Conforme)
+          <strong>${isEn ? 'Date:' : 'Date :'}</strong> ${dateStr}<br>
+          <strong>${isEn ? 'User / Patient:' : 'Bénéficiaire :'}</strong> ${userName}<br>
+          <strong>${isEn ? 'Protocol:' : 'Protocole :'}</strong> ${isEn ? '100% Local (GDPR Compliant)' : '100% Local (RGPD Conforme)'}
         </div>
       </div>
     
       <div class="card-grid">
         <div class="card">
           <div class="card-val" style="color:#107c41;">${data.averageNeutralScore}%</div>
-          <div class="card-lbl">Maintien en Posture Neutre</div>
+          <div class="card-lbl">${isEn ? 'Neutral Alignment Ratio' : 'Maintien en Posture Neutre'}</div>
         </div>
         <div class="card">
           <div class="card-val" style="color:#0f6cbd;">${data.completedCycles}</div>
-          <div class="card-lbl">Cycles Ergonomiques Réalisés</div>
+          <div class="card-lbl">${isEn ? 'Completed Sessions' : 'Cycles Ergonomiques Réalisés'}</div>
         </div>
         <div class="card">
           <div class="card-val" style="color:#d13438;">${data.totalAlerts}</div>
-          <div class="card-lbl">Dérives Posturales Corrigées</div>
+          <div class="card-lbl">${isEn ? 'Corrected Slumps & Alerts' : 'Dérives Posturales Corrigées'}</div>
         </div>
       </div>
     
-      <div class="section-title">1. Répartition des Sollicitations Mécaniques Observées</div>
+      <div class="section-title">${isEn ? '1. Distribution of Biomechanical Strain Observed' : '1. Répartition des Sollicitations Mécaniques Observées'}</div>
       <table>
         <thead>
           <tr>
-            <th>Zone Rachidienne Surveillée</th>
-            <th>Compensations Détectées</th>
-            <th>Protocole de Décharge Recommandé</th>
+            <th>${isEn ? 'Monitored Spinal Region' : 'Zone Rachidienne Surveillée'}</th>
+            <th>${isEn ? 'Compensations Detected' : 'Compensations Détectées'}</th>
+            <th>${isEn ? 'Recommended Decompression Protocol' : 'Protocole de Décharge Recommandé'}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Rachis Cervical (C5-C7)</strong> — Text-Neck / Projection antérieure</td>
-            <td>${data.neckAlerts} alertes</td>
-            <td>Rétractions axiales guidées (McKenzie chin tuck)</td>
+            <td><strong>${isEn ? 'Cervical Spine (C5-C7)' : 'Rachis Cervical (C5-C7)'}</strong> — ${isEn ? 'Text-Neck / Forward slump' : 'Text-Neck / Projection antérieure'}</td>
+            <td>${data.neckAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+            <td>${isEn ? 'Guided axial retractions (McKenzie chin tuck)' : 'Rétractions axiales guidées (McKenzie chin tuck)'}</td>
           </tr>
           <tr>
-            <td><strong>Ceinture Scapulaire</strong> — Hausse réflexe des trapèzes</td>
-            <td>${data.shoulderAlerts} alertes</td>
-            <td>Déroulement scapulaire & posture Brügger</td>
+            <td><strong>${isEn ? 'Scapular Girdle' : 'Ceinture Scapulaire'}</strong> — ${isEn ? 'Trapezius shrug & tension' : 'Hausse réflexe des trapèzes'}</td>
+            <td>${data.shoulderAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+            <td>${isEn ? 'Scapular rolling & Brügger postural relief' : 'Déroulement scapulaire & posture Brügger'}</td>
           </tr>
           <tr>
-            <td><strong>Asymétrie Latérale</strong> — Inclinaison de la tête</td>
-            <td>${data.tiltAlerts} alertes</td>
-            <td>Réalignement bilatéral et étirement trapèze moyen</td>
+            <td><strong>${isEn ? 'Lateral Asymmetry' : 'Asymétrie Latérale'}</strong> — ${isEn ? 'Sustained head tilt' : 'Inclinaison de la tête'}</td>
+            <td>${data.tiltAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+            <td>${isEn ? 'Bilateral realignment & trapezius stretch' : 'Réalignement bilatéral et étirement trapèze moyen'}</td>
           </tr>
           <tr>
-            <td><strong>Proximité Visuelle & Charnière Dorsale</strong> (&lt;50cm)</td>
-            <td>${data.distanceAlerts} alertes</td>
-            <td>Règle oculaire 20-20-20 & Extension thoracique sur dossier</td>
+            <td><strong>${isEn ? 'Visual Proximity & Screen Strain' : 'Proximité Visuelle & Charnière Dorsale'}</strong> (&lt;50cm)</td>
+            <td>${data.distanceAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+            <td>${isEn ? '20-20-20 eye rest & Chair back thoracic extension' : 'Règle oculaire 20-20-20 & Extension thoracique sur dossier'}</td>
           </tr>
         </tbody>
       </table>
     
-      <div class="section-title">2. Observance des Micro-Pauses Kiné & Exercices du Dos</div>
+      <div class="section-title">${isEn ? '2. Compliance with Physical Therapy Micro-Breaks' : '2. Observance des Micro-Pauses Kiné & Exercices du Dos'}</div>
       <p style="font-size: 12px; color: #475569;">
-        Le patient a validé <strong>${data.kineStretches} session(s) d'étirement actif</strong> au cours de ses journées de travail.
+        ${isEn 
+          ? `The user completed <strong>${data.kineStretches} active stretch routine(s)</strong> during desk work sessions.`
+          : `Le patient a validé <strong>${data.kineStretches} session(s) d'étirement actif</strong> au cours de ses journées de travail.`
+        }
       </p>
     
-      <div class="section-title">3. Observations & Recommandations du Praticien (Kiné / Ostéopathe / Médecin)</div>
+      <div class="section-title">${isEn ? '3. Practitioner Observations & Recommendations (Physio / Osteopath / Physician)' : '3. Observations & Recommandations du Praticien (Kiné / Ostéopathe / Médecin)'}</div>
       <div class="notes-box">
-        <em style="color:#94a3b8; font-size:11px;">Zone réservée aux annotations manuscrites du praticien lors de la consultation :</em>
+        <em style="color:#94a3b8; font-size:11px;">${isEn ? 'Dedicated area for handwritten practitioner notes during consultation:' : 'Zone réservée aux annotations manuscrites du praticien lors de la consultation :'}</em>
       </div>
     
       <div class="footer">
-        <span>Document d'hygiène ergonomique non diagnostique — ErgoVision AI v3.0 (Pass Éthique Annuel)</span>
-        <span>Traitement local WebAssembly • Aucune image vidéo stockée</span>
+        <span>${isEn ? 'Non-diagnostic ergonomic hygiene document — ErgoVision AI (Ethical Annual Pass)' : 'Document d\'hygiène ergonomique non diagnostique — ErgoVision AI v3.0 (Pass Éthique Annuel)'}</span>
+        <span>${isEn ? 'Local WebAssembly processing • Zero video storage' : 'Traitement local WebAssembly • Aucune image vidéo stockée'}</span>
       </div>
     
       <scr` + `ipt>
@@ -5398,70 +5456,6 @@
         totalDeviations,
         dominantZone
       };
-    }
-    
-    /**
-     * Injecte un historique réaliste de 7 jours dans localStorage pour démonstration ou test.
-     */
-    function seedMockHistory7Days() {
-      const dates = getMultiDayKeys(7);
-      
-      // Scénario d'évolution clinique sur 7 jours :
-      // L'utilisateur démarre avec 72% de maintien neutre et monte à 89% avec moins d'alertes.
-      const profile = [
-        { score: 71, sessions: 2, neck: 6, shoulder: 4, tilt: 2, dist: 3, kine: 1 },
-        { score: 74, sessions: 2, neck: 5, shoulder: 3, tilt: 2, dist: 2, kine: 1 },
-        { score: 78, sessions: 3, neck: 4, shoulder: 3, tilt: 1, dist: 2, kine: 2 },
-        { score: 81, sessions: 3, neck: 3, shoulder: 2, tilt: 1, dist: 1, kine: 2 },
-        { score: 84, sessions: 2, neck: 2, shoulder: 2, tilt: 1, dist: 1, kine: 3 },
-        { score: 86, sessions: 3, neck: 2, shoulder: 1, tilt: 0, dist: 1, kine: 2 },
-        { score: 89, sessions: 2, neck: 1, shoulder: 1, tilt: 0, dist: 0, kine: 2 }
-      ];
-    
-      dates.forEach((dateKey, idx) => {
-        const p = profile[idx] || profile[0];
-        const dayLogs = [];
-    
-        // Session 1
-        dayLogs.push({
-          time: "09:45:00",
-          type: "summary",
-          title: `Session Rééducation (30 min) terminée`,
-          mode: "session",
-          score: p.score - 2
-        });
-    
-        // Alertes
-        for (let i = 0; i < p.neck; i++) {
-          dayLogs.push({ time: `10:1${i}:00`, type: "alert", reason: "Affaissement cervical (C7-C8)", title: "Affaissement cervical", mode: "session" });
-        }
-        for (let i = 0; i < p.shoulder; i++) {
-          dayLogs.push({ time: `10:2${i}:00`, type: "alert", reason: "Asymétrie des épaules / Tensions trapèzes", title: "Asymétrie scapulaire", mode: "session" });
-        }
-        for (let i = 0; i < p.tilt; i++) {
-          dayLogs.push({ time: `11:0${i}:00`, type: "alert", reason: "Inclinaison latérale prolongée", title: "Inclinaison latérale", mode: "session" });
-        }
-        for (let i = 0; i < p.dist; i++) {
-          dayLogs.push({ time: `11:2${i}:00`, type: "alert", reason: "Proximité excessive écran (<50cm)", title: "Distance écran", mode: "session" });
-        }
-    
-        // Kiné
-        for (let i = 0; i < p.kine; i++) {
-          dayLogs.push({ time: `11:3${i}:00`, type: "kine_exercise", title: "Exercice Kiné validé", mode: "pause" });
-        }
-    
-        if (p.sessions > 1) {
-          dayLogs.push({
-            time: "15:30:00",
-            type: "summary",
-            title: `Session Rééducation (30 min) terminée`,
-            mode: "session",
-            score: p.score + 1
-          });
-        }
-    
-        localStorage.setItem('ergovision_daily_log_' + dateKey, JSON.stringify(dayLogs));
-      });
     }
     
     /**
@@ -5669,11 +5663,9 @@
                 <button type="button" class="seg-btn ${currentPeriodDays === 30 ? 'active' : ''}" data-days="30" role="tab">${t('analytics_period_30d')}</button>
               </div>
               <div style="display:flex; gap:0.4rem; align-items:center;">
-                <button type="button" id="btnSeedAnalytics" class="btn-analytics-action" title="${t('analytics_btn_seed_title')}">
-                  ${t('analytics_btn_seed')}
-                </button>
                 <button type="button" id="btnClearAnalytics" class="btn-analytics-action btn-danger-subtle" title="${t('analytics_btn_clear_history')}">
                   <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>
+                  <span>${t('analytics_btn_clear_history')}</span>
                 </button>
               </div>
             </div>
@@ -5748,16 +5740,6 @@
           }
         });
       });
-    
-      // Écouteur Seed Mock Data
-      const btnSeed = containerEl.querySelector('#btnSeedAnalytics');
-      if (btnSeed) {
-        btnSeed.addEventListener('click', () => {
-          seedMockHistory7Days();
-          renderAnalyticsDashboard(containerEl, onDataChanged);
-          if (onDataChanged) onDataChanged();
-        });
-      }
     
       // Écouteur Clear History
       const btnClear = containerEl.querySelector('#btnClearAnalytics');
@@ -6085,18 +6067,18 @@
           if (sessionTotalFrames > 20) {
             finalScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
           }
-          addDailyLog('summary', `Session Rééducation (${sessionDurationMinutes} min) terminée`, 'session', finalScore);
+          addDailyLog('summary', t('session_log_title').replace('{min}', sessionDurationMinutes), 'session', finalScore);
     
-          updateSessionBadge('Session terminée • Reposez-vous !', 'var(--fluent-brand)');
+          updateSessionBadge(t('session_completed_badge'), 'var(--fluent-brand)');
           if (digits) digits.style.color = 'var(--fluent-brand)';
     
           // Arrêt préventif de la caméra pour éviter la fatigue musculaire
           stopCamera();
-          setStatusUI('var(--fluent-brand)', 'Bravo ! Session terminée. Bougez librement.');
+          setStatusUI('var(--fluent-brand)', t('session_completed_msg'));
           
           if ("Notification" in window && Notification.permission === "granted") {
-            new Notification("ErgoVision AI — Session accomplie !", {
-              body: `Bravo pour vos ${sessionDurationMinutes} min de rééducation posturale (Maintien : ${finalScore}%). Relâchez vos muscles !`
+            new Notification(t('session_notif_title'), {
+              body: t('session_notif_body').replace('{min}', sessionDurationMinutes).replace('{score}', finalScore)
             });
           }
         }
@@ -6124,7 +6106,7 @@
     
       const digits = document.getElementById('timerDigits');
       if (digits) digits.style.color = 'var(--fluent-fg-primary)';
-      updateSessionBadge('En attente de calibration', 'var(--fluent-fg-muted)');
+      updateSessionBadge(t('session_waiting_calib'), 'var(--fluent-fg-muted)');
     }
     
     function openKineRoutineFromUI() {
@@ -6174,13 +6156,13 @@
       }
       if (pill) {
         if (pct < 70) {
-          pill.textContent = 'OK';
+          pill.textContent = t('pill_ok');
           pill.className = 'gauge-deviation-pill pill-ok';
         } else if (pct < 100) {
-          pill.textContent = 'ATTN';
+          pill.textContent = t('pill_attn');
           pill.className = 'gauge-deviation-pill pill-warn';
         } else {
-          pill.textContent = 'DÉRIVE';
+          pill.textContent = t('pill_derive');
           pill.className = 'gauge-deviation-pill pill-danger';
         }
       }
@@ -6188,7 +6170,9 @@
     
     function startCalibrationCountdown() {
       if (!getIsCameraActive() || !currentLandmarks) {
-        alert("Activez d'abord la caméra et placez-vous bien dans le cadre face à l'écran.");
+        alert(getCurrentLanguage() === 'fr' 
+          ? "Activez d'abord la caméra et placez-vous bien dans le cadre face à l'écran." 
+          : "Please start the camera first and frame yourself facing the screen.");
         return;
       }
     
@@ -6209,7 +6193,7 @@
           overlay.classList.remove('visible');
           baseline = computeMetrics(currentLandmarks);
           playTone(880, 0.25, 'triangle', 0.15);
-          setStatusUI('var(--status-success)', `Point Zéro verrouillé`);
+          setStatusUI('var(--status-success)', t('point_zero_locked'));
           startSessionCountdown();
         }
       }, 1000);
@@ -6376,7 +6360,7 @@
     // ----------------------------------------------------
     async function startCamera(deviceId = null) {
       getAudioContext();
-      setStatusUI('var(--status-warning)', 'Démarrage du capteur...');
+      setStatusUI('var(--status-warning)', t('sensor_starting'));
     
       try {
         await startCameraStream(videoElement, onResults, deviceId);
@@ -6388,12 +6372,12 @@
         if (deviceId && cameraSelect) {
           cameraSelect.value = deviceId;
         }
-        setStatusUI('var(--status-success)', 'Capteur actif • Calibrez votre point zéro');
+        setStatusUI('var(--status-success)', t('sensor_active'));
         playTone(600, 0.15);
       } catch (err) {
         console.error("Erreur caméra :", err);
-        setStatusUI('var(--status-danger)', "Échec de l'accès à la caméra");
-        alert("Impossible d'accéder à la webcam.");
+        setStatusUI('var(--status-danger)', t('sensor_error'));
+        alert(getCurrentLanguage() === 'fr' ? "Impossible d'accéder à la webcam." : "Unable to access the webcam.");
       }
     }
     
@@ -6405,7 +6389,7 @@
       btnStopCam.style.display = 'none';
       const telemetryBadge = document.getElementById('videoTelemetryBadge');
       if (telemetryBadge) telemetryBadge.style.display = 'none';
-      setStatusUI('var(--fluent-fg-muted)', 'Capteur en veille');
+      setStatusUI('var(--fluent-fg-muted)', t('sensor_standby'));
     }
     
     async function switchCamera(deviceId) {
@@ -6494,6 +6478,28 @@
     
       const footer = document.querySelector('footer');
       if (footer) footer.innerText = t('footer_text');
+    
+      // Mise à jour des pilules d'état cliniques
+      document.querySelectorAll('.gauge-deviation-pill').forEach(pill => {
+        if (pill.classList.contains('pill-ok')) pill.textContent = t('pill_ok');
+        else if (pill.classList.contains('pill-warn')) pill.textContent = t('pill_attn');
+        else if (pill.classList.contains('pill-danger')) pill.textContent = t('pill_derive');
+      });
+    
+      // Badge d'alerte
+      const alertBadge = document.getElementById('alertCounterBadge');
+      if (alertBadge) {
+        alertBadge.innerText = `${alertCount} ${t('badge_alert').toLowerCase()}${alertCount > 1 ? 's' : ''}`;
+      }
+    
+      // Statut session et capteur si inactifs
+      const sessionStatus = document.getElementById('sessionStatusBadge');
+      if (sessionStatus && !isSessionRunning) {
+        sessionStatus.innerText = t('session_waiting_calib');
+      }
+      if (!getIsCameraActive()) {
+        setStatusUI('var(--fluent-fg-muted)', t('sensor_standby'));
+      }
     
       renderAllLogs();
       refreshAnalyticsDashboard();

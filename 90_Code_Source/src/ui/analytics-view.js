@@ -8,7 +8,6 @@ import { t, getCurrentLanguage } from '../i18n/translations.js';
 import {
   loadMultiDayLogs,
   calculateAnalyticsSummary,
-  seedMockHistory7Days,
   clearAllMultiDayHistory
 } from '../analytics/posture-analytics.js';
 
@@ -194,11 +193,9 @@ export function renderAnalyticsDashboard(containerEl, onDataChanged = null) {
             <button type="button" class="seg-btn ${currentPeriodDays === 30 ? 'active' : ''}" data-days="30" role="tab">${t('analytics_period_30d')}</button>
           </div>
           <div style="display:flex; gap:0.4rem; align-items:center;">
-            <button type="button" id="btnSeedAnalytics" class="btn-analytics-action" title="${t('analytics_btn_seed_title')}">
-              ${t('analytics_btn_seed')}
-            </button>
             <button type="button" id="btnClearAnalytics" class="btn-analytics-action btn-danger-subtle" title="${t('analytics_btn_clear_history')}">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>
+              <span>${t('analytics_btn_clear_history')}</span>
             </button>
           </div>
         </div>
@@ -273,16 +270,6 @@ export function renderAnalyticsDashboard(containerEl, onDataChanged = null) {
       }
     });
   });
-
-  // Écouteur Seed Mock Data
-  const btnSeed = containerEl.querySelector('#btnSeedAnalytics');
-  if (btnSeed) {
-    btnSeed.addEventListener('click', () => {
-      seedMockHistory7Days();
-      renderAnalyticsDashboard(containerEl, onDataChanged);
-      if (onDataChanged) onDataChanged();
-    });
-  }
 
   // Écouteur Clear History
   const btnClear = containerEl.querySelector('#btnClearAnalytics');

@@ -317,18 +317,18 @@ function startSessionCountdown() {
       if (sessionTotalFrames > 20) {
         finalScore = Math.round((sessionGoodFrames / sessionTotalFrames) * 100);
       }
-      addDailyLog('summary', `Session Rééducation (${sessionDurationMinutes} min) terminée`, 'session', finalScore);
+      addDailyLog('summary', t('session_log_title').replace('{min}', sessionDurationMinutes), 'session', finalScore);
 
-      updateSessionBadge('Session terminée • Reposez-vous !', 'var(--fluent-brand)');
+      updateSessionBadge(t('session_completed_badge'), 'var(--fluent-brand)');
       if (digits) digits.style.color = 'var(--fluent-brand)';
 
       // Arrêt préventif de la caméra pour éviter la fatigue musculaire
       stopCamera();
-      setStatusUI('var(--fluent-brand)', 'Bravo ! Session terminée. Bougez librement.');
+      setStatusUI('var(--fluent-brand)', t('session_completed_msg'));
       
       if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("ErgoVision AI — Session accomplie !", {
-          body: `Bravo pour vos ${sessionDurationMinutes} min de rééducation posturale (Maintien : ${finalScore}%). Relâchez vos muscles !`
+        new Notification(t('session_notif_title'), {
+          body: t('session_notif_body').replace('{min}', sessionDurationMinutes).replace('{score}', finalScore)
         });
       }
     }
@@ -356,7 +356,7 @@ function resetCurrentModeTimer() {
 
   const digits = document.getElementById('timerDigits');
   if (digits) digits.style.color = 'var(--fluent-fg-primary)';
-  updateSessionBadge('En attente de calibration', 'var(--fluent-fg-muted)');
+  updateSessionBadge(t('session_waiting_calib'), 'var(--fluent-fg-muted)');
 }
 
 function openKineRoutineFromUI() {
@@ -406,13 +406,13 @@ function updateGauge(cardId, badgeId, fillId, ratioToThreshold, pillId) {
   }
   if (pill) {
     if (pct < 70) {
-      pill.textContent = 'OK';
+      pill.textContent = t('pill_ok');
       pill.className = 'gauge-deviation-pill pill-ok';
     } else if (pct < 100) {
-      pill.textContent = 'ATTN';
+      pill.textContent = t('pill_attn');
       pill.className = 'gauge-deviation-pill pill-warn';
     } else {
-      pill.textContent = 'DÉRIVE';
+      pill.textContent = t('pill_derive');
       pill.className = 'gauge-deviation-pill pill-danger';
     }
   }
@@ -420,7 +420,9 @@ function updateGauge(cardId, badgeId, fillId, ratioToThreshold, pillId) {
 
 function startCalibrationCountdown() {
   if (!getIsCameraActive() || !currentLandmarks) {
-    alert("Activez d'abord la caméra et placez-vous bien dans le cadre face à l'écran.");
+    alert(getCurrentLanguage() === 'fr' 
+      ? "Activez d'abord la caméra et placez-vous bien dans le cadre face à l'écran." 
+      : "Please start the camera first and frame yourself facing the screen.");
     return;
   }
 
@@ -441,7 +443,7 @@ function startCalibrationCountdown() {
       overlay.classList.remove('visible');
       baseline = computeMetrics(currentLandmarks);
       playTone(880, 0.25, 'triangle', 0.15);
-      setStatusUI('var(--status-success)', `Point Zéro verrouillé`);
+      setStatusUI('var(--status-success)', t('point_zero_locked'));
       startSessionCountdown();
     }
   }, 1000);
@@ -608,7 +610,7 @@ function onResults(results) {
 // ----------------------------------------------------
 async function startCamera(deviceId = null) {
   getAudioContext();
-  setStatusUI('var(--status-warning)', 'Démarrage du capteur...');
+  setStatusUI('var(--status-warning)', t('sensor_starting'));
 
   try {
     await startCameraStream(videoElement, onResults, deviceId);
@@ -620,12 +622,12 @@ async function startCamera(deviceId = null) {
     if (deviceId && cameraSelect) {
       cameraSelect.value = deviceId;
     }
-    setStatusUI('var(--status-success)', 'Capteur actif • Calibrez votre point zéro');
+    setStatusUI('var(--status-success)', t('sensor_active'));
     playTone(600, 0.15);
   } catch (err) {
     console.error("Erreur caméra :", err);
-    setStatusUI('var(--status-danger)', "Échec de l'accès à la caméra");
-    alert("Impossible d'accéder à la webcam.");
+    setStatusUI('var(--status-danger)', t('sensor_error'));
+    alert(getCurrentLanguage() === 'fr' ? "Impossible d'accéder à la webcam." : "Unable to access the webcam.");
   }
 }
 
@@ -637,7 +639,7 @@ async function stopCamera() {
   btnStopCam.style.display = 'none';
   const telemetryBadge = document.getElementById('videoTelemetryBadge');
   if (telemetryBadge) telemetryBadge.style.display = 'none';
-  setStatusUI('var(--fluent-fg-muted)', 'Capteur en veille');
+  setStatusUI('var(--fluent-fg-muted)', t('sensor_standby'));
 }
 
 async function switchCamera(deviceId) {
@@ -726,6 +728,28 @@ function setLanguage(lang) {
 
   const footer = document.querySelector('footer');
   if (footer) footer.innerText = t('footer_text');
+
+  // Mise à jour des pilules d'état cliniques
+  document.querySelectorAll('.gauge-deviation-pill').forEach(pill => {
+    if (pill.classList.contains('pill-ok')) pill.textContent = t('pill_ok');
+    else if (pill.classList.contains('pill-warn')) pill.textContent = t('pill_attn');
+    else if (pill.classList.contains('pill-danger')) pill.textContent = t('pill_derive');
+  });
+
+  // Badge d'alerte
+  const alertBadge = document.getElementById('alertCounterBadge');
+  if (alertBadge) {
+    alertBadge.innerText = `${alertCount} ${t('badge_alert').toLowerCase()}${alertCount > 1 ? 's' : ''}`;
+  }
+
+  // Statut session et capteur si inactifs
+  const sessionStatus = document.getElementById('sessionStatusBadge');
+  if (sessionStatus && !isSessionRunning) {
+    sessionStatus.innerText = t('session_waiting_calib');
+  }
+  if (!getIsCameraActive()) {
+    setStatusUI('var(--fluent-fg-muted)', t('sensor_standby'));
+  }
 
   renderAllLogs();
   refreshAnalyticsDashboard();

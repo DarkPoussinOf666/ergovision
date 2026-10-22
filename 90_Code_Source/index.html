@@ -73,18 +73,18 @@
           <svg id="iconNotifsBell" class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         </button>
         <div id="notifsDropdown" class="notifs-dropdown" style="display:none;" role="region" aria-label="Paramètres audio et notifications">
-          <div class="notifs-dropdown-title">Alertes &amp; Signaux</div>
+          <div class="notifs-dropdown-title" data-i18n="title_alerts_signals">Alertes &amp; Signaux</div>
           
           <div class="notifs-row">
             <label style="display:flex; justify-content:space-between; align-items:center; width:100%; cursor:pointer;">
-              <span style="font-weight:600; font-size:0.8rem;">Signal Audio</span>
+              <span style="font-weight:600; font-size:0.8rem;" data-i18n="label_audio_signal">Signal Audio</span>
               <input type="checkbox" id="chkAudioToggle" checked>
             </label>
           </div>
 
           <div class="notifs-row" id="rowAudioVolume">
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:0.25rem;">
-              <span>Volume</span>
+              <span data-i18n="label_volume">Volume</span>
               <span id="labelDropdownVol">15%</span>
             </div>
             <input type="range" id="rangeDropdownVol" min="0" max="100" step="5" value="15" style="width:100%;">
@@ -92,7 +92,7 @@
 
           <div class="notifs-row">
             <label style="display:flex; justify-content:space-between; align-items:center; width:100%; cursor:pointer;">
-              <span style="font-weight:600; font-size:0.8rem;">Notifications OS</span>
+              <span style="font-weight:600; font-size:0.8rem;" data-i18n="label_os_notifications">Notifications OS</span>
               <input type="checkbox" id="chkNotifToggle">
             </label>
           </div>
@@ -299,7 +299,7 @@
           <div class="section-title" style="border:none; padding:0;">
             <div class="section-title-left">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span id="timerTitle">Session Rééducation</span>
+              <span id="timerTitle" data-i18n="title_session">Session Rééducation</span>
             </div>
             <div style="display:flex; align-items:center; gap:0.4rem;">
               <button type="button" id="btnPacingSettings" style="background:none; border:none; cursor:pointer; color:var(--fluent-fg-secondary); font-size:0.75rem; font-weight:600; display:inline-flex; align-items:center; gap:0.25rem; min-height:32px; padding:0.25rem 0.4rem;" title="Régler la durée de la session">
@@ -323,15 +323,15 @@
             </div>
             <div class="session-digits-box">
               <div id="timerDigits" class="mono-big">30:00</div>
-              <div id="timerSub" class="widget-sub">Session ciblée conseillée : 2 × 30 min / jour</div>
+              <div id="timerSub" class="widget-sub" data-i18n="sub_session_target">Session ciblée conseillée : 2 × 30 min / jour</div>
             </div>
           </div>
           
           <div style="margin-top:0.75rem; display:flex; gap:0.5rem; justify-content:space-between; align-items:center; border-top:1px solid var(--fluent-stroke-subtle); padding-top:0.6rem;">
             <button type="button" id="btnOpenKineRoutine" class="btn-action" style="font-size:0.74rem; padding:0.35rem 0.7rem; border-color:var(--fluent-brand-border); background:var(--fluent-brand-tint); color:var(--fluent-brand); font-weight:600;">
-              <span>🧘 Étirements Kiné (5 min)</span>
+              <span id="labelKineRoutine" data-i18n="btn_kine_routine">🧘 Étirements Kiné (5 min)</span>
             </button>
-            <span id="sessionStatusBadge" style="font-size:0.72rem; color:var(--fluent-fg-muted);">En attente de calibration</span>
+            <span id="sessionStatusBadge" data-i18n="session_waiting_calib" style="font-size:0.72rem; color:var(--fluent-fg-muted);">En attente de calibration</span>
           </div>
         </div>
 
@@ -339,12 +339,12 @@
           <div class="section-title" style="border:none; padding:0;">
             <div class="section-title-left">
               <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span>Maintien Neutre</span>
+              <span data-i18n="title_neutral">Maintien Neutre</span>
             </div>
             <span id="alertCounterBadge" style="color:var(--status-success); font-size:0.75rem; font-weight:600;">0 alerte</span>
           </div>
           <div id="scoreDigits" class="mono-big" style="color:var(--status-success);">100%</div>
-          <div class="widget-sub">Ratio de temps en posture conforme</div>
+          <div class="widget-sub" data-i18n="sub_neutral">Ratio de temps en posture conforme</div>
           <div class="score-mini-track" aria-hidden="true">
             <div id="scoreMiniFill" class="score-mini-fill" style="width: 100%;"></div>
           </div>

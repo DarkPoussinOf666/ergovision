@@ -180,19 +180,45 @@ export const TRANSLATIONS = {
     analytics_chart_title: "Évolution Quotidienne du Maintien Neutre (%)",
     analytics_chart_target: "Cible clinique recommandée : 80%",
     analytics_dist_title: "Répartition Biomécanique des Dérives",
-    analytics_btn_seed: "🧪 Simuler 7 jours",
-    analytics_btn_seed_title: "Injecter des données d'exemple réalistes sur 7 jours pour tester le dashboard",
     analytics_btn_clear_history: "Effacer l'historique",
-    analytics_seed_success: "7 jours d'historique de démonstration ont été générés !",
     analytics_clear_confirm: "Voulez-vous vraiment effacer tout l'historique multi-jours ?",
-    analytics_no_data: "Aucune donnée sur cette période. Complétez une session de 30 min ou cliquez sur « 🧪 Simuler 7 jours ».",
+    analytics_no_data: "Aucune donnée sur cette période. Complétez votre première session de rééducation (30 min) pour afficher votre progression.",
     analytics_trend_up: "en hausse",
     analytics_trend_down: "en baisse",
     analytics_trend_stable: "stable",
     analytics_zone_neck: "Nuque (C7-C8)",
     analytics_zone_shoulder: "Épaules / Trapèzes",
     analytics_zone_tilt: "Inclinaison latérale",
-    analytics_zone_distance: "Distance écran"
+    analytics_zone_distance: "Distance écran",
+
+    // Dropdown Notifs & Signaux
+    title_alerts_signals: "Alertes & Signaux",
+    label_audio_signal: "Signal Audio",
+    label_volume: "Volume",
+    label_os_notifications: "Notifications OS",
+
+    // Session Rééducation & Télémétrie
+    title_session: "Session Rééducation",
+    sub_session_target: "Session ciblée conseillée : 2 × 30 min / jour",
+    btn_kine_routine: "🧘 Étirements Kiné (5 min)",
+    session_waiting_calib: "En attente de calibration",
+    session_completed_msg: "Bravo ! Session terminée. Bougez librement.",
+    session_completed_badge: "Session terminée • Reposez-vous !",
+    session_notif_title: "ErgoVision AI — Session accomplie !",
+    session_notif_body: "Bravo pour vos {min} min de rééducation posturale (Maintien : {score}%). Relâchez vos muscles !",
+    session_log_title: "Session Rééducation ({min} min) terminée",
+
+    // Capteur & Calibration Point Zéro
+    sensor_starting: "Démarrage du capteur...",
+    sensor_active: "Capteur actif • Calibrez votre point zéro",
+    sensor_standby: "Capteur en attente",
+    sensor_error: "Échec de l'accès à la caméra",
+    point_zero_locked: "Point Zéro verrouillé",
+
+    // Pilules d'état cliniques
+    pill_ok: "OK",
+    pill_attn: "ATTN",
+    pill_derive: "DÉRIVE"
   },
   en: {
     brand_sub: "Ergonomic Copilot • Real-Time RSI Prevention",
@@ -370,19 +396,45 @@ export const TRANSLATIONS = {
     analytics_chart_title: "Daily Neutral Posture Evolution (%)",
     analytics_chart_target: "Recommended clinical target: 80%",
     analytics_dist_title: "Biomechanical Deviation Breakdown",
-    analytics_btn_seed: "🧪 Mock 7 days",
-    analytics_btn_seed_title: "Inject realistic 7-day sample data to test the dashboard",
     analytics_btn_clear_history: "Clear history",
-    analytics_seed_success: "7 days of mock history have been generated!",
     analytics_clear_confirm: "Are you sure you want to clear all multi-day history?",
-    analytics_no_data: "No data in this period. Complete a 30-min session or click '🧪 Mock 7 days'.",
+    analytics_no_data: "No data in this period. Complete your first 30-min posture session to view your progress.",
     analytics_trend_up: "improving",
     analytics_trend_down: "declining",
     analytics_trend_stable: "stable",
     analytics_zone_neck: "Neck (C7-C8)",
     analytics_zone_shoulder: "Shoulders / Traps",
     analytics_zone_tilt: "Lateral Head Tilt",
-    analytics_zone_distance: "Screen Proximity"
+    analytics_zone_distance: "Screen Proximity",
+
+    // Dropdown Alerts & Signals
+    title_alerts_signals: "Alerts & Signals",
+    label_audio_signal: "Audio Alert",
+    label_volume: "Volume",
+    label_os_notifications: "OS Notifications",
+
+    // Session Rehabilitation & Telemetry
+    title_session: "Rehabilitation Session",
+    sub_session_target: "Recommended targeted session: 2 × 30 min / day",
+    btn_kine_routine: "🧘 Physio Stretches (5 min)",
+    session_waiting_calib: "Awaiting calibration",
+    session_completed_msg: "Well done! Session complete. Move freely.",
+    session_completed_badge: "Session complete • Rest your eyes & back!",
+    session_notif_title: "ErgoVision AI — Session accomplished!",
+    session_notif_body: "Well done on your {min} min postural session (Alignment: {score}%). Relax your muscles!",
+    session_log_title: "Posture Session ({min} min) completed",
+
+    // Sensor & Calibration Zero Point
+    sensor_starting: "Starting optical sensor...",
+    sensor_active: "Sensor active • Calibrate zero point",
+    sensor_standby: "Sensor on standby",
+    sensor_error: "Camera access failed",
+    point_zero_locked: "Zero Point locked",
+
+    // Clinical Deviation Pills
+    pill_ok: "OK",
+    pill_attn: "ATTN",
+    pill_derive: "SLUMP"
   }
 };
 

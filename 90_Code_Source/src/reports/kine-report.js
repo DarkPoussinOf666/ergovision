@@ -58,13 +58,16 @@ export function aggregateClinicalData(logs) {
 export function printKineClinicalReport(logs, userName = "Patient Télétravailleur") {
   const data = aggregateClinicalData(logs);
   const lang = getCurrentLanguage();
-  const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+  const isEn = lang === 'en';
+  const dateStr = new Date().toLocaleDateString(isEn ? 'en-US' : 'fr-FR', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
 
   const printWindow = window.open('', '_blank', 'width=800,height=900');
   if (!printWindow) {
-    alert("Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan kiné.");
+    alert(isEn 
+      ? "Please allow pop-up windows to print your physio report." 
+      : "Veuillez autoriser les fenêtres pop-up pour imprimer votre bilan kiné.");
     return;
   }
 
@@ -73,7 +76,7 @@ export function printKineClinicalReport(logs, userName = "Patient Télétravaill
 <html lang="${lang}">
 <head>
   <meta charset="UTF-8">
-  <title>ErgoVision AI — Bilan d'Observance Posturale & Kinésithérapie</title>
+  <title>${isEn ? 'ErgoVision AI — Posture Observance & Physio Report' : 'ErgoVision AI — Bilan d\'Observance Posturale & Kinésithérapie'}</title>
   <style>
     @page { size: A4 portrait; margin: 15mm; }
     body {
@@ -179,76 +182,79 @@ export function printKineClinicalReport(logs, userName = "Patient Télétravaill
   <div class="header">
     <div>
       <div class="brand-title">🛡️ ErgoVision AI</div>
-      <div class="brand-sub">Copilote Ergonomique • Synthèse d'Observance Clinique & Prévention TMS</div>
+      <div class="brand-sub">${isEn ? 'Ergonomic Copilot • Clinical Compliance & RSI Prevention Summary' : 'Copilote Ergonomique • Synthèse d\'Observance Clinique & Prévention TMS'}</div>
     </div>
     <div class="meta-box">
-      <strong>Date :</strong> ${dateStr}<br>
-      <strong>Bénéficiaire :</strong> ${userName}<br>
-      <strong>Protocole :</strong> 100% Local (RGPD Conforme)
+      <strong>${isEn ? 'Date:' : 'Date :'}</strong> ${dateStr}<br>
+      <strong>${isEn ? 'User / Patient:' : 'Bénéficiaire :'}</strong> ${userName}<br>
+      <strong>${isEn ? 'Protocol:' : 'Protocole :'}</strong> ${isEn ? '100% Local (GDPR Compliant)' : '100% Local (RGPD Conforme)'}
     </div>
   </div>
 
   <div class="card-grid">
     <div class="card">
       <div class="card-val" style="color:#107c41;">${data.averageNeutralScore}%</div>
-      <div class="card-lbl">Maintien en Posture Neutre</div>
+      <div class="card-lbl">${isEn ? 'Neutral Alignment Ratio' : 'Maintien en Posture Neutre'}</div>
     </div>
     <div class="card">
       <div class="card-val" style="color:#0f6cbd;">${data.completedCycles}</div>
-      <div class="card-lbl">Cycles Ergonomiques Réalisés</div>
+      <div class="card-lbl">${isEn ? 'Completed Sessions' : 'Cycles Ergonomiques Réalisés'}</div>
     </div>
     <div class="card">
       <div class="card-val" style="color:#d13438;">${data.totalAlerts}</div>
-      <div class="card-lbl">Dérives Posturales Corrigées</div>
+      <div class="card-lbl">${isEn ? 'Corrected Slumps & Alerts' : 'Dérives Posturales Corrigées'}</div>
     </div>
   </div>
 
-  <div class="section-title">1. Répartition des Sollicitations Mécaniques Observées</div>
+  <div class="section-title">${isEn ? '1. Distribution of Biomechanical Strain Observed' : '1. Répartition des Sollicitations Mécaniques Observées'}</div>
   <table>
     <thead>
       <tr>
-        <th>Zone Rachidienne Surveillée</th>
-        <th>Compensations Détectées</th>
-        <th>Protocole de Décharge Recommandé</th>
+        <th>${isEn ? 'Monitored Spinal Region' : 'Zone Rachidienne Surveillée'}</th>
+        <th>${isEn ? 'Compensations Detected' : 'Compensations Détectées'}</th>
+        <th>${isEn ? 'Recommended Decompression Protocol' : 'Protocole de Décharge Recommandé'}</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><strong>Rachis Cervical (C5-C7)</strong> — Text-Neck / Projection antérieure</td>
-        <td>${data.neckAlerts} alertes</td>
-        <td>Rétractions axiales guidées (McKenzie chin tuck)</td>
+        <td><strong>${isEn ? 'Cervical Spine (C5-C7)' : 'Rachis Cervical (C5-C7)'}</strong> — ${isEn ? 'Text-Neck / Forward slump' : 'Text-Neck / Projection antérieure'}</td>
+        <td>${data.neckAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+        <td>${isEn ? 'Guided axial retractions (McKenzie chin tuck)' : 'Rétractions axiales guidées (McKenzie chin tuck)'}</td>
       </tr>
       <tr>
-        <td><strong>Ceinture Scapulaire</strong> — Hausse réflexe des trapèzes</td>
-        <td>${data.shoulderAlerts} alertes</td>
-        <td>Déroulement scapulaire & posture Brügger</td>
+        <td><strong>${isEn ? 'Scapular Girdle' : 'Ceinture Scapulaire'}</strong> — ${isEn ? 'Trapezius shrug & tension' : 'Hausse réflexe des trapèzes'}</td>
+        <td>${data.shoulderAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+        <td>${isEn ? 'Scapular rolling & Brügger postural relief' : 'Déroulement scapulaire & posture Brügger'}</td>
       </tr>
       <tr>
-        <td><strong>Asymétrie Latérale</strong> — Inclinaison de la tête</td>
-        <td>${data.tiltAlerts} alertes</td>
-        <td>Réalignement bilatéral et étirement trapèze moyen</td>
+        <td><strong>${isEn ? 'Lateral Asymmetry' : 'Asymétrie Latérale'}</strong> — ${isEn ? 'Sustained head tilt' : 'Inclinaison de la tête'}</td>
+        <td>${data.tiltAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+        <td>${isEn ? 'Bilateral realignment & trapezius stretch' : 'Réalignement bilatéral et étirement trapèze moyen'}</td>
       </tr>
       <tr>
-        <td><strong>Proximité Visuelle & Charnière Dorsale</strong> (&lt;50cm)</td>
-        <td>${data.distanceAlerts} alertes</td>
-        <td>Règle oculaire 20-20-20 & Extension thoracique sur dossier</td>
+        <td><strong>${isEn ? 'Visual Proximity & Screen Strain' : 'Proximité Visuelle & Charnière Dorsale'}</strong> (&lt;50cm)</td>
+        <td>${data.distanceAlerts} ${isEn ? 'alerts' : 'alertes'}</td>
+        <td>${isEn ? '20-20-20 eye rest & Chair back thoracic extension' : 'Règle oculaire 20-20-20 & Extension thoracique sur dossier'}</td>
       </tr>
     </tbody>
   </table>
 
-  <div class="section-title">2. Observance des Micro-Pauses Kiné & Exercices du Dos</div>
+  <div class="section-title">${isEn ? '2. Compliance with Physical Therapy Micro-Breaks' : '2. Observance des Micro-Pauses Kiné & Exercices du Dos'}</div>
   <p style="font-size: 12px; color: #475569;">
-    Le patient a validé <strong>${data.kineStretches} session(s) d'étirement actif</strong> au cours de ses journées de travail.
+    ${isEn 
+      ? `The user completed <strong>${data.kineStretches} active stretch routine(s)</strong> during desk work sessions.`
+      : `Le patient a validé <strong>${data.kineStretches} session(s) d'étirement actif</strong> au cours de ses journées de travail.`
+    }
   </p>
 
-  <div class="section-title">3. Observations & Recommandations du Praticien (Kiné / Ostéopathe / Médecin)</div>
+  <div class="section-title">${isEn ? '3. Practitioner Observations & Recommendations (Physio / Osteopath / Physician)' : '3. Observations & Recommandations du Praticien (Kiné / Ostéopathe / Médecin)'}</div>
   <div class="notes-box">
-    <em style="color:#94a3b8; font-size:11px;">Zone réservée aux annotations manuscrites du praticien lors de la consultation :</em>
+    <em style="color:#94a3b8; font-size:11px;">${isEn ? 'Dedicated area for handwritten practitioner notes during consultation:' : 'Zone réservée aux annotations manuscrites du praticien lors de la consultation :'}</em>
   </div>
 
   <div class="footer">
-    <span>Document d'hygiène ergonomique non diagnostique — ErgoVision AI v3.0 (Pass Éthique Annuel)</span>
-    <span>Traitement local WebAssembly • Aucune image vidéo stockée</span>
+    <span>${isEn ? 'Non-diagnostic ergonomic hygiene document — ErgoVision AI (Ethical Annual Pass)' : 'Document d\'hygiène ergonomique non diagnostique — ErgoVision AI v3.0 (Pass Éthique Annuel)'}</span>
+    <span>${isEn ? 'Local WebAssembly processing • Zero video storage' : 'Traitement local WebAssembly • Aucune image vidéo stockée'}</span>
   </div>
 
   <scr` + `ipt>
