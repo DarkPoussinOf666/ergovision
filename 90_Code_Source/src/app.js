@@ -940,22 +940,20 @@ if (btnPiP) {
       const active = await toggleAlwaysOnTopPiP({
         canvasElement,
         pipVideoElement: pipVideo,
-        onZeroCalibrate: () => {
-          startCalibrationCountdown();
-        },
         t
       });
       btnPiP.classList.toggle('active', !!active);
     } catch (e) {
+      console.error("Erreur lors de l'activation de la miniature Always-On-Top :", e);
       alert(e.message || "Erreur lors de l'activation de la miniature Always-On-Top.");
     }
   });
 }
 
-window.addEventListener('ergovision_pip_closed', () => {
-  if (btnPiP) btnPiP.classList.remove('active');
-});
 if (pipVideo) {
+  pipVideo.addEventListener('enterpictureinpicture', () => {
+    if (btnPiP) btnPiP.classList.add('active');
+  });
   pipVideo.addEventListener('leavepictureinpicture', () => {
     if (btnPiP) btnPiP.classList.remove('active');
   });

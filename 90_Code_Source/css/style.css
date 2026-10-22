@@ -548,7 +548,20 @@
       border-right: 2px solid var(--fluent-brand);
     }
 
-    video { display: none; }
+    video#input_video { display: none; }
+
+    /* Vidéo PiP technique : doit conserver une dimension pour l'API Picture-in-Picture W3C sans être visible à l'écran */
+    video#pip_video {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 16px;
+      height: 10px;
+      opacity: 0.001;
+      pointer-events: none;
+      z-index: -9999;
+      display: block !important;
+    }
 
     canvas#output_canvas {
       width: 100%;
