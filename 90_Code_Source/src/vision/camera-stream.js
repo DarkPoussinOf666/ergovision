@@ -153,6 +153,13 @@ export function isPopoutMode() {
   return urlParams.get('mode') === 'popout';
 }
 
+export function openPopoutWindow() {
+  if (typeof window === 'undefined') return;
+  const url = new URL(window.location.href);
+  url.searchParams.set('mode', 'popout');
+  window.open(url.toString(), 'ErgoVision_Popout_Window', 'width=420,height=640,resizable=yes');
+}
+
 /**
  * Bascule le mode Miniature Toujours au Premier Plan (Always-On-Top)
  * Dual-Engine :

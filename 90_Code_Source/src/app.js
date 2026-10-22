@@ -15,7 +15,7 @@ import { getTodayKey, loadDailyLogs, saveDailyLogs, clearDailyLogs, createCSVCon
 import { 
   getIsCameraActive, setIsCameraActive, enumerateVideoDevices, startCameraStream, stopCameraStream, 
   toggleAlwaysOnTopPiP, updateAlwaysOnTopPiPStatus, isAlwaysOnTopPiPActive, 
-  isPopoutMode, openPopoutWindow 
+  isPopoutMode 
 } from './vision/camera-stream.js';
 import { KineRoutineManager } from './kine/routine-timer.js';
 import { KineStudioView } from './ui/kine-studio-view.js';

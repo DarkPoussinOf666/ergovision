@@ -2655,11 +2655,11 @@
       <!-- BARRE DE CONTRÔLES EXTERNE (HORS CADRE VIDÉO) -->
       <div class="camera-controls-bar">
         <div class="camera-actions-row">
-          <button id="btnCalibrate" class="btn-action btn-calibrate" onclick="startCalibrationCountdown()">
+          <button id="btnCalibrate" class="btn-action btn-calibrate">
             <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
             <span>Calibrer Point Zéro (3s)</span>
           </button>
-          <button id="btnStopCam" class="btn-action btn-stop" style="display:none;" onclick="stopCamera()">
+          <button id="btnStopCam" class="btn-action btn-stop" style="display:none;">
             <svg class="icon" viewBox="0 0 24 24"><rect width="14" height="14" x="5" y="5" rx="2"/></svg>
             <span>Arrêter</span>
           </button>
@@ -2669,7 +2669,7 @@
             <span id="statusDot" class="status-dot"></span>
             <span id="statusText">Capteur en attente</span>
           </div>
-          <select id="cameraSelect" class="input-select camera-select-discreet" style="display:none;" onchange="switchCamera(this.value)" aria-label="Sélectionner la caméra">
+          <select id="cameraSelect" class="input-select camera-select-discreet" style="display:none;" aria-label="Sélectionner la caméra">
           </select>
         </div>
       </div>
@@ -4181,6 +4181,13 @@
       if (typeof window === 'undefined') return false;
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('mode') === 'popout';
+    }
+    
+    function openPopoutWindow() {
+      if (typeof window === 'undefined') return;
+      const url = new URL(window.location.href);
+      url.searchParams.set('mode', 'popout');
+      window.open(url.toString(), 'ErgoVision_Popout_Window', 'width=420,height=640,resizable=yes');
     }
     
     /**
