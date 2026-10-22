@@ -34,7 +34,13 @@ export class KineStudioView {
               <div class="kine-subtitle" id="kineStudioSub">${t('kine_studio_subtitle')}</div>
             </div>
           </div>
-          <span id="kineProtocolBadge" class="kine-badge">McKenzie</span>
+          <div style="display:flex; align-items:center; gap:0.45rem;">
+            <span id="kineExerciseIndexBadge" style="font-size:0.72rem; font-weight:700; color:var(--brand-primary); background:rgba(15, 108, 189, 0.1); padding:0.15rem 0.5rem; border-radius:12px;">1 / 4</span>
+            <span id="kineProtocolBadge" class="kine-badge">McKenzie</span>
+            <button type="button" id="btnKineCloseStudio" class="btn-action btn-icon-only" style="width:26px; height:26px; min-height:26px; padding:0; border:none; background:none; cursor:pointer; color:var(--fluent-fg-muted);" title="Fermer l'Atelier Kiné" aria-label="Fermer l'Atelier Kiné">
+              <svg class="icon" style="width:14px; height:14px;" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
         </div>
 
         <!-- Corps de l'exercice actif -->
@@ -92,9 +98,14 @@ export class KineStudioView {
     const prevBtn = document.getElementById('kineBtnPrev');
     const nextBtn = document.getElementById('kineBtnNext');
     const pauseBtn = document.getElementById('kineBtnTogglePause');
+    const closeBtn = document.getElementById('btnKineCloseStudio');
 
     if (prevBtn) prevBtn.addEventListener('click', () => this.manager.prev());
     if (nextBtn) nextBtn.addEventListener('click', () => this.manager.next());
+    if (closeBtn) closeBtn.addEventListener('click', () => {
+      this.manager.stop();
+      this.hide();
+    });
     if (pauseBtn) {
       pauseBtn.addEventListener('click', () => {
         const isPaused = this.manager.togglePause();
@@ -126,6 +137,9 @@ export class KineStudioView {
     const stepsKey = `ex_${ex.id}_steps`;
     const benefitKey = `ex_${ex.id}_benefit`;
     const zoneKey = `kine_zone_${ex.targetArea}`;
+
+    const indexBadge = document.getElementById('kineExerciseIndexBadge');
+    if (indexBadge) indexBadge.innerText = `${idx + 1} / ${total}`;
 
     document.getElementById('kineProtocolBadge').innerText = ex.protocol;
     document.getElementById('kineExName').innerText = t(titleKey);

@@ -347,6 +347,25 @@
 
 ---
 
+## 🧘 Phase 19 : Amélioration Visuelle Haute Précision du Studio Kiné (Animations SVG & Rachis C1-L5) [TERMINÉE]
+
+- [x] **Phase 19.1 : Conception des 4 Schémas Biomécaniques Animés Haute Définition (`src/kine/exercises.js`)**
+  - [x] 19.1.1 Rétraction Cervicale McKenzie : Silhouette de profil, translation horizontale axiale, flèche laser et surbrillance des vertèbres C5-C7.
+  - [x] 19.1.2 Décharge Posturale de Brügger : Silhouette 3/4 face assis sur bord de chaise, rotation externe des bras à 45°, ouverture pectorale et abaissement scapulaire.
+  - [x] 19.1.3 Extension Thoracique sur Dossier : Silhouette de profil sur chaise ergonomique, pivot dorsal, mains en berceau cervical et ouverture thoracique.
+  - [x] 19.1.4 Bascule Pelvienne Lombo-Sacrée : Silhouette bassin + rachis, bascule antéversion/rétroversion rythmée et décharge des disques L4-L5-S1.
+- [x] **Phase 19.2 : Micro-Animations CSS Dédiées & Callouts Anatomiques (`css/style.css`)**
+  - [x] 19.2.1 Définir les keyframes `@keyframes` pour chaque mouvement biomécanique (boucle fluide 3 à 4s calée sur le tempo d'étirement).
+  - [x] 19.2.2 Styliser les badges et marqueurs de vertèbres ciblées (`.vertebra-pulse`, flèches de recul).
+  - [x] 19.2.3 Agrandir et optimiser le conteneur visuel `.kine-visual-box` (130×130 px avec ombre douce) pour un affichage cristallin sur écrans standards et compacts.
+- [x] **Phase 19.3 : Intégration UI, Synchronisation Standalone & Validation Multi-Plateformes**
+  - [x] 19.3.1 Vérifier la compatibilité des animations avec les thèmes Light et Dark.
+  - [x] 19.3.2 Recompiler `index.html` standalone via `tasks/build_standalone.js` et valider la syntaxe.
+  - [x] 19.3.3 Reconstruire les extensions `dist/chrome/` et `dist/firefox/`.
+  - [x] 19.3.4 Validation visuelle et mise à jour de `tasks/lessons.md`.
+
+---
+
 ## Logique et Apprentissage
 
 ### Phases 11 & 12 : V2.0 et V2.1 — Kiné du Dos & Hygiène Visuelle Oculaire

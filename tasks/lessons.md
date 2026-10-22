@@ -59,6 +59,10 @@
 - **Visualisation Vectorielle Native sans Bibliothèque Tierce** : L'intégration d'une bibliothèque graphique externe (ex: Chart.js 150 Ko, D3 250 Ko) est proscrite dans un contexte WebExtension strict (MV3, CSP sans `eval`, contraintes de mémoire vive). L'écriture d'un générateur SVG vectoriel ultra-léger (viewBox responsive, rectangles `<rect rx="4">`, ligne cible clinique INRS 80% en pointillés) garantit un poids additionnel quasi-nul (<4 Ko), une réactivité instantanée aux variables CSS Fluent UI 2 et une conformité WCAG AA native.
 - **Résolution du "Dashboard Vide" & Droit à l'Oubli (Seed & Clear)** : Pour un tuteur ergonomique 100% local, l'utilisateur découvre initialement un tableau de bord vierge. Offrir simultanément l'injection en un clic d'un historique réaliste de 7 jours (`seedMockHistory7Days`) et la purge atomique (`clearAllMultiDayHistory`) offre à la fois un levier d'onboarding immédiat et la garantie absolue de la souveraineté des données de santé personnelles.
 
+## 14. Schémas Biomécaniques Animés & Précision Thérapeutique (v3.5)
+- **Cinématique Visuelle Dédiée en Kinésithérapie** : Les consignes textuelles pures conduisent fréquemment à des compensations parasites (ex: basculer la tête vers le haut au lieu d'effectuer un recul axial horizontal strict dans le protocole McKenzie). L'implémentation de micro-animations vectorielles CSS calées sur les repères articulaires réels (translation crânienne pure, rotation externe des omoplates, pivot thoracique sur dossier T6-T8) clarifie instantanément le geste sans surcharger la mémoire avec de lourdes vidéos MP4.
+- **Proprioception par Surbrillance Vertébrale (C1-L5)** : La mise en surbrillance pulsante des segments rachidiens ciblés (`C5-C7`, `T1-T12`, `T4-T8`, `L4-S1`) ancre la conscience corporelle de l'utilisateur et matérialise le soulagement mécanique ressenti lors de la décompression discale.
+
 
 
 

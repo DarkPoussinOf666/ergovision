@@ -1450,21 +1450,109 @@
     }
 
     .kine-visual-box {
-      width: 100px;
-      height: 100px;
-      border-radius: var(--radius-md);
-      background: rgba(0, 0, 0, 0.2);
+      width: 130px;
+      height: 130px;
+      border-radius: var(--radius-lg);
+      background: var(--fluent-bg-surface-flyout, var(--fluent-bg-surface));
       border: 1px solid var(--fluent-stroke-subtle);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      padding: 0.5rem;
+      padding: 0.4rem;
+      position: relative;
+      overflow: hidden;
     }
 
     .kine-visual-box svg {
       width: 100%;
       height: 100%;
+      overflow: visible;
+    }
+
+    /* Micro-Animations Biomécaniques Kiné */
+    @keyframes vertebraGlow {
+      0%, 100% { filter: drop-shadow(0 0 2px rgba(16, 124, 65, 0.4)); opacity: 0.85; }
+      50% { filter: drop-shadow(0 0 6px rgba(16, 124, 65, 1)); opacity: 1; }
+    }
+    .vertebra-pulse {
+      animation: vertebraGlow 2.4s ease-in-out infinite;
+    }
+
+    /* 1. McKenzie : Recul axial fluide de la tête */
+    @keyframes mckenzieHeadSlide {
+      0%, 100% { transform: translateX(0); }
+      35%, 65% { transform: translateX(-8px); }
+    }
+    .anim-head-mckenzie {
+      animation: mckenzieHeadSlide 3.5s ease-in-out infinite;
+      transform-origin: 42px 68px;
+    }
+
+    @keyframes mckenzieArrowPulse {
+      0%, 100% { opacity: 0.35; transform: translateX(0); }
+      50% { opacity: 1; transform: translateX(-4px); }
+    }
+    .anim-arrow-mckenzie {
+      animation: mckenzieArrowPulse 1.8s ease-in-out infinite;
+    }
+
+    /* 2. Brügger : Rotation externe 45° des bras et ouverture cage */
+    @keyframes bruggerArmLeft {
+      0%, 100% { transform: rotate(0deg); }
+      35%, 70% { transform: rotate(-9deg); }
+    }
+    @keyframes bruggerArmRight {
+      0%, 100% { transform: rotate(0deg); }
+      35%, 70% { transform: rotate(9deg); }
+    }
+    .anim-arm-left-brugger {
+      animation: bruggerArmLeft 4s ease-in-out infinite;
+      transform-origin: 48px 38px;
+    }
+    .anim-arm-right-brugger {
+      animation: bruggerArmRight 4s ease-in-out infinite;
+      transform-origin: 72px 38px;
+    }
+
+    @keyframes bruggerChestExpand {
+      0%, 100% { transform: scale(1); }
+      35%, 70% { transform: scale(1.08); }
+    }
+    .anim-chest-brugger {
+      animation: bruggerChestExpand 4s ease-in-out infinite;
+      transform-origin: 60px 48px;
+    }
+
+    /* 3. Extension Thoracique sur dossier */
+    @keyframes thoracicArch {
+      0%, 100% { transform: rotate(0deg); }
+      40%, 75% { transform: rotate(7deg); }
+    }
+    .anim-trunk-extension {
+      animation: thoracicArch 4s ease-in-out infinite;
+      transform-origin: 46px 56px;
+    }
+
+    @keyframes pivotPulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 4px var(--status-warning)); }
+    }
+    .pivot-glow {
+      animation: pivotPulse 2s ease-in-out infinite;
+      transform-origin: 44px 56px;
+    }
+
+    /* 4. Bascule Pelvienne Lombo-Sacrée */
+    @keyframes pelvicRocking {
+      0%, 100% { transform: rotate(0deg); }
+      30% { transform: rotate(-6deg); }
+      70% { transform: rotate(5deg); }
+    }
+    .anim-pelvis-rocking {
+      animation: pelvicRocking 4.2s ease-in-out infinite;
+      transform-origin: 46px 78px;
     }
 
     .kine-details {
