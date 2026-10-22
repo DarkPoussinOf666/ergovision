@@ -355,14 +355,21 @@
       <!-- ATELIER KINÉ DU DOS • PAUSE ACTIVE (FLUENT UI 2) -->
       <div id="kineStudioContainer" style="display:none; margin-bottom:0.75rem;"></div>
 
+      <!-- TABLEAU DE BORD & ANALYTICS LOCAUX (7 À 30 JOURS) -->
+      <div id="analyticsDashboardContainer" style="display:block;"></div>
+
       <!-- Journal des Dérives Posturales -->
       <div style="display:flex; flex-direction:column; gap:0.6rem; flex:1;">
         <div class="section-title">
           <div class="section-title-left">
             <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-            <span>Journal des Alertes</span>
+            <span data-i18n="title_journal">Journal des Alertes</span>
           </div>
           <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+            <button type="button" id="btnToggleAnalytics" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--brand-primary); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Afficher ou masquer le tableau de bord de progression">
+              <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+              <span data-i18n="analytics_toggle_btn">📊 Tableau de Bord</span>
+            </button>
             <button type="button" id="btnPrintKineReport" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--status-success); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Imprimer ou enregistrer le rapport en PDF pour votre Kiné">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
               <span data-i18n="btn_kine_report">Bilan Kiné (PDF)</span>

@@ -55,5 +55,10 @@
 - **Canal de Synchronisation Inter-Fenêtres (`BroadcastChannel`)** : Pour éviter tout conflit d'accès exclusif à la webcam sous Windows (`NotReadableError`), la fenêtre parente libère sa caméra avant le spawn de la fenêtre pop-out. Un canal `BroadcastChannel` synchronise instantanément les états d'ouverture, de fermeture et de rapatriement sans polling.
 - **Protection contre la Clôture de Balise HTML Inline** : Dans les scripts compilés ou inlinés au sein d'un document HTML, toute occurrence littérale de la séquence `</script>` (même au sein d'une chaîne de template JavaScript) termine prématurément le bloc d'exécution par le parseur HTML du navigateur. Toujours scinder la balise (`'</scr' + 'ipt>'`) pour garantir l'intégrité du bundling.
 
+## 13. Analytics Multi-Jours Déterministes & Visualisation SVG Native (v3.4)
+- **Visualisation Vectorielle Native sans Bibliothèque Tierce** : L'intégration d'une bibliothèque graphique externe (ex: Chart.js 150 Ko, D3 250 Ko) est proscrite dans un contexte WebExtension strict (MV3, CSP sans `eval`, contraintes de mémoire vive). L'écriture d'un générateur SVG vectoriel ultra-léger (viewBox responsive, rectangles `<rect rx="4">`, ligne cible clinique INRS 80% en pointillés) garantit un poids additionnel quasi-nul (<4 Ko), une réactivité instantanée aux variables CSS Fluent UI 2 et une conformité WCAG AA native.
+- **Résolution du "Dashboard Vide" & Droit à l'Oubli (Seed & Clear)** : Pour un tuteur ergonomique 100% local, l'utilisateur découvre initialement un tableau de bord vierge. Offrir simultanément l'injection en un clic d'un historique réaliste de 7 jours (`seedMockHistory7Days`) et la purge atomique (`clearAllMultiDayHistory`) offre à la fois un levier d'onboarding immédiat et la garantie absolue de la souveraineté des données de santé personnelles.
+
+
 
 

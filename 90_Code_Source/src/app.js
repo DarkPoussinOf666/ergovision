@@ -23,6 +23,7 @@ import {
   isProActive, getRemainingDays, getFeatureFlags, activateLicenseKey, loadLicenseState 
 } from './license/license-gate.js';
 import { printKineClinicalReport } from './reports/kine-report.js';
+import { renderAnalyticsDashboard } from './ui/analytics-view.js';
 
 // DOM References
 const videoElement = document.getElementById('input_video');
@@ -259,6 +260,10 @@ function addDailyLog(type, title, mode, score = null) {
     const badge = document.getElementById('alertCounterBadge');
     badge.innerText = `${alertCount} ${t('badge_alert').toLowerCase()}${alertCount > 1 ? 's' : ''}`;
     badge.style.color = 'var(--status-warning)';
+  }
+
+  if (type === 'summary' || type === 'kine_exercise') {
+    refreshAnalyticsDashboard();
   }
 }
 
@@ -712,15 +717,18 @@ function setLanguage(lang) {
   const btnResetSpan = document.querySelector('#btnResetTimer span');
   const btnExportSpan = document.querySelector('#btnExportCsv span');
   const btnClearSpan = document.querySelector('#btnClearLogs span');
+  const btnToggleAnalyticsSpan = document.querySelector('#btnToggleAnalytics span');
   if (btnSettingsSpan) btnSettingsSpan.innerText = t('btn_settings');
   if (btnResetSpan) btnResetSpan.innerText = t('btn_reset');
   if (btnExportSpan) btnExportSpan.innerText = t('btn_export_csv');
   if (btnClearSpan) btnClearSpan.innerText = t('btn_clear_logs');
+  if (btnToggleAnalyticsSpan) btnToggleAnalyticsSpan.innerText = t('analytics_toggle_btn');
 
   const footer = document.querySelector('footer');
   if (footer) footer.innerText = t('footer_text');
 
   renderAllLogs();
+  refreshAnalyticsDashboard();
   updateLicenseUI();
 }
 
@@ -1148,9 +1156,45 @@ document.getElementById('btnClearLogs').addEventListener('click', () => {
   sessionTotalFrames = 0;
   clearDailyLogs(todayKey);
   renderAllLogs();
+  refreshAnalyticsDashboard();
   const scoreDigits = document.getElementById('scoreDigits');
   if (scoreDigits) scoreDigits.innerText = '100%';
 });
+
+// ----------------------------------------------------
+// CONDUCTEUR DU TABLEAU DE BORD & ANALYTICS (7 À 30 JOURS)
+// ----------------------------------------------------
+function refreshAnalyticsDashboard() {
+  const container = document.getElementById('analyticsDashboardContainer');
+  if (container && container.style.display !== 'none') {
+    renderAnalyticsDashboard(container, () => {
+      // Recharger le journal actuel après injection ou purge de données
+      dailyLogs = loadDailyLogs(todayKey);
+      renderAllLogs();
+    });
+  }
+}
+
+const analyticsContainer = document.getElementById('analyticsDashboardContainer');
+let isAnalyticsOpen = localStorage.getItem('ergovision_analytics_open') !== 'false';
+if (analyticsContainer) {
+  analyticsContainer.style.display = isAnalyticsOpen ? 'block' : 'none';
+  refreshAnalyticsDashboard();
+}
+
+const btnToggleAnalytics = document.getElementById('btnToggleAnalytics');
+if (btnToggleAnalytics) {
+  btnToggleAnalytics.addEventListener('click', () => {
+    if (analyticsContainer) {
+      isAnalyticsOpen = analyticsContainer.style.display === 'none';
+      analyticsContainer.style.display = isAnalyticsOpen ? 'block' : 'none';
+      localStorage.setItem('ergovision_analytics_open', isAnalyticsOpen ? 'true' : 'false');
+      if (isAnalyticsOpen) {
+        refreshAnalyticsDashboard();
+      }
+    }
+  });
+}
 
 // App Bootstrap
 setLanguage(getCurrentLanguage());

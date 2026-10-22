@@ -2091,6 +2091,281 @@
       padding: 0.4rem 0.6rem;
       font-size: 0.78rem;
     }
+
+    /* ==========================================================================
+       DASHBOARD & ANALYTICS LOCAUX (7 À 30 JOURS) — FLUENT UI 2
+       ========================================================================== */
+    .analytics-dashboard-card {
+      margin-bottom: 0.9rem;
+      padding: 1rem 1.1rem;
+      background: var(--fluent-bg-surface-card);
+      border: 1px solid var(--fluent-stroke-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      transition: all var(--transition-normal);
+    }
+
+    .analytics-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid var(--fluent-stroke-subtle);
+      padding-bottom: 0.65rem;
+    }
+
+    .analytics-actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .period-selector.segmented-control {
+      background: var(--fluent-bg-surface-flyout, var(--fluent-bg-surface));
+      padding: 2px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--fluent-stroke-subtle);
+    }
+
+    .period-selector .seg-btn {
+      padding: 0.25rem 0.55rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      min-height: 26px;
+    }
+
+    .btn-analytics-action {
+      background: var(--fluent-bg-surface);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-radius: var(--radius-md);
+      color: var(--fluent-fg-secondary);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.25rem 0.55rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      min-height: 26px;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-analytics-action:hover {
+      background: var(--fluent-bg-surface-card);
+      color: var(--brand-primary);
+      border-color: var(--brand-primary);
+    }
+
+    .btn-danger-subtle:hover {
+      color: var(--status-danger) !important;
+      border-color: var(--status-danger) !important;
+    }
+
+    .analytics-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 0.85rem;
+    }
+
+    @media (max-width: 680px) {
+      .analytics-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .analytics-kpi-card {
+      background: var(--fluent-bg-surface);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.65rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--fluent-fg-secondary);
+    }
+
+    .kpi-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.45rem;
+      margin: 0.25rem 0;
+      flex-wrap: wrap;
+    }
+
+    .kpi-number {
+      font-family: var(--font-family-numeric);
+      font-variant-numeric: tabular-nums;
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--fluent-fg-primary);
+    }
+
+    .analytics-trend-pill {
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 0.12rem 0.38rem;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .analytics-trend-pill.trend-up {
+      color: var(--status-success);
+      background: rgba(16, 124, 65, 0.12);
+    }
+
+    .analytics-trend-pill.trend-down {
+      color: var(--status-danger);
+      background: rgba(209, 52, 56, 0.12);
+    }
+
+    .analytics-trend-pill.trend-stable {
+      color: var(--fluent-fg-muted);
+      background: var(--fluent-stroke-subtle);
+    }
+
+    .kpi-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--brand-primary);
+      background: rgba(15, 108, 189, 0.1);
+      padding: 0.1rem 0.35rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .kpi-subtext {
+      font-size: 0.68rem;
+      color: var(--fluent-fg-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .analytics-chart-wrapper,
+    .analytics-distribution-wrapper {
+      background: var(--fluent-bg-surface);
+      border: 1px solid var(--fluent-stroke-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .chart-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.45rem;
+    }
+
+    .chart-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--fluent-fg-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .analytics-histogram-svg {
+      width: 100%;
+      height: auto;
+      max-height: 190px;
+      display: block;
+      overflow: visible;
+    }
+
+    .chart-col {
+      cursor: pointer;
+      outline: none;
+    }
+
+    .chart-col:hover .chart-bar-rect,
+    .chart-col:focus .chart-bar-rect {
+      filter: brightness(1.18);
+    }
+
+    .chart-col:hover .chart-val-text,
+    .chart-col:focus .chart-val-text {
+      fill: var(--brand-primary);
+      font-size: 11px;
+    }
+
+    .analytics-empty-hint {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      color: var(--fluent-fg-muted);
+      font-size: 0.8rem;
+      font-style: italic;
+    }
+
+    .deviation-stacked-bar {
+      width: 100%;
+      height: 10px;
+      background: var(--fluent-stroke-subtle);
+      border-radius: var(--radius-pill);
+      display: flex;
+      overflow: hidden;
+      margin: 0.45rem 0;
+    }
+
+    .dev-seg {
+      height: 100%;
+      transition: width var(--transition-normal);
+    }
+
+    .seg-neck { background: #0f6cbd; }
+    .seg-shoulder { background: #8764b8; }
+    .seg-tilt { background: #008272; }
+    .seg-distance { background: #d83b01; }
+
+    .deviation-legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.45rem;
+      margin-top: 0.45rem;
+    }
+
+    .dev-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .dot-neck { background: #0f6cbd; }
+    .dot-shoulder { background: #8764b8; }
+    .dot-tilt { background: #008272; }
+    .dot-distance { background: #d83b01; }
+
+    .legend-name {
+      color: var(--fluent-fg-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .legend-pct {
+      font-weight: 700;
+      color: var(--fluent-fg-primary);
+      margin-left: auto;
+    }
+
   </style>
 </head>
 <body>
@@ -2434,14 +2709,21 @@
       <!-- ATELIER KINÉ DU DOS • PAUSE ACTIVE (FLUENT UI 2) -->
       <div id="kineStudioContainer" style="display:none; margin-bottom:0.75rem;"></div>
 
+      <!-- TABLEAU DE BORD & ANALYTICS LOCAUX (7 À 30 JOURS) -->
+      <div id="analyticsDashboardContainer" style="display:block;"></div>
+
       <!-- Journal des Dérives Posturales -->
       <div style="display:flex; flex-direction:column; gap:0.6rem; flex:1;">
         <div class="section-title">
           <div class="section-title-left">
             <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-            <span>Journal des Alertes</span>
+            <span data-i18n="title_journal">Journal des Alertes</span>
           </div>
           <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+            <button type="button" id="btnToggleAnalytics" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--brand-primary); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Afficher ou masquer le tableau de bord de progression">
+              <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+              <span data-i18n="analytics_toggle_btn">📊 Tableau de Bord</span>
+            </button>
             <button type="button" id="btnPrintKineReport" style="background:none; border:none; cursor:pointer; font-size:0.72rem; color:var(--status-success); font-weight:700; display:inline-flex; align-items:center; gap:0.3rem; min-height:32px; padding:0.25rem 0.4rem;" title="Imprimer ou enregistrer le rapport en PDF pour votre Kiné">
               <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
               <span data-i18n="btn_kine_report">Bilan Kiné (PDF)</span>
@@ -2876,7 +3158,39 @@
         lock_tooltip_gauge: "Débloquez les 4 jauges avec le Pass à 7 €/an (zéro abonnement auto)",
         lock_tooltip_pip: "La miniature Picture-in-Picture fait partie du Pass à 7 €/an",
         lock_tooltip_kine: "Débloquez les 4 protocoles cliniques avec le Pass à 7 €/an",
-        btn_kine_report: "Imprimer Bilan Kiné (PDF)"
+        btn_kine_report: "Imprimer Bilan Kiné (PDF)",
+    
+        // Analytics Dashboard & Progression
+        analytics_title: "Tableau de Bord & Progression",
+        analytics_subtitle: "Synthèse de votre endurance posturale et d'observance ergonomique",
+        analytics_toggle_btn: "📊 Tableau de Bord",
+        analytics_period_7d: "7 jours",
+        analytics_period_14d: "14 jours",
+        analytics_period_30d: "30 jours",
+        analytics_kpi_score: "Maintien Neutre",
+        analytics_kpi_score_sub: "Score moyen de la période",
+        analytics_kpi_sessions: "Sessions Réalisées",
+        analytics_kpi_sessions_sub: "Temps actif de rééducation",
+        analytics_kpi_alerts: "Dérives Corrigées",
+        analytics_kpi_alerts_sub: "Alertes biomécaniques",
+        analytics_kpi_kine: "Exercices Kiné",
+        analytics_kpi_kine_sub: "Décompressions du rachis",
+        analytics_chart_title: "Évolution Quotidienne du Maintien Neutre (%)",
+        analytics_chart_target: "Cible clinique recommandée : 80%",
+        analytics_dist_title: "Répartition Biomécanique des Dérives",
+        analytics_btn_seed: "🧪 Simuler 7 jours",
+        analytics_btn_seed_title: "Injecter des données d'exemple réalistes sur 7 jours pour tester le dashboard",
+        analytics_btn_clear_history: "Effacer l'historique",
+        analytics_seed_success: "7 jours d'historique de démonstration ont été générés !",
+        analytics_clear_confirm: "Voulez-vous vraiment effacer tout l'historique multi-jours ?",
+        analytics_no_data: "Aucune donnée sur cette période. Complétez une session de 30 min ou cliquez sur « 🧪 Simuler 7 jours ».",
+        analytics_trend_up: "en hausse",
+        analytics_trend_down: "en baisse",
+        analytics_trend_stable: "stable",
+        analytics_zone_neck: "Nuque (C7-C8)",
+        analytics_zone_shoulder: "Épaules / Trapèzes",
+        analytics_zone_tilt: "Inclinaison latérale",
+        analytics_zone_distance: "Distance écran"
       },
       en: {
         brand_sub: "Ergonomic Copilot • Real-Time RSI Prevention",
@@ -3034,7 +3348,39 @@
         lock_tooltip_gauge: "Unlock all 4 gauges with the $7/yr Pass (no auto-renewal)",
         lock_tooltip_pip: "Floating Picture-in-Picture is part of the $7/yr Pass",
         lock_tooltip_kine: "Unlock all 4 clinical routines with the $7/yr Pass",
-        btn_kine_report: "Print Physio Report (PDF)"
+        btn_kine_report: "Print Physio Report (PDF)",
+    
+        // Analytics Dashboard & Progress
+        analytics_title: "Dashboard & Progress",
+        analytics_subtitle: "Summary of your postural endurance and ergonomic compliance",
+        analytics_toggle_btn: "📊 Dashboard",
+        analytics_period_7d: "7 days",
+        analytics_period_14d: "14 days",
+        analytics_period_30d: "30 days",
+        analytics_kpi_score: "Neutral Alignment",
+        analytics_kpi_score_sub: "Average period score",
+        analytics_kpi_sessions: "Completed Sessions",
+        analytics_kpi_sessions_sub: "Active monitored time",
+        analytics_kpi_alerts: "Corrected Slumps",
+        analytics_kpi_alerts_sub: "Biomechanical alerts",
+        analytics_kpi_kine: "Physio Stretches",
+        analytics_kpi_kine_sub: "Spinal decompressions",
+        analytics_chart_title: "Daily Neutral Posture Evolution (%)",
+        analytics_chart_target: "Recommended clinical target: 80%",
+        analytics_dist_title: "Biomechanical Deviation Breakdown",
+        analytics_btn_seed: "🧪 Mock 7 days",
+        analytics_btn_seed_title: "Inject realistic 7-day sample data to test the dashboard",
+        analytics_btn_clear_history: "Clear history",
+        analytics_seed_success: "7 days of mock history have been generated!",
+        analytics_clear_confirm: "Are you sure you want to clear all multi-day history?",
+        analytics_no_data: "No data in this period. Complete a 30-min session or click '🧪 Mock 7 days'.",
+        analytics_trend_up: "improving",
+        analytics_trend_down: "declining",
+        analytics_trend_stable: "stable",
+        analytics_zone_neck: "Neck (C7-C8)",
+        analytics_zone_shoulder: "Shoulders / Traps",
+        analytics_zone_tilt: "Lateral Head Tilt",
+        analytics_zone_distance: "Screen Proximity"
       }
     };
     
@@ -4867,11 +5213,572 @@
     }
 
     // ==========================================
+    // MODULE: src/analytics/posture-analytics.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Posture Analytics Engine
+     * Moteur d'agrégation statistique multi-jours (7 à 30 jours)
+     * 100% local, privé et déterministe (zéro requête externe).
+     */
+    
+    /**
+     * Génère la liste des clés de date ISO (YYYY-MM-DD) sur les N derniers jours
+     * (du jour le plus ancien au jour actuel).
+     * @param {number} numDays - Nombre de jours (ex: 7, 14, 30)
+     * @returns {string[]}
+     */
+    function getMultiDayKeys(numDays = 7) {
+      const keys = [];
+      const now = new Date();
+      for (let i = numDays - 1; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        keys.push(d.toISOString().slice(0, 10));
+      }
+      return keys;
+    }
+    
+    /**
+     * Charge les logs de tous les jours demandés depuis le localStorage.
+     * @param {number} numDays
+     * @returns {{ dates: string[], logsByDate: Object.<string, Array> }}
+     */
+    function loadMultiDayLogs(numDays = 7) {
+      const dates = getMultiDayKeys(numDays);
+      const logsByDate = {};
+    
+      dates.forEach(dateKey => {
+        try {
+          const raw = localStorage.getItem('ergovision_daily_log_' + dateKey);
+          logsByDate[dateKey] = raw ? JSON.parse(raw) : [];
+        } catch (e) {
+          console.warn(`Erreur lecture logs pour ${dateKey} :`, e);
+          logsByDate[dateKey] = [];
+        }
+      });
+    
+      return { dates, logsByDate };
+    }
+    
+    /**
+     * Calcule la synthèse globale et les séries temporelles pour les graphiques.
+     * @param {{ dates: string[], logsByDate: Object.<string, Array> }} multiDayData
+     * @param {string} lang - 'fr' | 'en'
+     * @returns {Object}
+     */
+    function calculateAnalyticsSummary(multiDayData, lang = 'fr') {
+      const { dates, logsByDate } = multiDayData;
+      const daysData = [];
+    
+      let grandTotalScoreSum = 0;
+      let grandTotalScoreCount = 0;
+      let totalSessions = 0;
+      let totalSessionMinutes = 0;
+      let totalAlerts = 0;
+      let kineStretches = 0;
+    
+      const deviationCounts = {
+        neck: 0,
+        shoulder: 0,
+        tilt: 0,
+        distance: 0
+      };
+    
+      const dayScores = [];
+    
+      dates.forEach(dateKey => {
+        const logs = logsByDate[dateKey] || [];
+        const dateObj = new Date(dateKey + 'T12:00:00');
+        
+        // Label jour court (ex: Lun, Mar / Mon, Tue)
+        const dayLabel = dateObj.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+          weekday: 'short'
+        });
+        // Format court jour/mois (ex: 18/10)
+        const dateShort = dateObj.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+          day: 'numeric',
+          month: 'numeric'
+        });
+    
+        let dayScoreSum = 0;
+        let dayScoreCount = 0;
+        let daySessions = 0;
+        let dayAlerts = 0;
+    
+        logs.forEach(log => {
+          if (log.type === 'alert') {
+            dayAlerts++;
+            totalAlerts++;
+            const r = (log.reason || log.title || '').toLowerCase();
+            if (r.includes('nuque') || r.includes('neck') || r.includes('cervic')) {
+              deviationCounts.neck++;
+            } else if (r.includes('épaule') || r.includes('shoulder') || r.includes('trapèze')) {
+              deviationCounts.shoulder++;
+            } else if (r.includes('inclin') || r.includes('tilt')) {
+              deviationCounts.tilt++;
+            } else if (r.includes('distance') || r.includes('écran') || r.includes('screen')) {
+              deviationCounts.distance++;
+            }
+          } else if (log.type === 'summary' || log.type === 'cycle_end') {
+            daySessions++;
+            totalSessions++;
+            totalSessionMinutes += 30; // standard session
+            if (typeof log.score === 'number' && log.score > 0) {
+              dayScoreSum += log.score;
+              dayScoreCount++;
+              grandTotalScoreSum += log.score;
+              grandTotalScoreCount++;
+            }
+          } else if (log.type === 'kine_exercise' || log.type === 'stretch') {
+            kineStretches++;
+          }
+        });
+    
+        const avgScoreForDay = dayScoreCount > 0 ? Math.round(dayScoreSum / dayScoreCount) : null;
+        if (avgScoreForDay !== null) {
+          dayScores.push(avgScoreForDay);
+        }
+    
+        daysData.push({
+          dateKey,
+          dayLabel: dayLabel.charAt(0).toUpperCase() + dayLabel.slice(1).replace('.', ''),
+          dateShort,
+          score: avgScoreForDay,
+          sessions: daySessions,
+          alerts: dayAlerts
+        });
+      });
+    
+      // Calcul du score moyen global
+      const averageNeutralScore = grandTotalScoreCount > 0
+        ? Math.round(grandTotalScoreSum / grandTotalScoreCount)
+        : (dayScores.length > 0 ? Math.round(dayScores.reduce((a, b) => a + b, 0) / dayScores.length) : null);
+    
+      // Calcul de la tendance (comparaison 1ère moitié vs 2nde moitié de période)
+      let trendDelta = 0;
+      if (dayScores.length >= 2) {
+        const half = Math.floor(dayScores.length / 2);
+        const firstHalf = dayScores.slice(0, half);
+        const secondHalf = dayScores.slice(half);
+    
+        const avg1 = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
+        const avg2 = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+        trendDelta = Math.round(avg2 - avg1);
+      }
+    
+      // Distribution des dérives en pourcentage
+      const totalDeviations = deviationCounts.neck + deviationCounts.shoulder + deviationCounts.tilt + deviationCounts.distance;
+      const deviationPct = {
+        neck: totalDeviations > 0 ? Math.round((deviationCounts.neck / totalDeviations) * 100) : 0,
+        shoulder: totalDeviations > 0 ? Math.round((deviationCounts.shoulder / totalDeviations) * 100) : 0,
+        tilt: totalDeviations > 0 ? Math.round((deviationCounts.tilt / totalDeviations) * 100) : 0,
+        distance: totalDeviations > 0 ? Math.round((deviationCounts.distance / totalDeviations) * 100) : 0
+      };
+    
+      // Identification de la dérive principale
+      let dominantZone = null;
+      let maxCount = 0;
+      for (const [zone, count] of Object.entries(deviationCounts)) {
+        if (count > maxCount) {
+          maxCount = count;
+          dominantZone = zone;
+        }
+      }
+    
+      return {
+        daysData,
+        averageNeutralScore,
+        trendDelta,
+        totalSessions,
+        totalSessionMinutes,
+        totalAlerts,
+        kineStretches,
+        deviationCounts,
+        deviationPct,
+        totalDeviations,
+        dominantZone
+      };
+    }
+    
+    /**
+     * Injecte un historique réaliste de 7 jours dans localStorage pour démonstration ou test.
+     */
+    function seedMockHistory7Days() {
+      const dates = getMultiDayKeys(7);
+      
+      // Scénario d'évolution clinique sur 7 jours :
+      // L'utilisateur démarre avec 72% de maintien neutre et monte à 89% avec moins d'alertes.
+      const profile = [
+        { score: 71, sessions: 2, neck: 6, shoulder: 4, tilt: 2, dist: 3, kine: 1 },
+        { score: 74, sessions: 2, neck: 5, shoulder: 3, tilt: 2, dist: 2, kine: 1 },
+        { score: 78, sessions: 3, neck: 4, shoulder: 3, tilt: 1, dist: 2, kine: 2 },
+        { score: 81, sessions: 3, neck: 3, shoulder: 2, tilt: 1, dist: 1, kine: 2 },
+        { score: 84, sessions: 2, neck: 2, shoulder: 2, tilt: 1, dist: 1, kine: 3 },
+        { score: 86, sessions: 3, neck: 2, shoulder: 1, tilt: 0, dist: 1, kine: 2 },
+        { score: 89, sessions: 2, neck: 1, shoulder: 1, tilt: 0, dist: 0, kine: 2 }
+      ];
+    
+      dates.forEach((dateKey, idx) => {
+        const p = profile[idx] || profile[0];
+        const dayLogs = [];
+    
+        // Session 1
+        dayLogs.push({
+          time: "09:45:00",
+          type: "summary",
+          title: `Session Rééducation (30 min) terminée`,
+          mode: "session",
+          score: p.score - 2
+        });
+    
+        // Alertes
+        for (let i = 0; i < p.neck; i++) {
+          dayLogs.push({ time: `10:1${i}:00`, type: "alert", reason: "Affaissement cervical (C7-C8)", title: "Affaissement cervical", mode: "session" });
+        }
+        for (let i = 0; i < p.shoulder; i++) {
+          dayLogs.push({ time: `10:2${i}:00`, type: "alert", reason: "Asymétrie des épaules / Tensions trapèzes", title: "Asymétrie scapulaire", mode: "session" });
+        }
+        for (let i = 0; i < p.tilt; i++) {
+          dayLogs.push({ time: `11:0${i}:00`, type: "alert", reason: "Inclinaison latérale prolongée", title: "Inclinaison latérale", mode: "session" });
+        }
+        for (let i = 0; i < p.dist; i++) {
+          dayLogs.push({ time: `11:2${i}:00`, type: "alert", reason: "Proximité excessive écran (<50cm)", title: "Distance écran", mode: "session" });
+        }
+    
+        // Kiné
+        for (let i = 0; i < p.kine; i++) {
+          dayLogs.push({ time: `11:3${i}:00`, type: "kine_exercise", title: "Exercice Kiné validé", mode: "pause" });
+        }
+    
+        if (p.sessions > 1) {
+          dayLogs.push({
+            time: "15:30:00",
+            type: "summary",
+            title: `Session Rééducation (30 min) terminée`,
+            mode: "session",
+            score: p.score + 1
+          });
+        }
+    
+        localStorage.setItem('ergovision_daily_log_' + dateKey, JSON.stringify(dayLogs));
+      });
+    }
+    
+    /**
+     * Nettoie toutes les clés de logs multi-jours dans localStorage.
+     * @param {number} maxDaysLookback
+     */
+    function clearAllMultiDayHistory(maxDaysLookback = 60) {
+      const dates = getMultiDayKeys(maxDaysLookback);
+      dates.forEach(dateKey => {
+        localStorage.removeItem('ergovision_daily_log_' + dateKey);
+      });
+    }
+
+    // ==========================================
+    // MODULE: src/ui/analytics-view.js
+    // ==========================================
+    /**
+     * ErgoVision AI - Analytics Dashboard View Component
+     * Rendu SVG & HTML vectoriel natif, sans bibliothèque externe (0 Ko de dépendance).
+     * Compatible Fluent UI 2, thèmes Light/Dark et conformité WCAG 2.1 AA.
+     */
+    
+    
+    
+    
+    let currentPeriodDays = 7;
+    
+    /**
+     * Génère le SVG de l'histogramme quotidien
+     * @param {Array} daysData 
+     * @param {string} lang 
+     * @returns {string} SVG HTML string
+     */
+    function renderDailyHistogramSvg(daysData, lang) {
+      const width = 560;
+      const height = 180;
+      const chartTop = 24;
+      const chartBottom = 150;
+      const chartHeight = chartBottom - chartTop; // 126px
+      const count = daysData.length;
+      
+      // Ligne cible 80%
+      const targetY = chartBottom - (chartHeight * 0.80);
+    
+      // Espacement des barres
+      const barSlotWidth = width / count;
+      const barWidth = Math.max(12, Math.min(36, barSlotWidth * 0.55));
+    
+      let barsHtml = '';
+      daysData.forEach((day, index) => {
+        const cx = index * barSlotWidth + barSlotWidth / 2;
+        const x = cx - barWidth / 2;
+        const score = day.score;
+    
+        if (score !== null && score > 0) {
+          const h = (score / 100) * chartHeight;
+          const y = chartBottom - h;
+          
+          // Couleur selon palier
+          let barFill = 'var(--status-success, #107c41)';
+          if (score < 65) {
+            barFill = 'var(--status-danger, #d13438)';
+          } else if (score < 80) {
+            barFill = 'var(--status-warning, #d83b01)';
+          }
+    
+          barsHtml += `
+            <g class="chart-col" tabindex="0">
+              <title>${day.dateKey} (${day.dayLabel}): ${score}% (${day.sessions} sessions, ${day.alerts} alertes)</title>
+              <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="4" fill="${barFill}" class="chart-bar-rect">
+                <animate attributeName="height" from="0" to="${h}" dur="0.4s" fill="freeze" />
+                <animate attributeName="y" from="${chartBottom}" to="${y}" dur="0.4s" fill="freeze" />
+              </rect>
+              <text x="${cx}" y="${y - 6}" font-size="10" font-weight="700" fill="var(--fluent-fg-primary)" text-anchor="middle" class="chart-val-text">${score}%</text>
+              <text x="${cx}" y="${chartBottom + 16}" font-size="11" font-weight="600" fill="var(--fluent-fg-secondary)" text-anchor="middle">${day.dayLabel}</text>
+              <text x="${cx}" y="${chartBottom + 28}" font-size="9" fill="var(--fluent-fg-muted)" text-anchor="middle">${day.dateShort}</text>
+            </g>
+          `;
+        } else {
+          // Jour sans session
+          barsHtml += `
+            <g class="chart-col empty" tabindex="0">
+              <title>${day.dateKey} (${day.dayLabel}): Aucune session</title>
+              <rect x="${x}" y="${chartBottom - 4}" width="${barWidth}" height="4" rx="2" fill="var(--fluent-stroke-subtle, rgba(0,0,0,0.1))" />
+              <text x="${cx}" y="${chartBottom - 8}" font-size="9" fill="var(--fluent-fg-muted)" text-anchor="middle">—</text>
+              <text x="${cx}" y="${chartBottom + 16}" font-size="11" font-weight="600" fill="var(--fluent-fg-muted)" text-anchor="middle">${day.dayLabel}</text>
+              <text x="${cx}" y="${chartBottom + 28}" font-size="9" fill="var(--fluent-fg-muted)" text-anchor="middle">${day.dateShort}</text>
+            </g>
+          `;
+        }
+      });
+    
+      return `
+        <svg class="analytics-histogram-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${t('analytics_chart_title')}">
+          <defs>
+            <pattern id="gridPattern" width="10" height="25" patternUnits="userSpaceOnUse">
+              <path d="M 0 25 L 10 25" fill="none" stroke="var(--fluent-stroke-subtle, rgba(0,0,0,0.05))" stroke-width="1" />
+            </pattern>
+          </defs>
+    
+          <!-- Grille d'arrière-plan -->
+          <line x1="0" y1="${chartTop}" x2="${width}" y2="${chartTop}" stroke="var(--fluent-stroke-subtle, rgba(0,0,0,0.08))" stroke-width="1" />
+          <line x1="0" y1="${chartBottom}" x2="${width}" y2="${chartBottom}" stroke="var(--fluent-stroke-subtle, rgba(0,0,0,0.15))" stroke-width="1.5" />
+    
+          <!-- Ligne cible 80% INRS -->
+          <line x1="0" y1="${targetY}" x2="${width}" y2="${targetY}" stroke="var(--status-success, #107c41)" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.8" />
+          <text x="${width - 8}" y="${targetY - 5}" font-size="10" font-weight="700" fill="var(--status-success, #107c41)" text-anchor="end">${t('analytics_chart_target')}</text>
+    
+          <!-- Barres des jours -->
+          ${barsHtml}
+        </svg>
+      `;
+    }
+    
+    /**
+     * Rendu de la barre de répartition biomécanique
+     * @param {Object} deviationCounts 
+     * @param {Object} deviationPct 
+     * @param {number} totalDeviations 
+     * @returns {string} HTML
+     */
+    function renderDistributionBarHtml(deviationCounts, deviationPct, totalDeviations) {
+      if (totalDeviations === 0) {
+        return `<div style="font-size:0.8rem; color:var(--fluent-fg-muted); text-align:center; padding:0.5rem;">${t('status_optimal')} — 0 dérive enregistrée.</div>`;
+      }
+    
+      return `
+        <div class="deviation-stacked-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" title="${totalDeviations} dérives totales">
+          ${deviationPct.neck > 0 ? `<div class="dev-seg seg-neck" style="width:${deviationPct.neck}%;" title="${t('analytics_zone_neck')}: ${deviationCounts.neck} (${deviationPct.neck}%)"></div>` : ''}
+          ${deviationPct.shoulder > 0 ? `<div class="dev-seg seg-shoulder" style="width:${deviationPct.shoulder}%;" title="${t('analytics_zone_shoulder')}: ${deviationCounts.shoulder} (${deviationPct.shoulder}%)"></div>` : ''}
+          ${deviationPct.tilt > 0 ? `<div class="dev-seg seg-tilt" style="width:${deviationPct.tilt}%;" title="${t('analytics_zone_tilt')}: ${deviationCounts.tilt} (${deviationPct.tilt}%)"></div>` : ''}
+          ${deviationPct.distance > 0 ? `<div class="dev-seg seg-distance" style="width:${deviationPct.distance}%;" title="${t('analytics_zone_distance')}: ${deviationCounts.distance} (${deviationPct.distance}%)"></div>` : ''}
+        </div>
+        <div class="deviation-legend-grid">
+          <div class="dev-legend-item">
+            <span class="legend-dot dot-neck"></span>
+            <span class="legend-name">${t('analytics_zone_neck')}</span>
+            <span class="legend-pct">${deviationPct.neck}% (${deviationCounts.neck})</span>
+          </div>
+          <div class="dev-legend-item">
+            <span class="legend-dot dot-shoulder"></span>
+            <span class="legend-name">${t('analytics_zone_shoulder')}</span>
+            <span class="legend-pct">${deviationPct.shoulder}% (${deviationCounts.shoulder})</span>
+          </div>
+          <div class="dev-legend-item">
+            <span class="legend-dot dot-tilt"></span>
+            <span class="legend-name">${t('analytics_zone_tilt')}</span>
+            <span class="legend-pct">${deviationPct.tilt}% (${deviationCounts.tilt})</span>
+          </div>
+          <div class="dev-legend-item">
+            <span class="legend-dot dot-distance"></span>
+            <span class="legend-name">${t('analytics_zone_distance')}</span>
+            <span class="legend-pct">${deviationPct.distance}% (${deviationCounts.distance})</span>
+          </div>
+        </div>
+      `;
+    }
+    
+    /**
+     * Rendu principal du conteneur Analytics
+     * @param {HTMLElement} containerEl 
+     * @param {Function} onDataChanged - Callback en cas de modification des données (ex: seed ou clear)
+     */
+    function renderAnalyticsDashboard(containerEl, onDataChanged = null) {
+      if (!containerEl) return;
+    
+      const lang = getCurrentLanguage();
+      const multiDayData = loadMultiDayLogs(currentPeriodDays);
+      const summary = calculateAnalyticsSummary(multiDayData, lang);
+    
+      const hasData = summary.totalSessions > 0 || summary.totalAlerts > 0;
+    
+      // Calcul du badge de tendance
+      let trendBadgeHtml = '';
+      if (summary.trendDelta > 0) {
+        trendBadgeHtml = `<span class="analytics-trend-pill trend-up">↗ +${summary.trendDelta}% ${t('analytics_trend_up')}</span>`;
+      } else if (summary.trendDelta < 0) {
+        trendBadgeHtml = `<span class="analytics-trend-pill trend-down">↘ ${summary.trendDelta}% ${t('analytics_trend_down')}</span>`;
+      } else if (summary.averageNeutralScore !== null) {
+        trendBadgeHtml = `<span class="analytics-trend-pill trend-stable">→ 0% ${t('analytics_trend_stable')}</span>`;
+      }
+    
+      // Formatage des heures de sessions
+      const hours = Math.floor(summary.totalSessionMinutes / 60);
+      const mins = summary.totalSessionMinutes % 60;
+      const timeFormatted = hours > 0 ? `${hours}h ${mins > 0 ? mins + 'm' : ''}` : `${mins} min`;
+    
+      containerEl.innerHTML = `
+        <div class="analytics-dashboard-card bento-card">
+          <!-- Header Dashboard -->
+          <div class="analytics-header">
+            <div class="analytics-header-left">
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <svg class="icon" style="color:var(--brand-primary); width:18px; height:18px;" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                <h3 style="margin:0; font-size:0.95rem; font-weight:800; color:var(--fluent-fg-primary);">${t('analytics_title')}</h3>
+              </div>
+              <p style="margin:0.2rem 0 0; font-size:0.75rem; color:var(--fluent-fg-muted);">${t('analytics_subtitle')}</p>
+            </div>
+    
+            <!-- Sélecteur Période & Actions -->
+            <div class="analytics-actions-bar">
+              <div class="segmented-control period-selector" role="tablist">
+                <button type="button" class="seg-btn ${currentPeriodDays === 7 ? 'active' : ''}" data-days="7" role="tab">${t('analytics_period_7d')}</button>
+                <button type="button" class="seg-btn ${currentPeriodDays === 14 ? 'active' : ''}" data-days="14" role="tab">${t('analytics_period_14d')}</button>
+                <button type="button" class="seg-btn ${currentPeriodDays === 30 ? 'active' : ''}" data-days="30" role="tab">${t('analytics_period_30d')}</button>
+              </div>
+              <div style="display:flex; gap:0.4rem; align-items:center;">
+                <button type="button" id="btnSeedAnalytics" class="btn-analytics-action" title="${t('analytics_btn_seed_title')}">
+                  ${t('analytics_btn_seed')}
+                </button>
+                <button type="button" id="btnClearAnalytics" class="btn-analytics-action btn-danger-subtle" title="${t('analytics_btn_clear_history')}">
+                  <svg class="icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+    
+          <!-- KPI Cards Grid -->
+          <div class="analytics-kpi-grid">
+            <div class="analytics-kpi-card">
+              <div class="kpi-label">${t('analytics_kpi_score')}</div>
+              <div class="kpi-value-row">
+                <span class="kpi-number">${summary.averageNeutralScore !== null ? summary.averageNeutralScore + '%' : '—'}</span>
+                ${trendBadgeHtml}
+              </div>
+              <div class="kpi-subtext">${t('analytics_kpi_score_sub')}</div>
+            </div>
+    
+            <div class="analytics-kpi-card">
+              <div class="kpi-label">${t('analytics_kpi_sessions')}</div>
+              <div class="kpi-value-row">
+                <span class="kpi-number">${summary.totalSessions}</span>
+                <span class="kpi-tag">${timeFormatted}</span>
+              </div>
+              <div class="kpi-subtext">${t('analytics_kpi_sessions_sub')}</div>
+            </div>
+    
+            <div class="analytics-kpi-card">
+              <div class="kpi-label">${t('analytics_kpi_alerts')}</div>
+              <div class="kpi-value-row">
+                <span class="kpi-number" style="color:var(--status-danger);">${summary.totalAlerts}</span>
+              </div>
+              <div class="kpi-subtext">${t('analytics_kpi_alerts_sub')}</div>
+            </div>
+    
+            <div class="analytics-kpi-card">
+              <div class="kpi-label">${t('analytics_kpi_kine')}</div>
+              <div class="kpi-value-row">
+                <span class="kpi-number" style="color:var(--status-success);">${summary.kineStretches}</span>
+              </div>
+              <div class="kpi-subtext">${t('analytics_kpi_kine_sub')}</div>
+            </div>
+          </div>
+    
+          <!-- Graphique Quotidien SVG -->
+          <div class="analytics-chart-wrapper">
+            <div class="chart-header-row">
+              <span class="chart-title">${t('analytics_chart_title')}</span>
+            </div>
+            ${hasData 
+              ? renderDailyHistogramSvg(summary.daysData, lang)
+              : `<div class="analytics-empty-hint">${t('analytics_no_data')}</div>`
+            }
+          </div>
+    
+          <!-- Distribution des Dérives -->
+          <div class="analytics-distribution-wrapper">
+            <div class="chart-header-row">
+              <span class="chart-title">${t('analytics_dist_title')}</span>
+            </div>
+            ${renderDistributionBarHtml(summary.deviationCounts, summary.deviationPct, summary.totalDeviations)}
+          </div>
+        </div>
+      `;
+    
+      // Écouteurs de changement de période
+      const periodBtns = containerEl.querySelectorAll('.period-selector .seg-btn');
+      periodBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const days = parseInt(btn.getAttribute('data-days'), 10);
+          if (days && days !== currentPeriodDays) {
+            currentPeriodDays = days;
+            renderAnalyticsDashboard(containerEl, onDataChanged);
+          }
+        });
+      });
+    
+      // Écouteur Seed Mock Data
+      const btnSeed = containerEl.querySelector('#btnSeedAnalytics');
+      if (btnSeed) {
+        btnSeed.addEventListener('click', () => {
+          seedMockHistory7Days();
+          renderAnalyticsDashboard(containerEl, onDataChanged);
+          if (onDataChanged) onDataChanged();
+        });
+      }
+    
+      // Écouteur Clear History
+      const btnClear = containerEl.querySelector('#btnClearAnalytics');
+      if (btnClear) {
+        btnClear.addEventListener('click', () => {
+          if (confirm(t('analytics_clear_confirm'))) {
+            clearAllMultiDayHistory(60);
+            renderAnalyticsDashboard(containerEl, onDataChanged);
+            if (onDataChanged) onDataChanged();
+          }
+        });
+      }
+    }
+
+    // ==========================================
     // MODULE: src/app.js
     // ==========================================
     /**
      * ErgoVision AI - Application Conductor (ES6 Modular Entry Point)
      */
+    
     
     
     
@@ -5121,6 +6028,10 @@
         const badge = document.getElementById('alertCounterBadge');
         badge.innerText = `${alertCount} ${t('badge_alert').toLowerCase()}${alertCount > 1 ? 's' : ''}`;
         badge.style.color = 'var(--status-warning)';
+      }
+    
+      if (type === 'summary' || type === 'kine_exercise') {
+        refreshAnalyticsDashboard();
       }
     }
     
@@ -5574,15 +6485,18 @@
       const btnResetSpan = document.querySelector('#btnResetTimer span');
       const btnExportSpan = document.querySelector('#btnExportCsv span');
       const btnClearSpan = document.querySelector('#btnClearLogs span');
+      const btnToggleAnalyticsSpan = document.querySelector('#btnToggleAnalytics span');
       if (btnSettingsSpan) btnSettingsSpan.innerText = t('btn_settings');
       if (btnResetSpan) btnResetSpan.innerText = t('btn_reset');
       if (btnExportSpan) btnExportSpan.innerText = t('btn_export_csv');
       if (btnClearSpan) btnClearSpan.innerText = t('btn_clear_logs');
+      if (btnToggleAnalyticsSpan) btnToggleAnalyticsSpan.innerText = t('analytics_toggle_btn');
     
       const footer = document.querySelector('footer');
       if (footer) footer.innerText = t('footer_text');
     
       renderAllLogs();
+      refreshAnalyticsDashboard();
       updateLicenseUI();
     }
     
@@ -6010,9 +6924,45 @@
       sessionTotalFrames = 0;
       clearDailyLogs(todayKey);
       renderAllLogs();
+      refreshAnalyticsDashboard();
       const scoreDigits = document.getElementById('scoreDigits');
       if (scoreDigits) scoreDigits.innerText = '100%';
     });
+    
+    // ----------------------------------------------------
+    // CONDUCTEUR DU TABLEAU DE BORD & ANALYTICS (7 À 30 JOURS)
+    // ----------------------------------------------------
+    function refreshAnalyticsDashboard() {
+      const container = document.getElementById('analyticsDashboardContainer');
+      if (container && container.style.display !== 'none') {
+        renderAnalyticsDashboard(container, () => {
+          // Recharger le journal actuel après injection ou purge de données
+          dailyLogs = loadDailyLogs(todayKey);
+          renderAllLogs();
+        });
+      }
+    }
+    
+    const analyticsContainer = document.getElementById('analyticsDashboardContainer');
+    let isAnalyticsOpen = localStorage.getItem('ergovision_analytics_open') !== 'false';
+    if (analyticsContainer) {
+      analyticsContainer.style.display = isAnalyticsOpen ? 'block' : 'none';
+      refreshAnalyticsDashboard();
+    }
+    
+    const btnToggleAnalytics = document.getElementById('btnToggleAnalytics');
+    if (btnToggleAnalytics) {
+      btnToggleAnalytics.addEventListener('click', () => {
+        if (analyticsContainer) {
+          isAnalyticsOpen = analyticsContainer.style.display === 'none';
+          analyticsContainer.style.display = isAnalyticsOpen ? 'block' : 'none';
+          localStorage.setItem('ergovision_analytics_open', isAnalyticsOpen ? 'true' : 'false');
+          if (isAnalyticsOpen) {
+            refreshAnalyticsDashboard();
+          }
+        }
+      });
+    }
     
     // App Bootstrap
     setLanguage(getCurrentLanguage());

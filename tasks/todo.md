@@ -321,6 +321,32 @@
 
 ---
 
+## 📊 Phase 18 : Dashboard Graphique & Analytics Locaux (7 à 30 jours) [TERMINÉE]
+
+- [x] **Phase 18.1 : Moteur Analytique & Agrégation Multijour (`src/analytics/posture-analytics.js`)**
+  - [x] 18.1.1 Définir les fonctions de requête multijours (`getMultiDayKeys`, `loadMultiDayLogs`).
+  - [x] 18.1.2 Calculer les métriques synthétiques : score moyen, delta tendance vs période antérieure, durée totale, dérive dominante.
+  - [x] 18.1.3 Implémenter le générateur de simulation de données démo sur 7 jours (`seedMockHistory7Days`) et le nettoyage (`clearAllMultiDayHistory`).
+- [x] **Phase 18.2 : Dictionnaires de Traduction Bilingue (`src/i18n/translations.js`)**
+  - [x] 18.2.1 Ajouter les ~20 clés bilingues FR/EN pour les KPI cards, les périodes (7j, 14j, 30j), les légendes et actions.
+- [x] **Phase 18.3 : Composant UI & Visualisation Graphique SVG Native (`src/ui/analytics-view.js`)**
+  - [x] 18.3.1 Concevoir le conteneur du tableau de bord avec sélecteur de périodes (7j, 14j, 30j) et 4 KPI cards.
+  - [x] 18.3.2 Concevoir l'histogramme SVG vectoriel réactif avec seuil INRS 80%, dégradés de score et graduations journalières.
+  - [x] 18.3.3 Concevoir la barre de répartition biomécanique des dérives (Nuque, Épaules, Inclinaison, Distance) avec légende.
+- [x] **Phase 18.4 : Styles Fluent UI 2 & Responsive (`css/style.css`)**
+  - [x] 18.4.1 Définir les styles des cartes KPI, barres SVG, badges de tendance et tooltips en mode Light et Dark.
+  - [x] 18.4.2 Optimiser l'affichage responsive et le repli accordéon.
+- [x] **Phase 18.5 : Câblage Applicatif & Événements (`app.js`, `index.html`)**
+  - [x] 18.5.1 Insérer le conteneur et le bouton d'accordéon dans `90_Code_Source/index.html`.
+  - [x] 18.5.2 Câbler l'initialisation, le rafraîchissement automatique lors des fins de cycle et les écouteurs de boutons dans `app.js`.
+- [x] **Phase 18.6 : Compilation Standalone, Builds Extension & Validation Finale**
+  - [x] 18.6.1 Mettre à jour `tasks/build_standalone.js` pour intégrer les nouveaux modules.
+  - [x] 18.6.2 Exécuter `node tasks/build_standalone.js` et valider la syntaxe du standalone `index.html`.
+  - [x] 18.6.3 Exécuter `node tasks/build_extension.js` pour actualiser `dist/chrome/` et `dist/firefox/`.
+  - [x] 18.6.4 Validation fonctionnelle et mise à jour de `tasks/lessons.md`.
+
+---
+
 ## Logique et Apprentissage
 
 ### Phases 11 & 12 : V2.0 et V2.1 — Kiné du Dos & Hygiène Visuelle Oculaire
